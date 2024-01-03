@@ -6,9 +6,9 @@ local function postinitfn(inst)
         return inst
     end
 
-    local loots = LootTables["daywalker"]
-    if loots then
-        table.insert(loots, {"dreadsword_blueprint", 1})
+    local daywalker_loots = LootTables["daywalker"]
+    if daywalker_loots ～= nil then
+        table.insert(daywalker_loots, {"dreadsword_blueprint", 1})
     end
 end
 
