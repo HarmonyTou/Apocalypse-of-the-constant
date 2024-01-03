@@ -7,21 +7,11 @@ local _PlayMiningFX = PlayMiningFX
 function PlayMiningFX(inst, target, nosound)
     local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
     if target ~= nil and target:IsValid() and equip:HasTag("dread_pickaxes") then
-        local frozen = target:HasTag("frozen")
-        local moonglass = target:HasTag("moonglass")
-        local crystal = target:HasTag("crystal")
         if target.Transform ~= nil then
-            SpawnPrefab(
-                (frozen and "mining_ice_fx") or
-                (moonglass and "mining_moonglass_fx") or
-                (crystal and "mining_crystal_fx") or
-                "mining_fx"
-            ).Transform:SetPosition(target.Transform:GetWorldPosition())
+            SpawnPrefab("mining_fx").Transform:SetPosition(target.Transform:GetWorldPosition())
         end
         if not nosound and inst.SoundEmitter ~= nil   then
-            inst.SoundEmitter:PlaySound(
-                "daywalker/pillar/pickaxe_hit_unbreakable"
-            )
+            inst.SoundEmitter:PlaySound("daywalker/pillar/pickaxe_hit_unbreakable")
         end
     else
         _PlayMiningFX(inst, target, nosound)
