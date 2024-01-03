@@ -49,11 +49,11 @@ local function postinitfn(sg)
         inst:PerformBufferedAction()
     end)
 
-    local hammer_timeline = sg.states["mine"].timeline
-    table.remove(hammer_timeline, 1)
-    table.insert(hammer_timeline, 1, mine_timeevent)
+    local mine_timeline = sg.states["mine"].timeline
+    table.remove(mine_timeline, 1)
+    table.insert(mine_timeline, 1, mine_timeevent)
 
-    local mine_recoil_timeevent = TimeEvent(7 * FRAMES, function(inst)
+    local hammer_recoil_timeevent = TimeEvent(7 * FRAMES, function(inst)
         inst.sg.statemem.recoilstate = "mine_recoil"
         inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
         inst:PerformBufferedAction()
@@ -61,7 +61,7 @@ local function postinitfn(sg)
 
     local hammer_timeline = sg.states["hammer"].timeline
     table.remove(hammer_timeline, 1)
-    table.insert(hammer_timeline, 1, mine_recoil_timeevent)
+    table.insert(hammer_timeline, 1, hammer_recoil_timeevent)
 
 end
 
