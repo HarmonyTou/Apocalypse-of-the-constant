@@ -1,7 +1,7 @@
 local ENV = env
 local RegisterInventoryItemAtlas = RegisterInventoryItemAtlas
 local resolvefilepath = GLOBAL.resolvefilepath
-GLOBAL.setfenv(1, GLOBAL)
+
 
 Util = {}
 ENV.Util = Util
@@ -20,7 +20,7 @@ function Util.RegisterInventoryItemAtlas(atlas_path)
         local _, _, image = string.find(s, "name=\"(.-)\"")
         if image ~= nil then
             RegisterInventoryItemAtlas(atlas, image)
-            RegisterInventoryItemAtlas(atlas, hash(image))  -- for client
+            RegisterInventoryItemAtlas(atlas, hash(image)) -- for client
         end
     end
 end
@@ -58,9 +58,9 @@ end
 
 local sound = {}
 
-local PlaySound = SoundEmitter.PlaySound
+local Old_PlaySound = SoundEmitter.PlaySound
 function SoundEmitter:PlaySound(soundname, ...)
-    return PlaySound(self, sound[soundname] or soundname, ...)
+    return Old_PlaySound(self, sound[soundname] or soundname, ...)
 end
 
 function Util.SetSound(name, alias)

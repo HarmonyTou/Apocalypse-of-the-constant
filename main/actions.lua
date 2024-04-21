@@ -1,5 +1,3 @@
-GLOBAL.setfenv(1, GLOBAL)
-
 local function TriggerAbility(sanity_precent)
     if sanity_precent == 1 then
         return math.random() <= 0.35
@@ -12,15 +10,16 @@ local function TriggerAbility(sanity_precent)
     end
 end
 
-local _DoToolWork = Util.GetUpvalue(ACTIONS.MINE.fn, "DoToolWork")
+local Old_DoToolWork = Util.GetUpvalue(ACTIONS.MINE.fn, "DoToolWork")
 local function DoToolWork(act, workaction, ...)
     local equip = act.invobject
     local worker = act.doer
     local target = act.target
-    local sanity_precent = worker.components.sanity ~= nil and worker.components.sanity:GetPercent()
+    local sanity_precent = act.doer ~= nil and act.doer.components.sanity ~= nil and
+        act.doer.components.sanity:GetPercent()
 
     if not (equip and worker and target and sanity_precent) then --如果不是人就别搞事了
-        return _DoToolWork(act, workaction, ...)
+        return Old_DoToolWork(act, workaction, ...)
     end
 
     if worker.sg ~= nil and equip:HasTag("dread_pickaxe") and worker.sg.statemem.recoilstate ~= nil then
@@ -39,7 +38,16 @@ local function DoToolWork(act, workaction, ...)
         end
     end
 
-    return _DoToolWork(act, workaction, ...)
+    return Old_DoToolWork(act, workaction, ...)
 end
 
 Util.SetUpvalue(ACTIONS.MINE.fn, DoToolWork, "DoToolWork")
+
+
+local old_ACTIONS_CASTAOE_strfn = ACTIONS.CASTAOE.strfn
+ACTIONS.CASTAOE.strfn = function(act)
+    if act.invobject ~= nil and table.contains({ "dreadsword", "dread_lantern" }, act.invobject.prefab) then
+        return act.invobject.skillname_index
+    end
+    return old_ACTIONS_CASTAOE_strfn(act)
+end

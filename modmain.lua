@@ -37,23 +37,30 @@ san越低概率越高（满san25%概率～0san50%概率） 麻烦的话就一直
 
 ]]
 
-local files = {
-	"config",
-    "util",
-    "postinit",
+GLOBAL.setmetatable(env, { __index = function(t, k) return GLOBAL.rawget(GLOBAL, k) end })
+
+local GetModConfigData = GetModConfigData
+
+GLOBAL.dread_crafts_config = {
+	include_voidcloth = GetModConfigData("include_voidcloth"),
+	dreadsword_enable = GetModConfigData("dreadsword_enable"),
+	dread_pickaxe_enable = GetModConfigData("dread_pickaxe_enable"),
+	talking_sword = GetModConfigData("talking_sword"),
+}
+
+
+
+local file = {
+	"util",
+	"postinit",
 	"assets",
 	"tuning",
 	"recipes",
 	"strings",
-    "actions",
-    "commands",
-	"prefabskin"
+	"actions",
+	"commands"
 }
 
-if not GlassicAPIEnabled then
-	table.insert(files, "skinhandler")
-end
-
-for i = 1, #files do
-	modimport("main/" .. files[i])
+for i = 1, #file do
+	modimport("main/" .. file[i])
 end

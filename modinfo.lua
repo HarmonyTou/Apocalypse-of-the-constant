@@ -1,11 +1,11 @@
 local function en_zh(en, zh)
     return (locale == "zh" or locale == "zhr" or locale == "zht") and zh or en
 end
-name = en_zh("Dread Crafts", "绝望工艺")
-author = "Bishop, Manutsawee, 噩梦猪咪, dx11"
-version = "1.5"
-description = "\n version: " .. version
+name = en_zh("Dread Crafts", "绝望工艺测试版")
+author = "Bishop, Manutsawee, 噩梦猪咪, Alace dx11,Guns of the Patriots"
+description = ""
 
+version = "1.6"
 forumthread = "https://steamcommunity.com/sharedfiles/filedetails/?id=2995403395"
 api_version = 10
 api_version_dst = 10
@@ -21,21 +21,22 @@ icon = "modicon.tex"
 server_filter_tags = {}
 
 local enable_option = {
-    {description = en_zh("Enable", "开启"), data = true},
-    {description = en_zh("Disable", "关闭"), data = false},
+    { description = en_zh("Enable", "开启"), data = true },
+    { description = en_zh("Disable", "关闭"), data = false },
 }
 
 --配置项
 configuration_options = {
     {
-        name = "locale",
+        name = "translation",
         label = en_zh("Translation", "翻译"),
         hover = en_zh("Select your translation.", "选择翻译"),
-        options = {
-            {description = "English", data = "en"},
-            {description = "简体中文", data = "sc"},
+        options =
+        {
+            { description = "English", data = "en" },
+            { description = "简体中文", data = "sc" },
         },
-        default = "en",
+        default = en_zh("en", "sc"),
     },
     {
         name = "include_voidcloth",

@@ -1,5 +1,5 @@
 local modimport = modimport
-GLOBAL.setfenv(1, GLOBAL)
+
 
 local prefabs_postinit = {
     "daywalker",
@@ -12,10 +12,10 @@ local stategraph_postinit = {
     "wilson_client"
 }
 
-for _,v in pairs(prefabs_postinit) do
-    modimport("postinit/prefabs/" .. v )
+for _, v in pairs(prefabs_postinit) do
+    modimport("postinit/prefabs/" .. v)
 end
 
-for _,v in pairs(stategraph_postinit) do
-    modimport("postinit/stategraphs/SG" .. v )
+for _, v in pairs(stategraph_postinit) do
+    modimport("postinit/stategraphs/SG" .. v)
 end

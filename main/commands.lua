@@ -1,5 +1,3 @@
-GLOBAL.setfenv(1, GLOBAL)
-
 -- 开全图
 function c_revealmap()
     local size = 2 * TheWorld.Map:GetSize()
@@ -17,9 +15,9 @@ function c_spawndaywalker()
         world:AddComponent("daywalkerspawner")
     end
 
-    local x,y,z = ThePlayer.Transform:GetWorldPosition()
+    local x, y, z = ThePlayer.Transform:GetWorldPosition()
 
     if world.components.daywalkerspawner ~= nil then
-        world.components.daywalkerspawner:SpawnDayWalkerArena(x,y,z)
+        world.components.daywalkerspawner:SpawnDayWalkerArena(x, y, z)
     end
 end

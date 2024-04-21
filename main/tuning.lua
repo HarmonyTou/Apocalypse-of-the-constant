@@ -1,6 +1,3 @@
-local TUNING = GLOBAL.TUNING
-GLOBAL.setfenv(1, GLOBAL)
-
 local tuning = {
     DREADSWORD = {
         DAMAGE = 51,
@@ -26,6 +23,6 @@ local tuning = {
     },
 }
 
-for k,v in pairs(tuning) do
+for k, v in pairs(tuning) do
     TUNING[k] = v
 end

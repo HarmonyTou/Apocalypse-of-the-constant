@@ -1,5 +1,5 @@
 local AddRecipe2 = AddRecipe2
-GLOBAL.setfenv(1, GLOBAL)
+
 local function SortRecipe(a, b, filter_name, offset)
     local filter = CRAFTING_FILTERS[filter_name]
     if filter and filter.recipes then
@@ -31,26 +31,25 @@ local function SortAfter(a, b, filter_name)
 end
 
 -- 制作所需要的材料
-local dreadsword_ingredients = {Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4)}
+local dreadsword_ingredients = { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4) }
 
 if dread_crafts_config.include_voidcloth and dread_crafts_config.dreadsword_enable then
     table.insert(dreadsword_ingredients, Ingredient("voidcloth", 1))
 end
 
 if dread_crafts_config.dreadsword_enable then
-    AddRecipe2("dreadsword", dreadsword_ingredients, TECH.LOST, {nounlock = false}, {"MAGIC", "WEAPONS"})
+    AddRecipe2("dreadsword", dreadsword_ingredients, TECH.LOST, { nounlock = false }, { "MAGIC", "WEAPONS" })
     SortBefore("dreadsword", "nightsword", "MAGIC")
     SortAfter("dreadsword", "nightstick", "WEAPONS")
 end
 
-local dread_pickaxe_ingredients = {Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4)}
+local dread_pickaxe_ingredients = { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4) }
 
 if dread_crafts_config.include_voidcloth and dread_crafts_config.dread_pickaxe_enable then
     table.insert(dread_pickaxe_ingredients, Ingredient("voidcloth", 2))
 end
 
 if dread_crafts_config.dread_pickaxe_enable then
-    AddRecipe2("dread_pickaxe", dread_pickaxe_ingredients, TECH.SHADOWFORGING_TWO, {station_tag = "shadow_forge"}, {"TOOLS"})
+    AddRecipe2("dread_pickaxe", dread_pickaxe_ingredients, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" },
+        { "TOOLS" })
 end
-
-
