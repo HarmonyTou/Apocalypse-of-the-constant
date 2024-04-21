@@ -1,0 +1,228 @@
+"Application: Dont' Starve\n"
+"POT Version: 2.0\n"
+
+#. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY
+msgctxt "STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY"
+msgid "block"
+msgstr 
+
+#. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_WAVE
+msgctxt "STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_WAVE"
+msgid "Shadow Cut"
+msgstr 
+
+#. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START
+msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START"
+msgid "absorb miasma"
+msgstr 
+
+#. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP
+msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP"
+msgid "stop absorbing miasma"
+msgstr 
+
+#. STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY
+msgctxt "STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY"
+msgid "My strength is not strong enough..."
+msgstr 
+
+#. STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_WAVE
+msgctxt "STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_WAVE"
+msgid "Make waves, why can’t you make waves?"
+msgstr 
+
+#. STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREADSWORD"
+msgid "Just holding it makes me shiver."
+msgstr 
+
+#. STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_LANTERN
+msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_LANTERN"
+msgid "Something was burning inside."
+msgstr 
+
+#. STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_PICKAXE
+msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_PICKAXE"
+msgid "It can easily fall out of your hand if you don't hold it tightly."
+msgstr 
+
+#. STRINGS.CHARACTERS.WALTER.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WALTER.DESCRIBE.DREADSWORD"
+msgid "The Sword of the Evil Knight!"
+msgstr 
+
+#. STRINGS.CHARACTERS.WANDA.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WANDA.DESCRIBE.DREADSWORD"
+msgid "This sword works better than the last one."
+msgstr 
+
+#. STRINGS.CHARACTERS.WARLY.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WARLY.DESCRIBE.DREADSWORD"
+msgid "When will I have real kitchen utensils?"
+msgstr 
+
+#. STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.DREADSWORD"
+msgid "Hull's inferno of despair! Only those brave enough to face death can hold it."
+msgstr 
+
+#. STRINGS.CHARACTERS.WAXWELL.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WAXWELL.DESCRIBE.DREADSWORD"
+msgid "It draws despair from its victims and uses it to repair the darkness that protects you."
+msgstr 
+
+#. STRINGS.CHARACTERS.WEBBER.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WEBBER.DESCRIBE.DREADSWORD"
+msgid "We are afraid of its sound."
+msgstr 
+
+#. STRINGS.CHARACTERS.WENDY.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WENDY.DESCRIBE.DREADSWORD"
+msgid "This sword...radiates more pain."
+msgstr 
+
+#. STRINGS.CHARACTERS.WICKERBOTTOM.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WICKERBOTTOM.DESCRIBE.DREADSWORD"
+msgid "It's not as heavy as it looks."
+msgstr 
+
+#. STRINGS.CHARACTERS.WILLOW.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WILLOW.DESCRIBE.DREADSWORD"
+msgid "Yes, it would be better if it had some firelight."
+msgstr 
+
+#. STRINGS.CHARACTERS.WINONA.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WINONA.DESCRIBE.DREADSWORD"
+msgid "It looks tattered and I don't know if it is strong or not."
+msgstr 
+
+#. STRINGS.CHARACTERS.WOLFGANG.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WOLFGANG.DESCRIBE.DREADSWORD"
+msgid "Not only is it true, it’s also sharp!"
+msgstr 
+
+#. STRINGS.CHARACTERS.WOODIE.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WOODIE.DESCRIBE.DREADSWORD"
+msgid "It's a pity that it can't be used to cut down trees."
+msgstr 
+
+#. STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD"
+msgid "A black, shabby sword with a loud sound."
+msgstr 
+
+#. STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD"
+msgid "Fun! Fun!"
+msgstr 
+
+#. STRINGS.CHARACTERS.WURT.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WURT.DESCRIBE.DREADSWORD"
+msgid "A spooky sword."
+msgstr 
+
+#. STRINGS.CHARACTERS.WX78.DESCRIBE.DREADSWORD
+msgctxt "STRINGS.CHARACTERS.WX78.DESCRIBE.DREADSWORD"
+msgid "Organic destroyer."
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.ATTTALK.1
+msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.1"
+msgid "I will tear your soul apart"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.ATTTALK.2
+msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.2"
+msgid "It's a waste of beautiful suffering"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.ATTTALK.3
+msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.3"
+msgid "Oh, this is what I'm going to show you"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.ATTTALK.4
+msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.4"
+msgid "Give up extravagant hopes"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.ATTTALK.5
+msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.5"
+msgid "Fragile"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.ATTTALK.6
+msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.6"
+msgid "you should suffer"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.1
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.1"
+msgid "Fear, more despair!"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.2
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.2"
+msgid "Look them in the eye!"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.3
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.3"
+msgid "Do not resist the darkness of destiny!"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.4
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.4"
+msgid "You crave more death"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.5
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.5"
+msgid "end it all"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.6
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.6"
+msgid "Let raw killing rule you"
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.7
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.7"
+msgid "..."
+msgstr 
+
+#. STRINGS.DREADSWORD_TALK.TALK.8
+msgctxt "STRINGS.DREADSWORD_TALK.TALK.8"
+msgid "madness..."
+msgstr 
+
+#. STRINGS.NAMES.DREADSWORD
+msgctxt "STRINGS.NAMES.DREADSWORD"
+msgid "Stone Sword of Despair"
+msgstr 
+
+#. STRINGS.NAMES.DREAD_LANTERN
+msgctxt "STRINGS.NAMES.DREAD_LANTERN"
+msgid "Despair Stone Lantern"
+msgstr 
+
+#. STRINGS.NAMES.DREAD_PICKAXE
+msgctxt "STRINGS.NAMES.DREAD_PICKAXE"
+msgid "Despair Stone Pickaxe"
+msgstr 
+
+#. STRINGS.RECIPE_DESC.DREADSWORD
+msgctxt "STRINGS.RECIPE_DESC.DREADSWORD"
+msgid "Bring the deepest despair to your enemies"
+msgstr 
+
+#. STRINGS.RECIPE_DESC.DREAD_LANTERN
+msgctxt "STRINGS.RECIPE_DESC.DREAD_LANTERN"
+msgid "A very hopeless looking lantern."
+msgstr 
+
+#. STRINGS.RECIPE_DESC.DREAD_PICKAXE
+msgctxt "STRINGS.RECIPE_DESC.DREAD_PICKAXE"
+msgid "It's very destructive, but you need to find a good angle."
+msgstr 
+

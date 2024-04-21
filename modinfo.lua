@@ -2,7 +2,7 @@ local function en_zh(en, zh)
     return (locale == "zh" or locale == "zhr" or locale == "zht") and zh or en
 end
 name = en_zh("Dread Crafts", "绝望工艺测试版")
-author = "Bishop, Manutsawee, 噩梦猪咪, Alace dx11,Guns of the Patriots"
+author = "Bishop, Sydney, 噩梦猪咪, Alace dx11, Guns of the Patriots"
 description = ""
 
 version = "1.6"
@@ -18,7 +18,9 @@ priority = -1
 icon_atlas = "images/modicon.xml"
 icon = "modicon.tex"
 
-server_filter_tags = {}
+server_filter_tags = {
+    "Dread Crafts",
+}
 
 local enable_option = {
     { description = en_zh("Enable", "开启"), data = true },
@@ -28,7 +30,7 @@ local enable_option = {
 --配置项
 configuration_options = {
     {
-        name = "translation",
+        name = "locale",
         label = en_zh("Translation", "翻译"),
         hover = en_zh("Select your translation.", "选择翻译"),
         options =

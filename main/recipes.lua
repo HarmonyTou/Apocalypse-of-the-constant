@@ -1,4 +1,5 @@
 local AddRecipe2 = AddRecipe2
+GLOBAL.setfenv(1, GLOBAL)
 
 local function SortRecipe(a, b, filter_name, offset)
     local filter = CRAFTING_FILTERS[filter_name]

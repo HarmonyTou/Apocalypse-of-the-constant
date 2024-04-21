@@ -301,18 +301,18 @@ local function set_rarity(rarity, order, color, override_symbol, override_build)
     end
 end
 
-Util.SkinHandler = {
---     GetModSkins                 = get_mod_skins,
---     AddModSkin                  = add_mod_skin,
---     RemoveModSkin               = remove_mod_skin,
---     IsModSkin                   = validate_mod_skin, -- Backward compatible
---     IsValidModSkin              = validate_mod_skin, -- Backward compatible
---     ValidateModSkin             = validate_mod_skin,
+return {
+    --     GetModSkins                 = get_mod_skins,
+    --     AddModSkin                  = add_mod_skin,
+    --     RemoveModSkin               = remove_mod_skin,
+    --     IsModSkin                   = validate_mod_skin, -- Backward compatible
+    --     IsValidModSkin              = validate_mod_skin, -- Backward compatible
+    --     ValidateModSkin             = validate_mod_skin,
 
---     GetPlayerFromID             = get_player_from_id,
---     SetCharacterExclusiveSkin   = set_character_exlusive_skin,
---     DoesCharacterHaveSkin       = does_character_have_skin,
---     DoesCharacterHasSkin        = does_character_have_skin, -- Backward compatible
+    --     GetPlayerFromID             = get_player_from_id,
+    --     SetCharacterExclusiveSkin   = set_character_exlusive_skin,
+    --     DoesCharacterHaveSkin       = does_character_have_skin,
+    --     DoesCharacterHasSkin        = does_character_have_skin, -- Backward compatible
 
     AddModSkins                 = add_mod_skins, -- Import skin data
     -- SetRarity                   = set_rarity,

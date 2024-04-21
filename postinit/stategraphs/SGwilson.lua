@@ -1,4 +1,116 @@
 require("stategraphs/commonstates")
+local SoundUtil = require("utils/soundutil")
+local ReplaceSound = SoundUtil.ReplaceSound
+local AddStategraphState = AddStategraphState
+local AddStategraphPostInit = AddStategraphPostInit
+GLOBAL.setfenv(1, GLOBAL)
+
+local states = {
+    State {
+        name = "lunar_spark_blade_leap",
+        tags = { "attack", "busy", "abouttoattack", "pausepredict", "nointerrupt" },
+    
+        onenter = function(inst, data)
+            inst.components.locomotor:Stop()
+    
+            local buffaction = inst:GetBufferedAction()
+            local target = buffaction ~= nil and buffaction.target or nil
+    
+            inst.sg.statemem.target = target
+    
+            inst.components.combat:SetTarget(target)
+            inst.components.combat:StartAttack()
+    
+            inst.Transform:SetEightFaced()
+    
+    
+            inst.AnimState:PlayAnimation("atk_leap")
+    
+            inst.SoundEmitter:PlaySound("dontstarve/common/deathpoof")
+    
+            if inst.components.playercontroller ~= nil then
+                inst.components.playercontroller:RemotePausePrediction()
+            end
+        end,
+    
+        timeline =
+        {
+            TimeEvent(0 * FRAMES, function(inst)
+                local target = inst.sg.statemem.target
+                if target then
+                    local mypos = inst:GetPosition()
+                    local tarpos = target:GetPosition()
+    
+    
+                    local dist = (tarpos - mypos):Length()
+                    local duration = 13 * FRAMES
+                    -- local speed = math.min(20, dist / duration)
+                    local speed = dist / duration
+    
+                    inst:ForceFacePoint(tarpos)
+    
+                    inst.Physics:SetMotorVel(speed, 0, 0)
+                end
+            end),
+    
+            TimeEvent(13 * FRAMES, function(inst)
+                inst.sg:RemoveStateTag("busy")
+                inst.sg:RemoveStateTag("abouttoattack")
+                inst.sg:RemoveStateTag("nointerrupt")
+    
+                inst.Physics:Stop()
+    
+                inst:PerformBufferedAction()
+                -- inst.components.playercontroller:Enable(false)
+                ShakeAllCameras(CAMERASHAKE.VERTICAL, .7, .015, .8, inst, 20)
+    
+                inst.SoundEmitter:PlaySound("dontstarve/common/destroy_smoke", nil, nil, true)
+            end),
+    
+            TimeEvent(24 * FRAMES, function(inst)
+                -- inst.sg:RemoveStateTag("busy")
+                -- inst.sg:RemoveStateTag("attack")
+                -- inst.sg:RemoveStateTag("nointerrupt")
+                -- inst.sg:RemoveStateTag("pausepredict")
+                -- inst.sg:AddStateTag("idle")
+                -- inst.components.playercontroller:Enable(true)
+    
+                inst.sg:GoToState("idle", true)
+            end),
+    
+        },
+    
+        events =
+        {
+            EventHandler("animover", function(inst)
+                inst.sg:GoToState("idle")
+            end),
+        },
+    
+        onexit = function(inst)
+            inst.components.combat:SetTarget(nil)
+            if inst.sg:HasStateTag("abouttoattack") then
+                inst.components.combat:CancelAttack()
+            end
+    
+            inst.Transform:SetFourFaced()
+    
+            inst.Physics:Stop()
+            -- inst:DoTaskInTime(0, function(inst)
+            --     if inst.components.playercontroller then
+            --         inst.components.playercontroller:Enable(true)
+            --     end
+            -- end)
+            -- if inst.components.playercontroller then
+            --     inst.components.playercontroller:Enable(true)
+            -- end
+        end,
+    }
+}
+
+for _, state in ipairs(states) do
+    AddStategraphState("wilson", state)
+end
 
 local Old_PlayMiningFX = PlayMiningFX
 function PlayMiningFX(inst, target, nosound)
@@ -40,14 +152,14 @@ local function postinitfn(sg)
 
         -- 如果装备存在且装备有dreadsword标签，那么将attack_weapon替换为hit_metal
         if equip ~= nil and equip:HasTag("dreadsword") then
-            Util.SetSound("dontstarve/wilson/attack_weapon", "rifts2/thrall_wings/projectile")
+            ReplaceSound("dontstarve/wilson/attack_weapon", "rifts2/thrall_wings/projectile")
         end
 
         -- 执行原来的onenter函数
         old_attack_onenter(inst, ...)
 
         -- 播放完后把音效改回去
-        Util.SetSound("dontstarve/wilson/attack_weapon", nil)
+        ReplaceSound("dontstarve/wilson/attack_weapon", nil)
     end
 
     local mine_timeevent = TimeEvent(7 * FRAMES, function(inst)
@@ -76,8 +188,6 @@ local function postinitfn(sg)
     local old_hammer_timeline = sg.states["hammer"].timeline
     table.remove(old_hammer_timeline, 1)
     table.insert(old_hammer_timeline, 1, mine_recoil_timeevent)
-
-
 
     local old_CASTAOE = sg.actionhandlers[ACTIONS.CASTAOE].deststate
     sg.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action)
@@ -120,105 +230,3 @@ local function postinitfn(sg)
 end
 
 AddStategraphPostInit("wilson", postinitfn)
-
-
-AddStategraphState("wilson", State {
-    name = "lunar_spark_blade_leap",
-    tags = { "attack", "busy", "abouttoattack", "pausepredict", "nointerrupt" },
-
-    onenter = function(inst, data)
-        inst.components.locomotor:Stop()
-
-        local buffaction = inst:GetBufferedAction()
-        local target = buffaction ~= nil and buffaction.target or nil
-
-        inst.sg.statemem.target = target
-
-        inst.components.combat:SetTarget(target)
-        inst.components.combat:StartAttack()
-
-        inst.Transform:SetEightFaced()
-
-
-        inst.AnimState:PlayAnimation("atk_leap")
-
-        inst.SoundEmitter:PlaySound("dontstarve/common/deathpoof")
-
-        if inst.components.playercontroller ~= nil then
-            inst.components.playercontroller:RemotePausePrediction()
-        end
-    end,
-
-    timeline =
-    {
-        TimeEvent(0 * FRAMES, function(inst)
-            local target = inst.sg.statemem.target
-            if target then
-                local mypos = inst:GetPosition()
-                local tarpos = target:GetPosition()
-
-
-                local dist = (tarpos - mypos):Length()
-                local duration = 13 * FRAMES
-                -- local speed = math.min(20, dist / duration)
-                local speed = dist / duration
-
-                inst:ForceFacePoint(tarpos)
-
-                inst.Physics:SetMotorVel(speed, 0, 0)
-            end
-        end),
-
-        TimeEvent(13 * FRAMES, function(inst)
-            inst.sg:RemoveStateTag("busy")
-            inst.sg:RemoveStateTag("abouttoattack")
-            inst.sg:RemoveStateTag("nointerrupt")
-
-            inst.Physics:Stop()
-
-            inst:PerformBufferedAction()
-            -- inst.components.playercontroller:Enable(false)
-            ShakeAllCameras(CAMERASHAKE.VERTICAL, .7, .015, .8, inst, 20)
-
-            inst.SoundEmitter:PlaySound("dontstarve/common/destroy_smoke", nil, nil, true)
-        end),
-
-        TimeEvent(24 * FRAMES, function(inst)
-            -- inst.sg:RemoveStateTag("busy")
-            -- inst.sg:RemoveStateTag("attack")
-            -- inst.sg:RemoveStateTag("nointerrupt")
-            -- inst.sg:RemoveStateTag("pausepredict")
-            -- inst.sg:AddStateTag("idle")
-            -- inst.components.playercontroller:Enable(true)
-
-            inst.sg:GoToState("idle", true)
-        end),
-
-    },
-
-    events =
-    {
-        EventHandler("animover", function(inst)
-            inst.sg:GoToState("idle")
-        end),
-    },
-
-    onexit = function(inst)
-        inst.components.combat:SetTarget(nil)
-        if inst.sg:HasStateTag("abouttoattack") then
-            inst.components.combat:CancelAttack()
-        end
-
-        inst.Transform:SetFourFaced()
-
-        inst.Physics:Stop()
-        -- inst:DoTaskInTime(0, function(inst)
-        --     if inst.components.playercontroller then
-        --         inst.components.playercontroller:Enable(true)
-        --     end
-        -- end)
-        -- if inst.components.playercontroller then
-        --     inst.components.playercontroller:Enable(true)
-        -- end
-    end,
-})

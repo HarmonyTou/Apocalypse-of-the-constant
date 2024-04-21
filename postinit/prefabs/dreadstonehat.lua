@@ -1,5 +1,5 @@
 local AddPrefabPostInit = AddPrefabPostInit
-
+local UpvalueUtil = require("utils/upvalueutil")
 
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
@@ -59,8 +59,8 @@ local function postinitfn(inst)
     local Old_OnEquip = inst.components.equippable.onequipfn
     local Old_OnUnequip = inst.components.equippable.onunequipfn
 
-    Util.SetUpvalue(Old_OnEquip, dreadstone_startregen, "dreadstone_startregen")
-    Util.SetUpvalue(Old_OnUnequip, dreadstone_stopregen, "dreadstone_stopregen")
+    UpvalueUtil.SetUpvalue(Old_OnEquip, dreadstone_startregen, "dreadstone_startregen")
+    UpvalueUtil.SetUpvalue(Old_OnUnequip, dreadstone_stopregen, "dreadstone_stopregen")
 end
 
 AddPrefabPostInit("dreadstonehat", postinitfn)

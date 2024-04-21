@@ -1,3 +1,6 @@
+local UpvalueUtil = require("utils/upvalueutil")
+GLOBAL.setfenv(1, GLOBAL)
+
 local function TriggerAbility(sanity_precent)
     if sanity_precent == 1 then
         return math.random() <= 0.35
@@ -10,7 +13,7 @@ local function TriggerAbility(sanity_precent)
     end
 end
 
-local Old_DoToolWork = Util.GetUpvalue(ACTIONS.MINE.fn, "DoToolWork")
+local Old_DoToolWork = UpvalueUtil.GetUpvalue(ACTIONS.MINE.fn, "DoToolWork")
 local function DoToolWork(act, workaction, ...)
     local equip = act.invobject
     local worker = act.doer
@@ -41,13 +44,13 @@ local function DoToolWork(act, workaction, ...)
     return Old_DoToolWork(act, workaction, ...)
 end
 
-Util.SetUpvalue(ACTIONS.MINE.fn, DoToolWork, "DoToolWork")
+UpvalueUtil.SetUpvalue(ACTIONS.MINE.fn, DoToolWork, "DoToolWork")
 
 
-local old_ACTIONS_CASTAOE_strfn = ACTIONS.CASTAOE.strfn
+local _ACTIONS_CASTAOE_strfn = ACTIONS.CASTAOE.strfn
 ACTIONS.CASTAOE.strfn = function(act)
     if act.invobject ~= nil and table.contains({ "dreadsword", "dread_lantern" }, act.invobject.prefab) then
         return act.invobject.skillname_index
     end
-    return old_ACTIONS_CASTAOE_strfn(act)
+    return _ACTIONS_CASTAOE_strfn(act)
 end

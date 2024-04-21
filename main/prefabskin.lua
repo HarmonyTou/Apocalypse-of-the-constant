@@ -1,3 +1,4 @@
+local SkinHandler = require("utils/skinhandler")
 GLOBAL.setfenv(1, GLOBAL)
 
 local dreadsword = {
@@ -13,7 +14,7 @@ dreadsword_init_fn = function(inst, build_name)
 end
 
 if not GlassicAPIEnabled then
-    Util.AddModSkins({
+    SkinHandler.AddModSkins({
         dreadsword
     })
 else

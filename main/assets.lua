@@ -1,3 +1,5 @@
+local AssetUtil = require("utils/assetutil")
+
 --注册预制体
 PrefabFiles = {
     "dreadsword",
@@ -15,4 +17,4 @@ Assets = {
     Asset("ATLAS_BUILD", "images/dread_tools.xml", 256), -- for minisign
 }
 
-Util.RegisterInventoryItemAtlas("images/dread_tools.xml")
+AssetUtil.RegisterImageAtlas("images/dread_tools.xml")
