@@ -65,33 +65,11 @@ local characters = {
 }
 
 local strings = {
-    CHARACTERS = {
-        -- GENERIC = StringUtil.ImportStringsFile("generic", ENV),
-        -- WILLOW = StringUtil.ImportStringsFile("willow", ENV),
-        -- WOLFGANG = StringUtil.ImportStringsFile("wolfgang", ENV),
-        -- WENDY = StringUtil.ImportStringsFile("wendy", ENV),
-        -- WX78 = StringUtil.ImportStringsFile("wx78", ENV),
-        -- WICKERBOTTOM = StringUtil.ImportStringsFile("wickerbottom", ENV),
-        -- WOODIE = StringUtil.ImportStringsFile("woodie", ENV),
-        -- WAXWELL = StringUtil.ImportStringsFile("waxwell", ENV),
-        -- WATHGRITHR = StringUtil.ImportStringsFile("wathgrithr", ENV),
-        -- WEBBER = StringUtil.ImportStringsFile("webber", ENV),
-        -- WINONA = StringUtil.ImportStringsFile("winona", ENV),
-        -- WARLY = StringUtil.ImportStringsFile("warly", ENV),
-        -- WORTOX = StringUtil.ImportStringsFile("wortox", ENV),
-        -- WORMWOOD = StringUtil.ImportStringsFile("wormwood", ENV),
-        -- WURT = StringUtil.ImportStringsFile("wurt", ENV),
-        -- WALTER = StringUtil.ImportStringsFile("walter", ENV),
-        -- WANDA = StringUtil.ImportStringsFile("wanda", ENV),
-    }
+    CHARACTERS = {}
 }
 
 for _, v in pairs(characters) do
     strings.CHARACTERS[string.upper(v)] = StringUtil.ImportStringsFile(v, ENV)
-end
-
-for k, v in pairs(StringUtil) do
-    print(k)
 end
 
 MergeStringsToGLOBAL(StringUtil.ImportStringsFile("common", ENV))

@@ -21,6 +21,15 @@ local tuning = {
         REGEN_SETBONUS = TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS,
         REGEN_PERIOD = TUNING.ARMOR_DREADSTONE_REGEN_PERIOD,
     },
+
+    DREAD_AXE = {
+        DAMAGE = 34,
+        ALT_DIST = 10,
+        ALT_HIT_RANGE = 3,
+		ALT_STIMULI = "strong",
+        PLANAR_DAMAGE = 17,
+        USES = 300,
+    }
 }
 
 for k, v in pairs(tuning) do

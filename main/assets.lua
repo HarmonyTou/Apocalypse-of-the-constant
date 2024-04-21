@@ -8,6 +8,7 @@ PrefabFiles = {
     "dread_lantern",
     "lunar_spark_blade",
     "dread_cloak",
+    "dread_axe",
 }
 
 Assets = {

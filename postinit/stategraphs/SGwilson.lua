@@ -9,30 +9,30 @@ local states = {
     State {
         name = "lunar_spark_blade_leap",
         tags = { "attack", "busy", "abouttoattack", "pausepredict", "nointerrupt" },
-    
+
         onenter = function(inst, data)
             inst.components.locomotor:Stop()
-    
+
             local buffaction = inst:GetBufferedAction()
             local target = buffaction ~= nil and buffaction.target or nil
-    
+
             inst.sg.statemem.target = target
-    
+
             inst.components.combat:SetTarget(target)
             inst.components.combat:StartAttack()
-    
+
             inst.Transform:SetEightFaced()
-    
-    
+
+
             inst.AnimState:PlayAnimation("atk_leap")
-    
+
             inst.SoundEmitter:PlaySound("dontstarve/common/deathpoof")
-    
+
             if inst.components.playercontroller ~= nil then
                 inst.components.playercontroller:RemotePausePrediction()
             end
         end,
-    
+
         timeline =
         {
             TimeEvent(0 * FRAMES, function(inst)
@@ -40,33 +40,33 @@ local states = {
                 if target then
                     local mypos = inst:GetPosition()
                     local tarpos = target:GetPosition()
-    
-    
+
+
                     local dist = (tarpos - mypos):Length()
                     local duration = 13 * FRAMES
                     -- local speed = math.min(20, dist / duration)
                     local speed = dist / duration
-    
+
                     inst:ForceFacePoint(tarpos)
-    
+
                     inst.Physics:SetMotorVel(speed, 0, 0)
                 end
             end),
-    
+
             TimeEvent(13 * FRAMES, function(inst)
                 inst.sg:RemoveStateTag("busy")
                 inst.sg:RemoveStateTag("abouttoattack")
                 inst.sg:RemoveStateTag("nointerrupt")
-    
+
                 inst.Physics:Stop()
-    
+
                 inst:PerformBufferedAction()
                 -- inst.components.playercontroller:Enable(false)
                 ShakeAllCameras(CAMERASHAKE.VERTICAL, .7, .015, .8, inst, 20)
-    
+
                 inst.SoundEmitter:PlaySound("dontstarve/common/destroy_smoke", nil, nil, true)
             end),
-    
+
             TimeEvent(24 * FRAMES, function(inst)
                 -- inst.sg:RemoveStateTag("busy")
                 -- inst.sg:RemoveStateTag("attack")
@@ -74,27 +74,27 @@ local states = {
                 -- inst.sg:RemoveStateTag("pausepredict")
                 -- inst.sg:AddStateTag("idle")
                 -- inst.components.playercontroller:Enable(true)
-    
+
                 inst.sg:GoToState("idle", true)
             end),
-    
+
         },
-    
+
         events =
         {
             EventHandler("animover", function(inst)
                 inst.sg:GoToState("idle")
             end),
         },
-    
+
         onexit = function(inst)
             inst.components.combat:SetTarget(nil)
             if inst.sg:HasStateTag("abouttoattack") then
                 inst.components.combat:CancelAttack()
             end
-    
+
             inst.Transform:SetFourFaced()
-    
+
             inst.Physics:Stop()
             -- inst:DoTaskInTime(0, function(inst)
             --     if inst.components.playercontroller then
@@ -105,7 +105,84 @@ local states = {
             --     inst.components.playercontroller:Enable(true)
             -- end
         end,
-    }
+    },
+
+    State{
+        name = "chop_attack",
+        tags = { "attack", "notalking", "abouttoattack", "autopredict" },
+
+        onenter = function(inst)
+            if inst.components.combat:InCooldown() then
+                inst.sg:RemoveStateTag("abouttoattack")
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle", true)
+                return
+            end
+            if inst.sg.laststate == inst.sg.currentstate then
+                inst.sg.statemem.chained = true
+            end
+            local buffaction = inst:GetBufferedAction()
+            local target = buffaction ~= nil and buffaction.target or nil
+            local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+            inst.components.combat:SetTarget(target)
+            inst.components.combat:StartAttack()
+            inst.components.locomotor:Stop()
+            local cooldown = inst.components.combat.min_attack_period
+            if equip ~= nil then
+				inst.AnimState:PlayAnimation(inst.AnimState:IsCurrentAnimation("woodie_chop_loop") and inst.AnimState:GetCurrentAnimationFrame() <= 7 and "woodie_chop_atk_pre" or "woodie_chop_pre")
+                inst.AnimState:PushAnimation("woodie_chop_loop", false)
+                inst.sg.statemem.ischop = true
+                cooldown = math.max(cooldown, 11 * FRAMES)
+            end
+
+            inst.sg:SetTimeout(cooldown)
+
+            if target ~= nil then
+                inst.components.combat:BattleCry()
+                if target:IsValid() then
+                    inst:FacePoint(target:GetPosition())
+                    inst.sg.statemem.attacktarget = target
+                    inst.sg.statemem.retarget = target
+                end
+            end
+        end,
+
+        timeline =
+        {
+            TimeEvent(6 * FRAMES, function(inst)
+                if inst.sg.statemem.ischop then
+                    inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_weapon", nil, nil, true)
+                end
+            end),
+            TimeEvent(8 * FRAMES, function(inst)
+                inst:PerformBufferedAction()
+                inst.sg:RemoveStateTag("abouttoattack")
+            end),
+        },
+
+        ontimeout = function(inst)
+            inst.sg:RemoveStateTag("attack")
+            inst.sg:AddStateTag("idle")
+        end,
+
+        events =
+        {
+            EventHandler("equip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+
+        onexit = function(inst)
+            inst.components.combat:SetTarget(nil)
+            if inst.sg:HasStateTag("abouttoattack") then
+                inst.components.combat:CancelAttack()
+            end
+        end,
+    },
 }
 
 for _, state in ipairs(states) do
@@ -143,7 +220,7 @@ function PlayMiningFX(inst, target, nosound)
     end
 end
 
-local function postinitfn(sg)
+local function fn(sg)
     -- 获取原来的attack状态中onenter函数
     local old_attack_onenter = sg.states["attack"].onenter
     sg.states["attack"].onenter = function(inst, ...)
@@ -189,7 +266,7 @@ local function postinitfn(sg)
     table.remove(old_hammer_timeline, 1)
     table.insert(old_hammer_timeline, 1, mine_recoil_timeevent)
 
-    local old_CASTAOE = sg.actionhandlers[ACTIONS.CASTAOE].deststate
+    local castaoe_actionhandler = sg.actionhandlers[ACTIONS.CASTAOE].deststate
     sg.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action)
         local weapon = action.invobject
         if weapon then
@@ -211,22 +288,40 @@ local function postinitfn(sg)
                 -- end
             end
         end
-        return old_CASTAOE(inst, action)
+
+        if castaoe_actionhandler ~= nil then
+            return castaoe_actionhandler(inst, action)
+        end
     end
 
-    local old_ATTACK = sg.actionhandlers[ACTIONS.ATTACK].deststate
+    local attack_actionhandler = sg.actionhandlers[ACTIONS.ATTACK].deststate
     sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
-        local weapon = inst.components.combat:GetWeapon()
+        inst.sg.mem.localchainattack = not action.forced or nil
+        local playercontroller = inst.components.playercontroller
+        local attack_tag =
+            playercontroller ~= nil and
+            playercontroller.remote_authority and
+            playercontroller.remote_predicting and
+            "abouttoattack" or
+            "attack"
         local target = action.target
-        if weapon then
-            if weapon.prefab == "lunar_spark_blade" then
-                if target and not target:IsNear(inst, weapon.leap_range) then
-                    return "lunar_spark_blade_leap"
+        if not (inst.sg:HasStateTag(attack_tag) and action.target == inst.sg.statemem.attacktarget or inst.components.health:IsDead()) then
+            local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
+            if weapon ~= nil then
+                if weapon.prefab == "lunar_spark_blade" then
+                    if target and not target:IsNear(inst, weapon.leap_range) then
+                        return "lunar_spark_blade_leap"
+                    end
+                elseif weapon:HasTag("chop_attack") then
+                    return "chop_attack"
                 end
             end
         end
-        return old_ATTACK(inst, action, ...)
+
+        if attack_actionhandler ~= nil then
+            return attack_actionhandler(inst, action, ...)
+        end
     end
 end
 
-AddStategraphPostInit("wilson", postinitfn)
+AddStategraphPostInit("wilson", fn)

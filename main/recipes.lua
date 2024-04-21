@@ -51,6 +51,7 @@ if dread_crafts_config.include_voidcloth and dread_crafts_config.dread_pickaxe_e
 end
 
 if dread_crafts_config.dread_pickaxe_enable then
-    AddRecipe2("dread_pickaxe", dread_pickaxe_ingredients, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" },
-        { "TOOLS" })
+    AddRecipe2("dread_pickaxe", dread_pickaxe_ingredients, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" }, { "TOOLS" })
 end
+
+AddRecipe2("dread_axe", {Ingredient("dreadstone", 5), Ingredient("horrorfuel", 5), Ingredient("voidcloth", 2)}, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" }, { "WEAPONS", "TOOLS" })
