@@ -24,11 +24,14 @@ local tuning = {
 
     DREAD_AXE = {
         DAMAGE = 34,
+        PLANAR_DAMAGE = 17,
+        USES = 300,
         ALT_DIST = 10,
         ALT_HIT_RANGE = 3,
 		ALT_STIMULI = "strong",
-        PLANAR_DAMAGE = 17,
-        USES = 300,
+        ALT_SPEED = 20,
+        ALT_DAMAGE = 68,
+        ALT_PLANAR_DAMAGE = 34,
     }
 }
 

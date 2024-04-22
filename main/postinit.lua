@@ -1,21 +1,19 @@
 local modimport = modimport
 
-
-local prefabs_postinit = {
-    "daywalker",
-    "dreadstonehat",
-    "armordreadstone",
+local postinit = {
+    prefabs = {
+        "daywalker",
+        "dreadstonehat",
+        "armordreadstone",
+    },
+    stategraphs = {
+        "SGwilson",
+        "SGwilson_client",
+    },
 }
 
-local stategraph_postinit = {
-    "wilson",
-    "wilson_client"
-}
-
-for _, v in pairs(prefabs_postinit) do
-    modimport("postinit/prefabs/" .. v)
-end
-
-for _, v in pairs(stategraph_postinit) do
-    modimport("postinit/stategraphs/SG" .. v)
+for k, v in pairs(postinit) do
+    for i = 1, #v do
+        modimport("postinit/" .. k .. "/" .. postinit[k][i])
+    end
 end
