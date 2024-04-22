@@ -4,6 +4,11 @@ local assets = {
     -- Asset("ANIM", "anim/swap_dreadsword.zip")
 }
 
+local fx_dreadsword_assets = {
+    Asset("ANIM", "anim/dreadsword.zip"),
+    Asset("ANIM", "anim/night_edge.zip"),
+}
+
 local prefabs =
 {
     "hitsparks_fx",
@@ -222,25 +227,6 @@ local function SwordTalk(inst, talkid)
     end
 end
 
-local function SetFxOwner(inst, owner)
-    if owner ~= nil then
-        inst.blade1.entity:SetParent(owner.entity)
-        inst.blade2.entity:SetParent(owner.entity)
-        inst.blade1.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 0, 0)
-        inst.blade2.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 5, 8)
-        inst.blade1.components.highlightchild:SetOwner(owner)
-        inst.blade2.components.highlightchild:SetOwner(owner)
-    else
-        inst.blade1.entity:SetParent(inst.entity)
-        inst.blade2.entity:SetParent(inst.entity)
-        --通过以空图层覆盖，使用特效跟随来等效覆盖效果并更可控（其实不）
-        inst.blade1.Follower:FollowSymbol(inst.GUID, "swap_spear", nil, nil, nil, true, nil, 0, 0) --xyz偏移量？
-        inst.blade2.Follower:FollowSymbol(inst.GUID, "swap_spear", nil, nil, nil, true, nil, 5, 8)
-        inst.blade1.components.highlightchild:SetOwner(inst)
-        inst.blade2.components.highlightchild:SetOwner(inst)
-    end
-end
-
 local function PushIdleLoop(inst)
     inst.AnimState:PushAnimation("idle")
 end
@@ -309,17 +295,44 @@ local function CalcDapperness(inst, owner)
     return insanity and inst.regentask ~= nil and TUNING.CRAZINESS_SMALL or 0
 end
 
+local function SetFxOwner(inst, owner)
+    local skin_build = inst:GetSkinBuild()
+    if owner ~= nil then
+        inst.blade1.entity:SetParent(owner.entity)
+        inst.blade2.entity:SetParent(owner.entity)
+        inst.blade1.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 0, 0)
+        inst.blade2.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 5, 8)
+        inst.blade1.components.highlightchild:SetOwner(owner)
+        inst.blade2.components.highlightchild:SetOwner(owner)
+        if skin_build ~= nil then
+            inst.AnimState:SetBank(skin_build)
+            inst.blade1.AnimState:SetBuild(skin_build)
+            inst.blade1.AnimState:SetBank(skin_build)
+            inst.blade2.AnimState:SetBuild(skin_build)
+            inst.blade2.AnimState:SetBank(skin_build)
+        end
+    else
+        inst.blade1.entity:SetParent(inst.entity)
+        inst.blade2.entity:SetParent(inst.entity)
+        --通过以空图层覆盖，使用特效跟随来等效覆盖效果并更可控（其实不）
+        inst.blade1.Follower:FollowSymbol(inst.GUID, "swap_spear", nil, nil, nil, true, nil, 0, 0) --xyz偏移量？
+        inst.blade2.Follower:FollowSymbol(inst.GUID, "swap_spear", nil, nil, nil, true, nil, 5, 8)
+        inst.blade1.components.highlightchild:SetOwner(inst)
+        inst.blade2.components.highlightchild:SetOwner(inst)
+        if skin_build ~= nil then
+            inst.AnimState:SetBank(inst.prefab)
+            inst.blade1.AnimState:SetBuild(inst.prefab)
+            inst.blade1.AnimState:SetBank(inst.prefab)
+            inst.blade2.AnimState:SetBuild(inst.prefab)
+            inst.blade2.AnimState:SetBank(inst.prefab)
+        end
+    end
+end
+
 local function OnEquip(inst, owner)
-    -- local skin_build = inst:GetSkinBuild()
-    -- if skin_build ~= nil then
-    --     owner:PushEvent("equipskinneditem", inst:GetSkinName())
-    --     owner.AnimState:OverrideItemSkinSymbol("swap_object", skin_build, "swap_dreadsword", inst.GUID, "swap_dreadsword")
-    -- else
-    --     owner.AnimState:OverrideSymbol("swap_object", "dreadsword", "swap_dreadsword")
-    -- end
+    owner.AnimState:ClearOverrideSymbol("swap_object")
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-    owner.AnimState:ClearOverrideSymbol("swap_object")
     SetFxOwner(inst, owner)
 
     inst:ListenForEvent("blocked", OnBlocked, owner)
@@ -547,4 +560,4 @@ local function fxfn()
 end
 
 return Prefab("dreadsword", fn, assets, prefabs),
-    Prefab("fx_dreadsword", fxfn, assets)
+    Prefab("fx_dreadsword", fxfn, fx_dreadsword_assets)

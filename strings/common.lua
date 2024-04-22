@@ -37,4 +37,10 @@ return {
         DREAD_LANTERN = "A very hopeless looking lantern.",
         DREAD_PICKAXE = "It's very destructive, but you need to find a good angle.",
     },
+    SKIN_NAMES = {
+        night_edge = "Night's Edge",
+    },
+    SKIN_DESCRIPTIONS = {
+        night_edge = "Night's Edge",
+    },
 }

@@ -1,6 +1,6 @@
 local prefs = {}
 
-table.insert(prefs, CreatPrefabSkin("night_edge", {
+table.insert(prefs, CreatePrefabSkin("night_edge", {
     base_prefab = "dreadsword",
     type = "item",
 	rarity = "Elegant",

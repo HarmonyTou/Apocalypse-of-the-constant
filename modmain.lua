@@ -14,7 +14,8 @@ local modules = {
 	"recipes",
 	"strings",
 	"actions",
-	"commands"
+	"commands",
+    "prefabskin",
 }
 
 for i = 1, #modules do

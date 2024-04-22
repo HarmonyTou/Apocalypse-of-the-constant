@@ -1,8 +1,6 @@
 -- API designed by Ducklantis.
 -- Personal Changed by Sydney.
 
-GLOBAL.setfenv(1, GLOBAL)
-
 local SKIN_AFFINITY_INFO = require("skin_affinity_info")
 local ALL_MOD_SKINS = {}
 local HEADSKIN_CHARACTERS = {}

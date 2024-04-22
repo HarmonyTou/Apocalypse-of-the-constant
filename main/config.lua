@@ -2,8 +2,6 @@ local GetModConfigData = GetModConfigData
 local ENV = env
 GLOBAL.setfenv(1, GLOBAL)
 
-GlassicAPIEnabled = rawget(ENV, "GlassicAPI") ~= nil
-
 dread_crafts_config = {
 	locale = GetModConfigData("locale"),
 	include_voidcloth = GetModConfigData("include_voidcloth"),
