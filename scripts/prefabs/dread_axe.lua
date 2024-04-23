@@ -82,19 +82,114 @@ local function OnStopFloating(inst)
     inst:DoTaskInTime(0, PushIdleLoop) --#V2C: #HACK restore the looping anim, timing issues
 end
 
+local function SpellFn(inst, caster, pos)
+	-- inst.components.projectile:AimedThrow(inst, caster, pos, caster.components.combat:CalcDamage(nil, inst, nil, true, nil, TUNING.DREAD_AXE.ALT_STIMULI), true)
+    -- inst.components.aoespell:OnSpellCast(caster, nil, inst)
+end
+
+local function IsValidPosition(inst)
+    local pos = inst:GetPosition()
+	return TheWorld.Map:IsGroundTargetBlocked(pos) or not TheWorld.Map:IsPassableAtPoint(pos:Get()) or not TheWorld.Map:IsValidTileAtPoint(pos:Get())
+end
+
+local function ReturnToInit(inst)
+    inst.Physics:Stop()
+    inst:RemoveTag("NOCLICK")
+    ChangeToInventoryPhysics(inst)
+    inst.AnimState:SetMultColour(1,1,1,1)
+    inst.components.inventoryitem.canbepickedup = true
+    inst.components.projectile:Stop()
+    inst.components.scaler:ApplyScale()
+end
+
+local function StartReturn(inst, attacker)
+    local returnfrompos = inst:GetPosition()
+
+    inst.Physics:Stop()
+    -- Return to thrower if Woodie
+    if attacker and attacker.prefab == "woodie" and not inst.no_return then
+        inst.AnimState:SetMultColour(0,0,0,0)
+        SpawnPrefab("lucy_transform_fx").Transform:SetPosition(inst:GetPosition():Get())
+        inst.projectileowner = nil
+        inst:DoTaskInTime(12*FRAMES, function()
+            if attacker and attacker.entity and attacker.entity:IsValid() and attacker.entity:IsVisible() then
+                local origin_pos = returnfrompos or inst:GetPosition() or Vector3(0,0,0)
+                if attacker.sg:HasStateTag("idle") then
+                    inst.projectileowner = attacker
+                end
+                attacker.components.inventory:Equip(inst)
+                -- attacker:SpawnChild("lucyspin_fx"):SetOrigin(origin_pos:Get())
+                if not attacker.sg.statemem.playedfx then
+                    SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50, -25, -1)
+                end
+            elseif IsValidPosition(inst) then
+                local pos = inst:GetPosition()
+                local result_offset
+                local distance = 0
+                local step = 0.5
+                while result_offset == nil do
+                    result_offset = FindValidPositionByFan(distance, distance, distance, function(offset)
+                        local test_point = pos + offset
+                        return not TheWorld.Map:IsGroundTargetBlocked(test_point) and TheWorld.Map:IsPassableAtPoint(test_point:Get()) and TheWorld.Map:IsValidTileAtPoint(test_point:Get())
+                    end)
+                    distance = distance + step
+                end
+
+                local target_pos = result_offset and pos + result_offset
+
+                local fx = SpawnPrefab("splash_lavafx")
+                fx.Transform:SetPosition(pos:Get())
+
+                if inst.components.inventoryitem then
+                    inst.components.inventoryitem:DoDropPhysics(target_pos.x, 10, target_pos.z, false, false)
+                else
+                    inst.Physics:Teleport(target_pos.x, 0, target_pos.z)
+                end
+            end
+            ReturnToInit(inst)
+            returnfrompos = nil
+        end)
+    else
+        ReturnToInit(inst)
+    end
+end
+
+local function ReturnToAttacker(inst, attacker)
+	attacker.components.combat.ignorehitrange = false
+	inst.Physics:SetMotorVel(5, 0, 0)
+    inst.components.inventoryitem.pushlandedevents = not attacker
+	inst:DoTaskInTime(15*FRAMES, StartReturn, attacker)
+end
+
 local function OnThrown(inst, attacker, targetpos)
+	inst:AddTag("NOCLICK")
+	inst.Physics:ClearCollisionMask()
+	inst.AnimState:PlayAnimation("spin_loop", true)
+    inst.components.inventoryitem.canbepickedup = false
+	attacker.components.combat.ignorehitrange = true
+    attacker.components.inventory:DropItem(inst)
 end
 
 local function OnHit(inst, attacker, target)
+    inst.AnimState:PlayAnimation("bounce")
+	inst.AnimState:PushAnimation("idle")
+
+	inst.components.projectile:RotateToTarget(attacker:GetPosition())
+	ReturnToAttacker(inst, attacker)
 end
 
 local function OnMiss(inst, attacker, target)
+    inst.AnimState:PlayAnimation("bounce")
+	inst.AnimState:PushAnimation("idle")
+    ReturnToAttacker(inst, attacker)
 end
 
 local function OnDischarged(inst)
+    inst.components.aoetargeting:SetEnabled(false)
 end
 
 local function OnCharged(inst)
+    inst.components.aoetargeting:SetEnabled(true)
 end
 
 local function fn()
@@ -133,6 +228,7 @@ local function fn()
 
     inst:AddComponent("aoetargeting")
     inst.components.aoetargeting:SetAlwaysValid(true)
+    inst.components.aoetargeting:SetAllowRiding(false)
     inst.components.aoetargeting.reticule.reticuleprefab = "reticulelong"
     inst.components.aoetargeting.reticule.pingprefab = "reticulelongping"
     inst.components.aoetargeting.reticule.targetfn = ReticuleTargetFn
@@ -160,12 +256,14 @@ local function fn()
     inst:ListenForEvent("floater_stopfloating", OnStopFloating)
 
     inst:AddComponent("scaler")
-    inst:AddComponent("aoespell")
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(TUNING.DREAD_AXE.DAMAGE * .5)
+
+    inst:AddComponent("aoespell")
+    inst.components.aoespell:SetSpellFn(SpellFn)
 
     inst:AddComponent("tool")
     inst.components.tool:SetAction(ACTIONS.CHOP, 1.5)
@@ -201,11 +299,11 @@ local function fn()
 	-- inst.components.projectile:SetRange(TUNING.DREAD_AXE.ALT_DIST)
 	-- inst.components.projectile:SetHitDist(TUNING.DREAD_AXE.ALT_HIT_RANGE)
 	-- inst.components.projectile:SetStimuli(TUNING.DREAD_AXE.ALT_STIMULI)
-	-- -- inst.components.projectile:SetDamage(TUNING.DREAD_AXE.ALT_DAMAGE)
+	-- inst.components.projectile:SetDamage(TUNING.DREAD_AXE.ALT_DAMAGE)
 	-- inst.components.projectile:SetOnThrownFn(OnThrown)
     -- inst.components.projectile:SetOnHitFn(OnHit)
 	-- inst.components.projectile:SetOnMissFn(OnMiss)
-	-- -- inst.components.projectile:SetMeleeWeapon(true)
+	-- inst.components.projectile:SetMeleeWeapon(true)
 
     MakeHauntableLaunch(inst)
 

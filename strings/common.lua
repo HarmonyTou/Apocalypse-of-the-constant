@@ -28,9 +28,9 @@ return {
         },
     },
     NAMES = {
-        DREADSWORD = "Stone Sword of Despair",
-        DREAD_LANTERN = "Despair Stone Lantern",
-        DREAD_PICKAXE = "Despair Stone Pickaxe",
+        DREADSWORD = "Dread Sword",
+        DREAD_LANTERN = "Dread Lantern",
+        DREAD_PICKAXE = "Dread Pickaxe",
     },
     RECIPE_DESC = {
         DREADSWORD = "Bring the deepest despair to your enemies",

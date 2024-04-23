@@ -6,6 +6,9 @@ local postinit = {
         "dreadstonehat",
         "armordreadstone",
     },
+    components = {
+        "projectile",
+    },
     stategraphs = {
         "SGwilson",
         "SGwilson_client",
