@@ -4,6 +4,7 @@ table.insert(prefs, CreatePrefabSkin("night_edge", {
     base_prefab = "dreadsword",
     type = "item",
 	rarity = "Elegant",
+    rarity_modifier = "Woven",
     assets = {
         Asset("DYNAMIC_ANIM", "anim/dynamic/night_edge.zip"),
         Asset("PKGREF", "anim/dynamic/night_edge.dyn"),

@@ -124,7 +124,7 @@ local function fn()
     inst:AddTag("weapon")
 
     --rechargeable (from rechargeable component) added to pristine state for optimization
-    inst:AddTag("rechargeable")
+    -- inst:AddTag("rechargeable")
 
     --shadowlevel (from shadowlevel component) added to pristine state for optimization
     inst:AddTag("shadowlevel")
@@ -196,16 +196,16 @@ local function fn()
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
-	inst:AddComponent("projectile")
-	inst.components.projectile:SetSpeed(TUNING.DREAD_AXE.ALT_SPEED)
-	inst.components.projectile:SetRange(TUNING.DREAD_AXE.ALT_DIST)
-	inst.components.projectile:SetHitDist(TUNING.DREAD_AXE.ALT_HIT_RANGE)
-	inst.components.projectile:SetStimuli(TUNING.DREAD_AXE.ALT_STIMULI)
-	-- inst.components.projectile:SetDamage(TUNING.DREAD_AXE.ALT_DAMAGE)
-	inst.components.projectile:SetOnThrownFn(OnThrown)
-    inst.components.projectile:SetOnHitFn(OnHit)
-	inst.components.projectile:SetOnMissFn(OnMiss)
-	-- inst.components.projectile:SetMeleeWeapon(true)
+	-- inst:AddComponent("projectile")
+	-- inst.components.projectile:SetSpeed(TUNING.DREAD_AXE.ALT_SPEED)
+	-- inst.components.projectile:SetRange(TUNING.DREAD_AXE.ALT_DIST)
+	-- inst.components.projectile:SetHitDist(TUNING.DREAD_AXE.ALT_HIT_RANGE)
+	-- inst.components.projectile:SetStimuli(TUNING.DREAD_AXE.ALT_STIMULI)
+	-- -- inst.components.projectile:SetDamage(TUNING.DREAD_AXE.ALT_DAMAGE)
+	-- inst.components.projectile:SetOnThrownFn(OnThrown)
+    -- inst.components.projectile:SetOnHitFn(OnHit)
+	-- inst.components.projectile:SetOnMissFn(OnMiss)
+	-- -- inst.components.projectile:SetMeleeWeapon(true)
 
     MakeHauntableLaunch(inst)
 

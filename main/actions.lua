@@ -25,7 +25,7 @@ local function DoToolWork(act, workaction, ...)
         return Old_DoToolWork(act, workaction, ...)
     end
 
-    if worker.sg ~= nil and equip:HasTag("dread_pickaxe") and worker.sg.statemem.recoilstate ~= nil then
+    if worker ~= nil and worker.sg ~= nil and equip:HasTag("dread_pickaxe") and worker.sg.statemem.recoilstate ~= nil then
         worker.sg:GoToState(worker.sg.statemem.recoilstate, { target = target })
     end
 

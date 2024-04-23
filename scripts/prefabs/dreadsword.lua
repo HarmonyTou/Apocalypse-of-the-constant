@@ -296,7 +296,6 @@ local function CalcDapperness(inst, owner)
 end
 
 local function SetFxOwner(inst, owner)
-    local skin_build = inst:GetSkinBuild()
     if owner ~= nil then
         inst.blade1.entity:SetParent(owner.entity)
         inst.blade2.entity:SetParent(owner.entity)
@@ -304,13 +303,6 @@ local function SetFxOwner(inst, owner)
         inst.blade2.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 5, 8)
         inst.blade1.components.highlightchild:SetOwner(owner)
         inst.blade2.components.highlightchild:SetOwner(owner)
-        if skin_build ~= nil then
-            inst.AnimState:SetBank(skin_build)
-            inst.blade1.AnimState:SetBuild(skin_build)
-            inst.blade1.AnimState:SetBank(skin_build)
-            inst.blade2.AnimState:SetBuild(skin_build)
-            inst.blade2.AnimState:SetBank(skin_build)
-        end
     else
         inst.blade1.entity:SetParent(inst.entity)
         inst.blade2.entity:SetParent(inst.entity)
@@ -319,13 +311,6 @@ local function SetFxOwner(inst, owner)
         inst.blade2.Follower:FollowSymbol(inst.GUID, "swap_spear", nil, nil, nil, true, nil, 5, 8)
         inst.blade1.components.highlightchild:SetOwner(inst)
         inst.blade2.components.highlightchild:SetOwner(inst)
-        if skin_build ~= nil then
-            inst.AnimState:SetBank(inst.prefab)
-            inst.blade1.AnimState:SetBuild(inst.prefab)
-            inst.blade1.AnimState:SetBank(inst.prefab)
-            inst.blade2.AnimState:SetBuild(inst.prefab)
-            inst.blade2.AnimState:SetBank(inst.prefab)
-        end
     end
 end
 
