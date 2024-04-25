@@ -1,5 +1,5 @@
 local RegisterInventoryItemAtlas = RegisterInventoryItemAtlas
-local resolvefilepath = GLOBAL.resolvefilepath
+local resolvefilepath = resolvefilepath
 
 local function RegisterImageAtlas(atlas_path)
     local atlas = resolvefilepath(atlas_path)
