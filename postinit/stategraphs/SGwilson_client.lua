@@ -44,34 +44,35 @@ local states = {
         end,
     },
 
-    State{
+    State {
         name = "chop_attack",
         tags = { "attack", "notalking", "abouttoattack" },
 
         onenter = function(inst)
-			local combat = inst.replica.combat
-			if combat:InCooldown() then
-				inst.sg:RemoveStateTag("abouttoattack")
-				inst:ClearBufferedAction()
-				inst.sg:GoToState("idle", true)
-				return
-			end
+            local combat = inst.replica.combat
+            if combat:InCooldown() then
+                inst.sg:RemoveStateTag("abouttoattack")
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle", true)
+                return
+            end
 
-			local cooldown = combat:MinAttackPeriod()
+            local cooldown = combat:MinAttackPeriod()
             if inst.sg.laststate == inst.sg.currentstate then
                 inst.sg.statemem.chained = true
             end
-			combat:StartAttack()
+            combat:StartAttack()
             inst.components.locomotor:Stop()
             local equip = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
             if equip ~= nil then
-				inst.AnimState:PlayAnimation(inst.AnimState:IsCurrentAnimation("woodie_chop_loop") and inst.AnimState:GetCurrentAnimationFrame() <= 7 and "woodie_chop_atk_pre" or "woodie_chop_pre")
+                inst.AnimState:PlayAnimation(inst.AnimState:IsCurrentAnimation("woodie_chop_loop") and
+                    inst.AnimState:GetCurrentAnimationFrame() <= 7 and "woodie_chop_atk_pre" or "woodie_chop_pre")
                 inst.AnimState:PushAnimation("woodie_chop_loop", false)
                 inst.sg.statemem.ischop = true
                 cooldown = math.max(cooldown, 11 * FRAMES)
             end
 
-			local buffaction = inst:GetBufferedAction()
+            local buffaction = inst:GetBufferedAction()
             if buffaction ~= nil then
                 inst:PerformPreviewBufferedAction()
 
@@ -115,7 +116,7 @@ local states = {
         },
 
         onexit = function(inst)
-			if inst.sg:HasStateTag("abouttoattack") then
+            if inst.sg:HasStateTag("abouttoattack") then
                 inst.replica.combat:CancelAttack()
             end
         end,
@@ -175,9 +176,11 @@ local function fn(sg)
                     if weapon.prefab == "lunar_spark_blade" then
                         if target and not target:IsNear(inst, weapon.leap_range) then
                             return "lunar_spark_blade_leap_lag"
-                        elseif weapon:HasTag("chop_attack") then
-                            return "chop_attack"
+                        else
+                            return "scythe"
                         end
+                    elseif weapon:HasTag("chop_attack") then
+                        return "chop_attack"
                     end
                 end
             end
