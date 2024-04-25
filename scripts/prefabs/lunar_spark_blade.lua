@@ -31,7 +31,8 @@ local function fn()
     MakeInventoryFloatable(inst, "med", 0.05, { 1.1, 0.5, 1.1 }, true, -9)
 
     -- Large than leap_range should leap
-    inst.leap_range = 1.9
+    inst._leap_range = net_float(inst.GUID, "inst._leap_range")
+    inst._leap_range:set(1.9)
 
     inst.entity:SetPristine()
 

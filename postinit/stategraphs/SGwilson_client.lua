@@ -174,7 +174,7 @@ local function fn(sg)
                 local target = action.target
                 if weapon then
                     if weapon.prefab == "lunar_spark_blade" then
-                        if target and not target:IsNear(inst, weapon.leap_range) then
+                        if target and not target:IsNear(inst, weapon._leap_range:value()) then
                             return "lunar_spark_blade_leap_lag"
                         else
                             return "scythe"

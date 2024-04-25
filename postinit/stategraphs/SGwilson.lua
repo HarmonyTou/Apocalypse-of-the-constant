@@ -130,7 +130,7 @@ local states = {
             local cooldown = inst.components.combat.min_attack_period
             if equip ~= nil then
                 inst.AnimState:PlayAnimation(inst.AnimState:IsCurrentAnimation("woodie_chop_loop") and
-                inst.AnimState:GetCurrentAnimationFrame() <= 7 and "woodie_chop_atk_pre" or "woodie_chop_pre")
+                    inst.AnimState:GetCurrentAnimationFrame() <= 7 and "woodie_chop_atk_pre" or "woodie_chop_pre")
                 inst.AnimState:PushAnimation("woodie_chop_loop", false)
                 inst.sg.statemem.ischop = true
                 cooldown = math.max(cooldown, 11 * FRAMES)
@@ -310,7 +310,7 @@ local function fn(sg)
             local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
             if weapon ~= nil then
                 if weapon.prefab == "lunar_spark_blade" then
-                    if target and not target:IsNear(inst, weapon.leap_range) then
+                    if target and not target:IsNear(inst, weapon._leap_range:value()) then
                         return "lunar_spark_blade_leap"
                     else
                         return "scythe"
