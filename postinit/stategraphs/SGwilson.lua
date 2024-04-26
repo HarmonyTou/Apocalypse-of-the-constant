@@ -184,6 +184,39 @@ local states = {
             end
         end,
     },
+
+    State {
+        name = "lunar_spark_blade_scythe_attack",
+        tags = { "busy" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("scythe_pre")
+            inst.AnimState:PushAnimation("scythe_loop", false)
+        end,
+
+        timeline =
+        {
+            FrameEvent(14, function(inst)
+                inst.SoundEmitter:PlaySound("rifts2/thrall_wings/projectile")
+            end),
+            FrameEvent(15, function(inst)
+                -- inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_whoosh")
+                inst:PerformBufferedAction()
+            end),
+            FrameEvent(18, function(inst)
+                inst.sg:RemoveStateTag("busy")
+            end),
+            FrameEvent(25, function(inst)
+                inst.sg:GoToState("idle", true)
+            end),
+        },
+
+        events =
+        {
+            EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
+        },
+    },
 }
 
 for _, state in ipairs(states) do
@@ -313,7 +346,7 @@ local function fn(sg)
                     if target and not target:IsNear(inst, weapon._leap_range:value()) then
                         return "lunar_spark_blade_leap"
                     else
-                        return "scythe"
+                        return "lunar_spark_blade_scythe_attack"
                     end
                 elseif weapon:HasTag("chop_attack") then
                     return "chop_attack"
