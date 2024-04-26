@@ -15,6 +15,20 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 end
 
+local function OnChargeValChange(inst, old, new)
+    if inst.components.dc_chargeable_item:GetPercent() >= 0.66 then
+        inst._leap_range:set(1.9)
+        inst.components.weapon:SetRange(10, 0)
+    else
+        inst._leap_range:set(0)
+        inst.components.weapon:SetRange(0)
+    end
+end
+
+local function OnAttack(inst, attacker, target)
+    inst.components.dc_chargeable_item:DoDelta(1)
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -32,7 +46,7 @@ local function fn()
 
     -- Large than leap_range should leap
     inst._leap_range = net_float(inst.GUID, "inst._leap_range")
-    inst._leap_range:set(1.9)
+    inst._leap_range:set(0)
 
     inst.entity:SetPristine()
 
@@ -40,10 +54,18 @@ local function fn()
         return inst
     end
 
+    inst:AddComponent("dc_chargeable_item")
+    inst.components.dc_chargeable_item:SetMax(20)
+    inst.components.dc_chargeable_item:SetDrainPerSecond(1)
+    inst.components.dc_chargeable_item:SetResumeDrainCD(2)
+    inst.components.dc_chargeable_item:SetOnValChangeFn(OnChargeValChange)
+    inst.components.dc_chargeable_item:SetVal(0)
+
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(34)
-    inst.components.weapon:SetRange(10, 0)
-
+    -- inst.components.weapon:SetRange(10, 0)
+    inst.components.weapon:SetRange(0)
+    inst.components.weapon:SetOnAttack(OnAttack)
     -------
 
     inst:AddComponent("finiteuses")
