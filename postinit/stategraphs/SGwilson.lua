@@ -187,35 +187,72 @@ local states = {
 
     State {
         name = "lunar_spark_blade_scythe_attack",
-        tags = { "busy" },
+        tags = { "attack", "notalking", "abouttoattack", "autopredict" },
 
         onenter = function(inst)
+            if inst.components.combat:InCooldown() then
+                inst.sg:RemoveStateTag("abouttoattack")
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle", true)
+                return
+            end
+
+            if inst.sg.laststate == inst.sg.currentstate then
+                inst.sg.statemem.chained = true
+            end
+
+            local buffaction = inst:GetBufferedAction()
+            local target = buffaction ~= nil and buffaction.target or nil
+            inst.components.combat:SetTarget(target)
+            inst.components.combat:StartAttack()
             inst.components.locomotor:Stop()
+
             inst.AnimState:PlayAnimation("scythe_pre")
             inst.AnimState:PushAnimation("scythe_loop", false)
         end,
 
         timeline =
         {
+            -- FrameEvent(14, function(inst)
+            --     inst.SoundEmitter:PlaySound("rifts2/thrall_wings/projectile")
+            -- end),
+            -- FrameEvent(15, function(inst)
+            --     inst:PerformBufferedAction()
+            --     inst.sg:RemoveStateTag("abouttoattack")
+            -- end),
+            -- FrameEvent(18, function(inst)
+            --     inst.sg:RemoveStateTag("attack")
+            --     inst.sg:AddStateTag("idle")
+            -- end),
+
             FrameEvent(14, function(inst)
                 inst.SoundEmitter:PlaySound("rifts2/thrall_wings/projectile")
             end),
             FrameEvent(15, function(inst)
-                -- inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_whoosh")
                 inst:PerformBufferedAction()
+                inst.sg:RemoveStateTag("abouttoattack")
             end),
             FrameEvent(18, function(inst)
-                inst.sg:RemoveStateTag("busy")
-            end),
-            FrameEvent(25, function(inst)
                 inst.sg:GoToState("idle", true)
             end),
         },
 
         events =
         {
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
             EventHandler("unequip", function(inst) inst.sg:GoToState("idle") end),
         },
+
+        onexit = function(inst)
+            inst.components.combat:SetTarget(nil)
+            if inst.sg:HasStateTag("abouttoattack") then
+                inst.components.combat:CancelAttack()
+            end
+        end,
     },
 }
 
@@ -343,7 +380,7 @@ local function fn(sg)
             local weapon = inst.components.combat ~= nil and inst.components.combat:GetWeapon() or nil
             if weapon ~= nil then
                 if weapon.prefab == "lunar_spark_blade" then
-                    if target and not target:IsNear(inst, weapon._leap_range:value()) then
+                    if target and weapon._leap_range:value() > 0 and not target:IsNear(inst, weapon._leap_range:value()) then
                         return "lunar_spark_blade_leap"
                     else
                         return "lunar_spark_blade_scythe_attack"

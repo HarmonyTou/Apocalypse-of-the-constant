@@ -67,7 +67,7 @@ function DCChargeableItem:SetVal(val)
     self.current = math.clamp(val, 0, self.total)
 
     local delta = self.current - old_val
-    if delta > 0 then
+    if val > old_val then
         self:PauseDrain(self.pause_drain_time_when_recover)
     end
 

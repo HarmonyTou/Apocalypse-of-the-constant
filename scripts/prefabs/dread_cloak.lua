@@ -2,63 +2,93 @@ local assets =
 {
     Asset("ANIM", "anim/armor_wood.zip"),
     Asset("ANIM", "anim/swap_dread_cloak.zip"),
+    Asset("ANIM", "anim/swap_dread_cloak2.zip"),
 }
 
 local function OnBlocked(owner)
     owner.SoundEmitter:PlaySound("dontstarve/wilson/hit_armour")
 end
 
-local function CheckSwapAnims(inst)
+local function CheckSwapAnims(inst, owner_unequip)
     if inst.components.equippable:IsEquipped() then
         local owner = inst.components.inventoryitem.owner
 
-        inst.anim_up:Show()
-        inst.anim_down:Show()
-        inst.anim_side:Show()
+        for k, v in pairs(inst.swap_anims) do
+            v:Show()
+            v.entity:SetParent(owner.entity)
 
-        inst.anim_up.entity:SetParent(owner.entity)
-        inst.anim_down.entity:SetParent(owner.entity)
-        inst.anim_side.entity:SetParent(owner.entity)
+            if v.components.highlightchild then
+                v.components.highlightchild:SetOwner(owner)
+            end
 
-        inst.anim_up.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 6, 9)
-        inst.anim_down.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 9)
-        inst.anim_side.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 10)
-
-        inst.anim_up.components.highlightchild:SetOwner(owner)
-        inst.anim_down.components.highlightchild:SetOwner(owner)
-        inst.anim_side.components.highlightchild:SetOwner(owner)
-        if owner.components.colouradder ~= nil then
-            owner.components.colouradder:AttachChild(inst.anim_up)
-            owner.components.colouradder:AttachChild(inst.anim_down)
-            owner.components.colouradder:AttachChild(inst.anim_side)
+            if owner.components.colouradder ~= nil then
+                owner.components.colouradder:AttachChild(v)
+            end
         end
+
+
+        inst.swap_anims.cloak_up.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 6, 9)
+        -- inst.swap_anims.cloak_side.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 10)
+        inst.swap_anims.cloak_down.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 9)
+
+        local lut = {
+            "armor_up_1",
+            "armor_up_2",
+            "armor_up_3",
+            "armor_side_1",
+            "armor_side_2",
+            "armor_side_3",
+        }
+
+        for i, v in pairs(lut) do
+            inst.swap_anims[v].Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, i - 1)
+        end
+
+        -- Static symbol, only contains up body anim
+        owner.AnimState:OverrideSymbol("swap_body", "swap_dread_cloak2", "swap_body")
     else
-        inst.anim_up:Hide()
-        inst.anim_down:Hide()
-        inst.anim_side:Hide()
+        for k, v in pairs(inst.swap_anims) do
+            v:Hide()
+            v.entity:SetParent(inst.entity)
 
-        inst.anim_up.entity:SetParent(inst.entity)
-        inst.anim_down.entity:SetParent(inst.entity)
-        inst.anim_side.entity:SetParent(inst.entity)
+            v.Follower:FollowSymbol(inst.GUID, "swap_body", nil, nil, nil, true)
 
-        inst.anim_up.Follower:FollowSymbol(inst.GUID, "swap_body", nil, nil, nil, true)
-        inst.anim_down.Follower:FollowSymbol(inst.GUID, "swap_body", nil, nil, nil, true)
-        inst.anim_side.Follower:FollowSymbol(inst.GUID, "swap_body", nil, nil, nil, true)
+            if v.components.highlightchild then
+                v.components.highlightchild:SetOwner(inst)
+            end
 
-        inst.anim_up.components.highlightchild:SetOwner(inst)
-        inst.anim_down.components.highlightchild:SetOwner(inst)
-        inst.anim_side.components.highlightchild:SetOwner(inst)
+            if owner_unequip and owner_unequip.components.colouradder ~= nil then
+                owner_unequip.components.colouradder:DetachChild(v)
+            end
+        end
+
+        if owner_unequip then
+            owner_unequip.AnimState:ClearOverrideSymbol("swap_body")
+        end
     end
 end
 
 local function onequip(inst, owner)
     CheckSwapAnims(inst)
+
+    inst.protect_fx = SpawnPrefab("spawnprotectionbuff")
+    owner:AddChild(inst.protect_fx)
+    owner.AnimState:SetHaunted(true)
+
+
     inst:ListenForEvent("blocked", OnBlocked, owner)
 end
 
 local function onunequip(inst, owner)
-    CheckSwapAnims(inst)
+    CheckSwapAnims(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
+
+    if inst.protect_fx and inst.protect_fx:IsValid() then
+        inst.protect_fx:Remove()
+    end
+    inst.protect_fx = nil
+    owner.AnimState:SetHaunted(false)
+
     inst:RemoveEventCallback("blocked", OnBlocked, owner)
 end
 
@@ -94,7 +124,7 @@ local function fn()
     inst.components.inventoryitem.imagename = "armorwood"
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(TUNING.ARMORWOOD, TUNING.ARMORWOOD_ABSORPTION)
+    inst.components.armor:InitCondition(1000, 1.0)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
@@ -106,26 +136,42 @@ local function fn()
 
 
     -- Create swapanims
-    inst.anim_up = inst:SpawnChild("dread_cloak_swapanim")
-    inst.anim_up.AnimState:PlayAnimation("idle1", true)
-    inst.anim_up.entity:AddFollower()
+    inst.swap_anims = {
+        cloak_up = inst:SpawnChild("dread_cloak_swapanim_cloak"),
+        -- cloak_side = inst:SpawnChild("dread_cloak_swapanim_cloak"),
+        cloak_down = inst:SpawnChild("dread_cloak_swapanim_cloak"),
 
-    inst.anim_down = inst:SpawnChild("dread_cloak_swapanim")
-    inst.anim_down.AnimState:PlayAnimation("idle1", true)
-    inst.anim_down.entity:AddFollower()
+        armor_up_1 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_up_2 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_up_3 = inst:SpawnChild("dread_cloak_swapanim_armor"),
 
+        armor_side_1 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_side_2 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_side_3 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+    }
 
-    inst.anim_side = inst:SpawnChild("dread_cloak_swapanim")
-    inst.anim_side.AnimState:PlayAnimation("idle4", true)
-    inst.anim_side.entity:AddFollower()
+    for k, v in pairs(inst.swap_anims) do
+        v.entity:AddFollower()
+    end
 
+    inst.swap_anims.cloak_up.AnimState:PlayAnimation("idle1", true)
+    -- inst.swap_anims.cloak_side.AnimState:PlayAnimation("idle1", true)
+    inst.swap_anims.cloak_down.AnimState:PlayAnimation("idle1", true)
+
+    inst.swap_anims.armor_up_1.AnimState:PlayAnimation("idle1", true)
+    inst.swap_anims.armor_up_2.AnimState:PlayAnimation("idle2", true)
+    inst.swap_anims.armor_up_3.AnimState:PlayAnimation("idle3", true)
+
+    inst.swap_anims.armor_side_1.AnimState:PlayAnimation("idle4", true)
+    inst.swap_anims.armor_side_2.AnimState:PlayAnimation("idle5", true)
+    inst.swap_anims.armor_side_3.AnimState:PlayAnimation("idle6", true)
 
     CheckSwapAnims(inst)
 
     return inst
 end
 
-local function animfn()
+local function cloak_animfn()
     local inst = CreateEntity()
 
     inst.entity:AddTransform()
@@ -148,5 +194,29 @@ local function animfn()
     return inst
 end
 
+local function armor_animfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("swap_dread_cloak2")
+    inst.AnimState:SetBuild("swap_dread_cloak2")
+
+    inst:AddComponent("highlightchild")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+
+    return inst
+end
+
 return Prefab("dread_cloak", fn, assets),
-    Prefab("dread_cloak_swapanim", animfn, assets)
+    Prefab("dread_cloak_swapanim_cloak", cloak_animfn, assets),
+    Prefab("dread_cloak_swapanim_armor", armor_animfn, assets)

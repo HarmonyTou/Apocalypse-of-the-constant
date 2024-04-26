@@ -55,13 +55,18 @@ local function OnChargeValChange(inst, old, new)
         inst._leap_range:set(1.9)
         inst.components.weapon:SetRange(10, 0)
     else
-        inst._leap_range:set(0)
+        inst._leap_range:set(-1)
         inst.components.weapon:SetRange(0)
     end
 end
 
 local function OnAttack(inst, attacker, target)
     inst.components.dc_chargeable_item:DoDelta(1)
+    if attacker and target and attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap" then
+        local delta_vec = (target:GetPosition() - attacker:GetPosition()):GetNormalized()
+        local fx = SpawnAt("moonstorm_ground_lightning_fx", attacker:GetPosition() + delta_vec * 3)
+        fx.Transform:SetRotation(attacker.Transform:GetRotation() - 90)
+    end
 end
 
 local function fn()
@@ -79,9 +84,9 @@ local function fn()
 
     MakeInventoryFloatable(inst, "med", 0.05, { 1.1, 0.5, 1.1 }, true, -9)
 
-    -- Large than leap_range should leap
+    -- if _leap_range > 0 and larger than leap_range should leap
     inst._leap_range = net_float(inst.GUID, "inst._leap_range")
-    inst._leap_range:set(0)
+    inst._leap_range:set(-1)
 
     inst.entity:SetPristine()
 
@@ -142,6 +147,9 @@ local function animfn()
 
     inst.AnimState:SetBank("lunar_spark_blade")
     inst.AnimState:SetBuild("lunar_spark_blade")
+
+    inst.AnimState:SetSymbolLightOverride("glow", 1)
+    inst.AnimState:SetSymbolMultColour("glow", 1, 1, 1, 0.5)
 
     inst:AddComponent("highlightchild")
 

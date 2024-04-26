@@ -124,31 +124,56 @@ local states = {
 
     State {
         name = "lunar_spark_blade_scythe_attack",
-        tags = { "busy" },
-        server_states = { "lunar_spark_blade_scythe_attack" },
+        tags = { "attack", "notalking", "abouttoattack" },
 
         onenter = function(inst)
+            local combat = inst.replica.combat
+            if combat:InCooldown() then
+                inst.sg:RemoveStateTag("abouttoattack")
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle", true)
+                return
+            end
+
+            local cooldown = combat:MinAttackPeriod()
+            if inst.sg.laststate == inst.sg.currentstate then
+                inst.sg.statemem.chained = true
+            end
+            combat:StartAttack()
             inst.components.locomotor:Stop()
+            local equip = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+
+
             inst.AnimState:PlayAnimation("scythe_pre")
-            inst.AnimState:PushAnimation("scythe_lag", false)
+            inst.AnimState:PushAnimation("scythe_loop", false)
 
             inst:PerformPreviewBufferedAction()
             inst.sg:SetTimeout(2)
         end,
 
-        onupdate = function(inst)
-            if inst.sg:ServerStateMatches() then
-                if inst.entity:FlattenMovementPrediction() then
-                    inst.sg:GoToState("idle", "noanim")
-                end
-            elseif inst.bufferedaction == nil then
-                inst.sg:GoToState("idle")
-            end
-        end,
+        timeline = {
+            FrameEvent(15, function(inst)
+                inst:ClearBufferedAction()
+                inst.sg:RemoveStateTag("abouttoattack")
+            end),
+            FrameEvent(18, function(inst)
+                inst.sg:GoToState("idle", true)
+            end),
+        },
 
-        ontimeout = function(inst)
-            inst:ClearBufferedAction()
-            inst.sg:GoToState("idle")
+        events =
+        {
+            EventHandler("animqueueover", function(inst)
+                if inst.AnimState:AnimDone() then
+                    inst.sg:GoToState("idle")
+                end
+            end),
+        },
+
+        onexit = function(inst)
+            if inst.sg:HasStateTag("abouttoattack") then
+                inst.replica.combat:CancelAttack()
+            end
         end,
     },
 }
@@ -204,7 +229,7 @@ local function fn(sg)
                 local target = action.target
                 if weapon then
                     if weapon.prefab == "lunar_spark_blade" then
-                        if target and not target:IsNear(inst, weapon._leap_range:value()) then
+                        if target and weapon._leap_range:value() > 0 and not target:IsNear(inst, weapon._leap_range:value()) then
                             return "lunar_spark_blade_leap_lag"
                         else
                             return "lunar_spark_blade_scythe_attack"
