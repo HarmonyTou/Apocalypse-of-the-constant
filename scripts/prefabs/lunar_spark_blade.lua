@@ -2,15 +2,50 @@ local assets =
 {
     Asset("ANIM", "anim/spear.zip"),
     Asset("ANIM", "anim/swap_spear.zip"),
+    Asset("ANIM", "anim/lunar_spark_blade.zip"),
 }
 
+local function CheckSwapAnims(inst, owneroverride)
+    local owner = owneroverride or inst.components.inventoryitem.owner
+    if owner and inst.components.equippable:IsEquipped() then
+        for _, v in pairs(inst.anim_fxs) do
+            v:Show()
+            v.entity:SetParent(owner.entity)
+            v.components.highlightchild:SetOwner(owner)
+            if owner.components.colouradder ~= nil then
+                owner.components.colouradder:AttachChild(v)
+            end
+        end
+
+        inst.anim_fxs[1].Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 0, 3)
+        inst.anim_fxs[2].Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 5, 8)
+    else
+        for _, v in pairs(inst.anim_fxs) do
+            v:Hide()
+            v.entity:SetParent(inst.entity)
+            v.Follower:FollowSymbol(inst.GUID, "lunar_spark_blade", nil, nil, nil, true)
+            v.components.highlightchild:SetOwner(inst)
+            if owner then
+                if owner.components.colouradder ~= nil then
+                    owner.components.colouradder:DetachChild(v)
+                end
+            end
+        end
+    end
+end
+
 local function onequip(inst, owner)
-    owner.AnimState:OverrideSymbol("swap_object", "swap_spear", "swap_spear")
+    -- owner.AnimState:OverrideSymbol("swap_object", "swap_spear", "swap_spear")
+    owner.AnimState:ClearOverrideSymbol("swap_object")
+    CheckSwapAnims(inst)
+
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
 
 local function onunequip(inst, owner)
+    CheckSwapAnims(inst)
+
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
 end
@@ -38,8 +73,8 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("spear")
-    inst.AnimState:SetBuild("swap_spear")
+    inst.AnimState:SetBank("lunar_spark_blade")
+    inst.AnimState:SetBuild("lunar_spark_blade")
     inst.AnimState:PlayAnimation("idle")
 
     MakeInventoryFloatable(inst, "med", 0.05, { 1.1, 0.5, 1.1 }, true, -9)
@@ -54,19 +89,28 @@ local function fn()
         return inst
     end
 
-    inst:AddComponent("dc_chargeable_item")
-    inst.components.dc_chargeable_item:SetMax(20)
-    inst.components.dc_chargeable_item:SetDrainPerSecond(1)
-    inst.components.dc_chargeable_item:SetResumeDrainCD(2)
-    inst.components.dc_chargeable_item:SetOnValChangeFn(OnChargeValChange)
-    inst.components.dc_chargeable_item:SetVal(0)
+    inst.anim_fxs = {
+        inst:SpawnChild("lunar_spark_blade_swapanim"),
+        inst:SpawnChild("lunar_spark_blade_swapanim")
+    }
+    inst.anim_fxs[1].AnimState:PlayAnimation("swap_loop1", true)
+    inst.anim_fxs[2].AnimState:PlayAnimation("swap_loop2", true)
+    for _, v in pairs(inst.anim_fxs) do
+        v.entity:AddFollower()
+    end
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(34)
     -- inst.components.weapon:SetRange(10, 0)
     inst.components.weapon:SetRange(0)
     inst.components.weapon:SetOnAttack(OnAttack)
-    -------
+
+    inst:AddComponent("dc_chargeable_item")
+    inst.components.dc_chargeable_item:SetMax(20)
+    inst.components.dc_chargeable_item:SetDrainPerSecond(1)
+    inst.components.dc_chargeable_item:SetResumeDrainCD(2)
+    inst.components.dc_chargeable_item:SetOnValChangeFn(OnChargeValChange)
+    inst.components.dc_chargeable_item:SetVal(0)
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetMaxUses(500)
@@ -84,8 +128,33 @@ local function fn()
     inst.components.equippable:SetOnUnequip(onunequip)
 
     MakeHauntableLaunch(inst)
+    CheckSwapAnims(inst)
 
     return inst
 end
 
-return Prefab("lunar_spark_blade", fn, assets)
+local function animfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    inst.AnimState:SetBank("lunar_spark_blade")
+    inst.AnimState:SetBuild("lunar_spark_blade")
+
+    inst:AddComponent("highlightchild")
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst.persists = false
+
+    return inst
+end
+
+return Prefab("lunar_spark_blade", fn, assets),
+    Prefab("lunar_spark_blade_swapanim", animfn, assets)
