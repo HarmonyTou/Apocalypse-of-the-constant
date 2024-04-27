@@ -4,7 +4,7 @@ local UpvalueUtil = require("utils/upvalueutil")
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
         local setbonus = inst.components.setbonus ~= nil and
-        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1
+        inst.components.setbonus:IsEnabled(GLOBAL.EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1
         local rate = 1 /
         Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
             owner.components.sanity:GetPercent())
