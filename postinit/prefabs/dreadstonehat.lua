@@ -49,7 +49,7 @@ local function dreadstone_stopregen(inst)
 end
 
 local function postinitfn(inst)
-    if not TheWorld.ismastersim then
+    if not GLOBAL.TheWorld.ismastersim then
         return inst
     end
 
