@@ -1,8 +1,8 @@
 local function en_zh(en, zh)
     return (locale == "zh" or locale == "zhr" or locale == "zht") and zh or en
 end
-name = en_zh("Dread Crafts", "绝望工艺测试版")
-author = "Bishop, Sydney, 噩梦猪咪, Alace dx11, Guns of the Patriots"
+name = en_zh("Dread Crafts", "绝望工艺")
+author = "The Dread Crafts Team"
 description = ""
 
 version = "1.6"
