@@ -225,8 +225,8 @@ local states = {
             --     inst.sg:AddStateTag("idle")
             -- end),
 
-            FrameEvent(14, function(inst)
-                inst.SoundEmitter:PlaySound("rifts2/thrall_wings/projectile")
+            FrameEvent(5, function(inst)
+                inst.SoundEmitter:PlaySound("grotto/creatures/centipede/attack")
             end),
             FrameEvent(15, function(inst)
                 inst:PerformBufferedAction()

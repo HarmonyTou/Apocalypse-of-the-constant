@@ -60,6 +60,12 @@ local function OnChargeValChange(inst, old, new)
     end
 end
 
+local function GetDamage(inst, attacker, target)
+    local base_dmg = 85
+    local leap_dmg = base_dmg * 1.2
+    return (attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap") and leap_dmg or base_dmg
+end
+
 local function OnAttack(inst, attacker, target)
     inst.components.dc_chargeable_item:DoDelta(1)
     if attacker and target and attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap" then
@@ -81,6 +87,9 @@ local function fn()
     inst.AnimState:SetBank("lunar_spark_blade")
     inst.AnimState:SetBuild("lunar_spark_blade")
     inst.AnimState:PlayAnimation("idle")
+    inst.AnimState:SetSymbolBloom("glow")
+    inst.AnimState:SetSymbolLightOverride("glow", 0.5)
+
 
     MakeInventoryFloatable(inst, "med", 0.05, { 1.1, 0.5, 1.1 }, true, -9)
 
@@ -104,8 +113,11 @@ local function fn()
         v.entity:AddFollower()
     end
 
+    inst:AddComponent("planardamage")
+    inst.components.planardamage:SetBaseDamage(34)
+
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(34)
+    inst.components.weapon:SetDamage(GetDamage)
     -- inst.components.weapon:SetRange(10, 0)
     inst.components.weapon:SetRange(0)
     inst.components.weapon:SetOnAttack(OnAttack)
@@ -148,8 +160,9 @@ local function animfn()
     inst.AnimState:SetBank("lunar_spark_blade")
     inst.AnimState:SetBuild("lunar_spark_blade")
 
-    inst.AnimState:SetSymbolLightOverride("glow", 1)
-    inst.AnimState:SetSymbolMultColour("glow", 1, 1, 1, 0.5)
+    inst.AnimState:SetSymbolBloom("glow")
+    inst.AnimState:SetSymbolLightOverride("glow", 0.5)
+
 
     inst:AddComponent("highlightchild")
 
