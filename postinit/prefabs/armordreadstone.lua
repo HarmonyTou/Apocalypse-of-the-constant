@@ -49,7 +49,7 @@ local function StopRegen(inst)
 end
 
 local function postinitfn(inst)
-    if not GLOBAl.TheWorld.ismastersim then
+    if not GLOBAL.TheWorld.ismastersim then
         return inst
     end
 
