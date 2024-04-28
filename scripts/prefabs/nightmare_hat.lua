@@ -154,7 +154,7 @@ local function MakeHat(name)
 
     local swap_data = { bank = symname, anim = "anim" }
 
-    local function fn(data)
+    local function fn()
         local inst = CreateEntity()
 
         inst.entity:AddTransform()
@@ -163,8 +163,8 @@ local function MakeHat(name)
 
         MakeInventoryPhysics(inst)
 
-        inst.AnimState:SetBank(data.symname)
-        inst.AnimState:SetBuild(data.fname)
+        inst.AnimState:SetBank(symname)
+        inst.AnimState:SetBuild(fname)
         inst.AnimState:PlayAnimation("anim")
 
         inst:AddTag("hat")
@@ -179,11 +179,8 @@ local function MakeHat(name)
         --waterproofer (from waterproofer component) added to pristine state for optimization
         inst:AddTag("waterproofer")
 
-        MakeInventoryFloatable(inst)
+        MakeInventoryFloatable(inst, "med", 0.25, .75)
         inst.components.floater:SetBankSwapOnFloat(false, nil, swap_data) --Hats default animation is not "idle", so even though we don't swap banks, we need to specify the swap_data for re-skinning to reset properly when floating
-		inst.components.floater:SetSize("med")
-		inst.components.floater:SetVerticalOffset(0.25)
-		inst.components.floater:SetScale(.75)
 
         inst.entity:SetPristine()
 
