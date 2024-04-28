@@ -32,7 +32,7 @@ end
 ---@param path string
 ---@param value any
 local function SetUpvalue(fn, value, path)
-    local _, i, source_fn = ToolUtil.GetUpvalue(fn, path)
+    local _, i, source_fn = GetUpvalue(fn, path)
     debug.setupvalue(source_fn, i, value)
 end
 
