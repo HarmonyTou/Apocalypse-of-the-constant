@@ -2,7 +2,7 @@ local GetModConfigData = GetModConfigData
 local ENV = env
 GLOBAL.setfenv(1, GLOBAL)
 
-dread_crafts_config = {
+aoc_config = {
 	locale = GetModConfigData("locale"),
 	include_voidcloth = GetModConfigData("include_voidcloth"),
 	dreadsword_enable = GetModConfigData("dreadsword_enable"),
@@ -10,4 +10,4 @@ dread_crafts_config = {
 	talking_sword = GetModConfigData("talking_sword"),
 }
 
-ENV.dread_crafts_config = dread_crafts_config
+ENV.aoc_config = aoc_config

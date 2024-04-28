@@ -1,8 +1,9 @@
 local function en_zh(en, zh)
     return (locale == "zh" or locale == "zhr" or locale == "zht") and zh or en
 end
-name = en_zh("Dread Crafts", "绝望工艺")
-author = "The Dread Crafts Team"
+
+name = en_zh("Apocalypse of the constant", "永恒启示录")
+author = "The AOC Team"
 description = ""
 
 version = "1.6"
@@ -19,7 +20,7 @@ icon_atlas = "images/modicon.xml"
 icon = "modicon.tex"
 
 server_filter_tags = {
-    "Dread Crafts",
+    "Apocalypse of the constant",
 }
 
 local enable_option = {
@@ -35,10 +36,11 @@ configuration_options = {
         hover = en_zh("Select your translation.", "选择翻译"),
         options =
         {
+            { description = "Auto", data = false },
             { description = "English", data = "en" },
             { description = "简体中文", data = "sc" },
         },
-        default = en_zh("en", "sc"),
+        default = false,
     },
     {
         name = "include_voidcloth",

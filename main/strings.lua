@@ -3,7 +3,7 @@ local MODROOT = MODROOT
 local StringUtil = require("utils/stringutil")
 GLOBAL.setfenv(1, GLOBAL)
 
-local locale = dread_crafts_config.locale
+local locale = aoc_config.locale
 
 local function MergeStringsToGLOBAL(strings, custom_field, no_override)
     StringUtil.merge_table(custom_field or STRINGS, strings, no_override)

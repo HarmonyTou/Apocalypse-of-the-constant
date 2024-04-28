@@ -212,13 +212,13 @@ local function OnFinished(inst)
 end
 
 local function SwordTalk(inst, talkid)
-    if dread_crafts_config.talking_sword and talkid == 1 then
+    if aoc_config.talking_sword and talkid == 1 then
         local list = STRINGS.DREADSWORD_TALK.TALK
         local index = math.random(#list)
         local item = list[index]
         inst.components.talker:Say(item)
     else
-        if dread_crafts_config.talking_sword and talkid == 2 then
+        if aoc_config.talking_sword and talkid == 2 then
             local list = STRINGS.DREADSWORD_TALK.ATTTALK
             local index = math.random(#list)
             local item = list[index]

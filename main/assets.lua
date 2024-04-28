@@ -9,7 +9,7 @@ PrefabFiles = {
     "lunar_spark_blade",
     "dread_cloak",
     "dread_axe",
-    "dreadcraft_skins",
+    "aoc_skins",
 }
 
 Assets = {

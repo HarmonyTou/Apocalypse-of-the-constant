@@ -1,7 +1,8 @@
 if not GLOBAL.IsInFrontEnd() then return end
+local modimport = modimport
 
 PrefabFiles = {
-    "dreadcraft_skins",
+    "aoc_skins",
 }
 
 Assets = {}

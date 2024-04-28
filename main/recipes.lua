@@ -34,11 +34,11 @@ end
 -- 制作所需要的材料
 local dreadsword_ingredients = { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4) }
 
-if dread_crafts_config.include_voidcloth and dread_crafts_config.dreadsword_enable then
+if aoc_config.include_voidcloth and aoc_config.dreadsword_enable then
     table.insert(dreadsword_ingredients, Ingredient("voidcloth", 1))
 end
 
-if dread_crafts_config.dreadsword_enable then
+if aoc_config.dreadsword_enable then
     AddRecipe2("dreadsword", dreadsword_ingredients, TECH.LOST, { nounlock = false }, { "MAGIC", "WEAPONS" })
     SortBefore("dreadsword", "nightsword", "MAGIC")
     SortAfter("dreadsword", "nightstick", "WEAPONS")
@@ -46,11 +46,11 @@ end
 
 local dread_pickaxe_ingredients = { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4) }
 
-if dread_crafts_config.include_voidcloth and dread_crafts_config.dread_pickaxe_enable then
+if aoc_config.include_voidcloth and aoc_config.dread_pickaxe_enable then
     table.insert(dread_pickaxe_ingredients, Ingredient("voidcloth", 2))
 end
 
-if dread_crafts_config.dread_pickaxe_enable then
+if aoc_config.dread_pickaxe_enable then
     AddRecipe2("dread_pickaxe", dread_pickaxe_ingredients, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" }, { "TOOLS" })
 end
 
