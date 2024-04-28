@@ -1,4 +1,5 @@
--- 开全图
+GLOBAL.setfenv(1, GLOBAL)
+
 function c_revealmap()
     local size = 2 * TheWorld.Map:GetSize()
     local player = ThePlayer

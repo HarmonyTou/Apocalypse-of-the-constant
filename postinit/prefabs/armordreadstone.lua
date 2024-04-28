@@ -1,10 +1,11 @@
 local AddPrefabPostInit = AddPrefabPostInit
 local UpvalueUtil = require("utils/upvalueutil")
+GLOBAL.setfenv(1, GLOBAL)
 
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
         local setbonus = inst.components.setbonus ~= nil and
-        inst.components.setbonus:IsEnabled(GLOBAL.EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1
+        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1
         local rate = 1 /
         Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
             owner.components.sanity:GetPercent())
@@ -49,18 +50,18 @@ local function StopRegen(inst)
 end
 
 local function postinitfn(inst)
-    if not GLOBAL.TheWorld.ismastersim then
+    if not TheWorld.ismastersim then
         return inst
     end
 
     inst.isonattack = false
 
     -- Hook
-    local Old_OnEquip = inst.components.equippable.onequipfn
-    local Old_OnUnequip = inst.components.equippable.onunequipfn
+    local _OnEquip = inst.components.equippable.onequipfn
+    local _OnUnequip = inst.components.equippable.onunequipfn
 
-    UpvalueUtil.SetUpvalue(Old_OnEquip, StartRegen, "StartRegen")
-    UpvalueUtil.SetUpvalue(Old_OnUnequip, StopRegen, "StopRegen")
+    UpvalueUtil.SetUpvalue(_OnEquip, StartRegen, "StartRegen")
+    UpvalueUtil.SetUpvalue(_OnUnequip, StopRegen, "StopRegen")
 end
 
 AddPrefabPostInit("armordreadstone", postinitfn)

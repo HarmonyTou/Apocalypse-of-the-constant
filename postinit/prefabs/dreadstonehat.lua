@@ -1,5 +1,6 @@
 local AddPrefabPostInit = AddPrefabPostInit
 local UpvalueUtil = require("utils/upvalueutil")
+GLOBAL.setfenv(1, GLOBAL)
 
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
@@ -49,18 +50,18 @@ local function dreadstone_stopregen(inst)
 end
 
 local function postinitfn(inst)
-    if not GLOBAL.TheWorld.ismastersim then
+    if not TheWorld.ismastersim then
         return inst
     end
 
     inst.isonattack = false
 
     -- Hook
-    local Old_OnEquip = inst.components.equippable.onequipfn
-    local Old_OnUnequip = inst.components.equippable.onunequipfn
+    local _OnEquip = inst.components.equippable.onequipfn
+    local _OnUnequip = inst.components.equippable.onunequipfn
 
-    UpvalueUtil.SetUpvalue(Old_OnEquip, dreadstone_startregen, "dreadstone_startregen")
-    UpvalueUtil.SetUpvalue(Old_OnUnequip, dreadstone_stopregen, "dreadstone_stopregen")
+    UpvalueUtil.SetUpvalue(_OnEquip, dreadstone_startregen, "dreadstone_startregen")
+    UpvalueUtil.SetUpvalue(_OnUnequip, dreadstone_stopregen, "dreadstone_stopregen")
 end
 
 AddPrefabPostInit("dreadstonehat", postinitfn)
