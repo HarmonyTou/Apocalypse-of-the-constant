@@ -77,6 +77,8 @@ local function onequip(inst, owner)
 
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
+
+    inst._owner:set(owner)
 end
 
 local function onunequip(inst, owner)
@@ -84,6 +86,8 @@ local function onunequip(inst, owner)
 
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
+
+    inst._owner:set(nil)
 end
 
 local function OnChargeValChange(inst, old, new)
@@ -104,11 +108,6 @@ end
 
 local function OnAttack(inst, attacker, target)
     inst.components.dc_chargeable_item:DoDelta(1)
-    if attacker and target and attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap" then
-        local delta_vec = (target:GetPosition() - attacker:GetPosition()):GetNormalized()
-        local fx = SpawnAt("moonstorm_ground_lightning_fx", attacker:GetPosition() + delta_vec * 3)
-        fx.Transform:SetRotation(attacker.Transform:GetRotation() - 90)
-    end
 end
 
 local function SpellFn(inst, caster, pos)
@@ -172,6 +171,22 @@ local function fn()
     inst._leap_range = net_float(inst.GUID, "inst._leap_range")
     inst._leap_range:set(-1)
 
+    inst._leap_fx_pos_x = net_float(inst.GUID, "inst._leap_fx_pos_x")
+    inst._leap_fx_pos_z = net_float(inst.GUID, "inst._leap_fx_pos_z")
+    inst._owner = net_entity(inst.GUID, "inst._owner")
+    inst._leap_fx_spawn_event = net_event(inst.GUID, "inst._leap_fx_spawn_event")
+
+    if not TheNet:IsDedicated() then
+        inst:ListenForEvent("inst._leap_fx_spawn_event", function()
+            local attacker = inst._owner:value()
+            if attacker ~= nil and attacker:IsValid() then
+                local fx = SpawnAt("moonstorm_ground_lightning_fx",
+                    Vector3(inst._leap_fx_pos_x:value(), 0, inst._leap_fx_pos_z:value()))
+                fx.Transform:SetRotation(attacker.Transform:GetRotation() - 90)
+            end
+        end)
+    end
+
     inst.entity:SetPristine()
 
     if not TheWorld.ismastersim then
@@ -198,7 +213,7 @@ local function fn()
     inst.components.weapon:SetOnAttack(OnAttack)
 
     inst:AddComponent("aoeweapon_lunge")
-    inst.components.aoeweapon_lunge:SetDamage(GetDamage)
+    inst.components.aoeweapon_lunge:SetDamage(34) -- lunge weapon skill damage
     inst.components.aoeweapon_lunge:SetSound("meta3/wigfrid/spear_lighting_lunge")
     inst.components.aoeweapon_lunge:SetSideRange(1)
     inst.components.aoeweapon_lunge:SetOnLungedFn(OnLunged)

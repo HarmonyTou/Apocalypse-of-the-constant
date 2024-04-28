@@ -15,8 +15,9 @@ local states = {
 
             local buffaction = inst:GetBufferedAction()
             local target = buffaction ~= nil and buffaction.target or nil
-
+            local weapon = inst.components.combat:GetWeapon()
             inst.sg.statemem.target = target
+            inst.sg.statemem.weapon = weapon
 
             inst.components.combat:SetTarget(target)
             inst.components.combat:StartAttack()
@@ -61,6 +62,23 @@ local states = {
                 inst.Physics:Stop()
 
                 inst:PerformBufferedAction()
+
+                local target = inst.sg.statemem.target
+                local weapon = inst.sg.statemem.weapon
+
+                -- print(target, target:IsValid())
+                -- print(weapon, weapon:IsValid())
+
+                if target and target:IsValid() and weapon and weapon:IsValid() and weapon.prefab == "lunar_spark_blade" then
+                    local delta_vec = (target:GetPosition() - inst:GetPosition()):GetNormalized()
+                    local spawn_pos = inst:GetPosition() + delta_vec * 3
+
+                    weapon._leap_fx_pos_x:set(spawn_pos.x)
+                    weapon._leap_fx_pos_z:set(spawn_pos.z)
+                    weapon._leap_fx_spawn_event:push()
+                end
+
+
                 -- inst.components.playercontroller:Enable(false)
                 ShakeAllCameras(CAMERASHAKE.VERTICAL, .7, .015, .8, inst, 20)
 
@@ -261,8 +279,7 @@ local states = {
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
-            inst.AnimState:PlayAnimation("lunge_pre")
-            inst.AnimState:PushAnimation("lunge_lag", false)
+            inst.AnimState:PlayAnimation("lunge_lag")
             inst:PerformBufferedAction()
         end,
 
