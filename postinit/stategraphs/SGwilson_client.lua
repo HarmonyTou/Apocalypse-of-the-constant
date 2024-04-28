@@ -215,6 +215,10 @@ local function fn(sg)
                 --         end
                 --     end
                 -- end
+                if weapon.prefab == "lunar_spark_blade" then
+                    inst:PerformPreviewBufferedAction()
+                    return
+                end
             end
         end
         return old_CASTAOE(inst, action)

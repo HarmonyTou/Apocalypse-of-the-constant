@@ -254,6 +254,25 @@ local states = {
             end
         end,
     },
+
+    State {
+        name = "lunar_spark_blade_skill_entry",
+        tags = { "aoe", "doing", "busy", "nointerrupt", "nomorph", "nopredict" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("lunge_pre")
+            inst.AnimState:PushAnimation("lunge_lag", false)
+            inst:PerformBufferedAction()
+        end,
+
+        events =
+        {
+            EventHandler("combat_lunge", function(inst, data)
+                inst.sg:GoToState("combat_lunge", data)
+            end),
+        },
+    },
 }
 
 for _, state in ipairs(states) do
@@ -357,6 +376,10 @@ local function fn(sg)
                 --         end
                 --     end
                 -- end
+
+                if weapon.prefab == "lunar_spark_blade" then
+                    return "lunar_spark_blade_skill_entry"
+                end
             end
         end
 

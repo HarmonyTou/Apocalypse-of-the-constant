@@ -5,6 +5,42 @@ local assets =
     Asset("ANIM", "anim/lunar_spark_blade.zip"),
 }
 
+------------------------------------------------------------------------------------------------------------------------
+
+local function ReticuleTargetFn()
+    --Cast range is 8, leave room for error (6.5 lunge)
+    return Vector3(ThePlayer.entity:LocalToWorldSpace(6.5, 0, 0))
+end
+
+local function ReticuleMouseTargetFn(inst, mousepos)
+    if mousepos ~= nil then
+        local x, y, z = inst.Transform:GetWorldPosition()
+        local dx = mousepos.x - x
+        local dz = mousepos.z - z
+        local l = dx * dx + dz * dz
+        if l <= 0 then
+            return inst.components.reticule.targetpos
+        end
+        l = 6.5 / math.sqrt(l)
+        return Vector3(x + dx * l, 0, z + dz * l)
+    end
+end
+
+local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt)
+    local x, y, z = inst.Transform:GetWorldPosition()
+    reticule.Transform:SetPosition(x, 0, z)
+    local rot = -math.atan2(pos.z - z, pos.x - x) / DEGREES
+    if ease and dt ~= nil then
+        local rot0 = reticule.Transform:GetRotation()
+        local drot = rot - rot0
+        rot = Lerp((drot > 180 and rot0 + 360) or (drot < -180 and rot0 - 360) or rot0, rot, dt * smoothing)
+    end
+    reticule.Transform:SetRotation(rot)
+end
+
+------------------------------------------------------------------------------------------------------------------------
+
+
 local function CheckSwapAnims(inst, owneroverride)
     local owner = owneroverride or inst.components.inventoryitem.owner
     if owner and inst.components.equippable:IsEquipped() then
@@ -75,6 +111,33 @@ local function OnAttack(inst, attacker, target)
     end
 end
 
+local function SpellFn(inst, caster, pos)
+    caster:PushEvent("combat_lunge", { targetpos = pos, weapon = inst })
+end
+
+local function OnLunged(inst, doer, startingpos, targetpos)
+    -- Lightning fx towards targetpos
+    local fx = SpawnPrefab("spear_wathgrithr_lightning_lunge_fx")
+    fx.Transform:SetPosition(targetpos:Get())
+    fx.Transform:SetRotation(doer:GetRotation())
+
+    -- Change weapon skill cd at here
+    inst.components.rechargeable:Discharge(3)
+end
+
+local function OnLungedHit(inst, doer, target)
+
+end
+
+local function OnDischarged(inst)
+    inst.components.aoetargeting:SetEnabled(false)
+end
+
+local function OnCharged(inst)
+    inst.components.aoetargeting:SetEnabled(true)
+end
+
+
 local function fn()
     local inst = CreateEntity()
 
@@ -92,6 +155,18 @@ local function fn()
 
 
     MakeInventoryFloatable(inst, "med", 0.05, { 1.1, 0.5, 1.1 }, true, -9)
+
+    inst:AddComponent("aoetargeting")
+    inst.components.aoetargeting:SetAllowRiding(false)
+    inst.components.aoetargeting.reticule.reticuleprefab = "reticuleline"
+    inst.components.aoetargeting.reticule.pingprefab = "reticulelineping"
+    inst.components.aoetargeting.reticule.targetfn = ReticuleTargetFn
+    inst.components.aoetargeting.reticule.mousetargetfn = ReticuleMouseTargetFn
+    inst.components.aoetargeting.reticule.updatepositionfn = ReticuleUpdatePositionFn
+    inst.components.aoetargeting.reticule.validcolour = { 1, .75, 0, 1 }
+    inst.components.aoetargeting.reticule.invalidcolour = { .5, 0, 0, 1 }
+    inst.components.aoetargeting.reticule.ease = true
+    inst.components.aoetargeting.reticule.mouseenabled = true
 
     -- if _leap_range > 0 and larger than leap_range should leap
     inst._leap_range = net_float(inst.GUID, "inst._leap_range")
@@ -122,6 +197,23 @@ local function fn()
     inst.components.weapon:SetRange(0)
     inst.components.weapon:SetOnAttack(OnAttack)
 
+    inst:AddComponent("aoeweapon_lunge")
+    inst.components.aoeweapon_lunge:SetDamage(GetDamage)
+    inst.components.aoeweapon_lunge:SetSound("meta3/wigfrid/spear_lighting_lunge")
+    inst.components.aoeweapon_lunge:SetSideRange(1)
+    inst.components.aoeweapon_lunge:SetOnLungedFn(OnLunged)
+    inst.components.aoeweapon_lunge:SetOnHitFn(OnLungedHit)
+    -- inst.components.aoeweapon_lunge:SetStimuli("electric")
+    inst.components.aoeweapon_lunge:SetWorkActions()
+    inst.components.aoeweapon_lunge:SetTags("_combat")
+
+    inst:AddComponent("aoespell")
+    inst.components.aoespell:SetSpellFn(SpellFn)
+
+    inst:AddComponent("rechargeable")
+    inst.components.rechargeable:SetOnDischargedFn(OnDischarged)
+    inst.components.rechargeable:SetOnChargedFn(OnCharged)
+
     inst:AddComponent("dc_chargeable_item")
     inst.components.dc_chargeable_item:SetMax(20)
     inst.components.dc_chargeable_item:SetDrainPerSecond(1)
@@ -132,7 +224,6 @@ local function fn()
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetMaxUses(500)
     inst.components.finiteuses:SetUses(500)
-
     inst.components.finiteuses:SetOnFinished(inst.Remove)
 
     inst:AddComponent("inspectable")
