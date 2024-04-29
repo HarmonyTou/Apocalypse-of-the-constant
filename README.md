@@ -7,7 +7,7 @@
 	- **Guns of the Patriots**
 - Animators & Artists:
 	- **Bishop**
-        - **Alace**
+  	- **Alacl**
 	- **小八专**
 	- **噩梦猪咪**
 - Translators/Writers:
