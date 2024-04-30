@@ -1,4 +1,5 @@
 local AssetUtil = require("utils/assetutil")
+local TheNet = GLOBAL.TheNet
 
 --注册预制体
 PrefabFiles = {
@@ -31,4 +32,3 @@ if not TheNet:IsDedicated() then
         table.insert(Assets, asset)
     end
 end
-
