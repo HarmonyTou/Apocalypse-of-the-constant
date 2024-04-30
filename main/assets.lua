@@ -14,9 +14,9 @@ PrefabFiles = {
 
 Assets = {
     -- inventoryimages
-    Asset("IMAGE", "images/dread_tools.tex"),
-    Asset("ATLAS", "images/dread_tools.xml"),
-    Asset("ATLAS_BUILD", "images/dread_tools.xml", 256), -- for minisign
+    Asset("IMAGE", "images/apocalypse-of-the-constant.tex"),
+    Asset("ATLAS", "images/apocalypse-of-the-constant.xml"),
+    Asset("ATLAS_BUILD", "images/apocalypse-of-the-constant.xml", 256), -- for minisign
 }
 
-AssetUtil.RegisterImageAtlas("images/dread_tools.xml")
+AssetUtil.RegisterImageAtlas("images/apocalypse-of-the-constant.xml")
