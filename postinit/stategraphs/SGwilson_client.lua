@@ -10,7 +10,6 @@ local states = {
         tags = { "busy" },
         server_states = { "lunar_spark_blade_leap" },
 
-
         onenter = function(inst)
             inst.components.locomotor:Stop()
             inst.AnimState:PlayAnimation("atk_leap_pre")
@@ -47,6 +46,7 @@ local states = {
     State {
         name = "chop_attack",
         tags = { "attack", "notalking", "abouttoattack" },
+        server_states = { "chop_attack" },
 
         onenter = function(inst)
             local combat = inst.replica.combat
@@ -68,7 +68,6 @@ local states = {
                 inst.AnimState:PlayAnimation(inst.AnimState:IsCurrentAnimation("woodie_chop_loop") and
                     inst.AnimState:GetCurrentAnimationFrame() <= 7 and "woodie_chop_atk_pre" or "woodie_chop_pre")
                 inst.AnimState:PushAnimation("woodie_chop_loop", false)
-                inst.sg.statemem.ischop = true
                 cooldown = math.max(cooldown, 11 * FRAMES)
             end
 
@@ -91,9 +90,7 @@ local states = {
         timeline =
         {
             TimeEvent(6 * FRAMES, function(inst)
-                if inst.sg.statemem.ischop then
-                    inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_weapon", nil, nil, true)
-                end
+                inst.SoundEmitter:PlaySound("dontstarve/wilson/attack_weapon", nil, nil, true)
             end),
             TimeEvent(8 * FRAMES, function(inst)
                 inst:ClearBufferedAction()
