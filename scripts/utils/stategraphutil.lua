@@ -4,7 +4,7 @@ local AddTimeEventPostInit = function(sg, name, index, fn, time)
         if _timeline ~= nil then
             local _timeevent_time = _timeline.time
             local _timeevent_fn = _timeline.fn
-            local _timeevent = TimeEvent(time ~= nil and time * FRAMES or _timeevent_time, function(inst)
+            local _timeevent = TimeEvent(_timeevent_time, function(inst)
                 if fn ~= nil then
                     fn(inst)
                 end
