@@ -14,4 +14,4 @@
 	- **Sydney**
 	- **Bishop**
 - Logo: **Bishop**
-- other:**dearfrisk**
+- Other: **Dearfrisk**
