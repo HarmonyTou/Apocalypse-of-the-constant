@@ -20,3 +20,15 @@ Assets = {
 }
 
 AssetUtil.RegisterImageAtlas("images/apocalypse-of-the-constant.xml")
+
+local sounds = {
+    Asset("SOUND", "sound/Aoc.fsb"),
+    Asset("SOUNDPACKAGE", "sound/Aoc.fev")
+}
+
+if not TheNet:IsDedicated() then
+    for _, asset in ipairs(sounds) do
+        table.insert(Assets, asset)
+    end
+end
+
