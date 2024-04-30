@@ -14,4 +14,4 @@
 	- **Sydney**
 	- **Bishop**
 - Logo: **Bishop**
-- Other: **Dearfrisk**
+- Other: **Dearfrisk** **yearned** 
