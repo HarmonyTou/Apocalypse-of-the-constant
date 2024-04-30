@@ -214,7 +214,7 @@ local function fn()
 
     inst:AddComponent("aoeweapon_lunge")
     inst.components.aoeweapon_lunge:SetDamage(34) -- lunge weapon skill damage
-    inst.components.aoeweapon_lunge:SetSound("meta3/wigfrid/spear_lighting_lunge")
+    inst.components.aoeweapon_lunge:SetSound("moonstorm/characters/wagstaff/goggles/shoot")
     inst.components.aoeweapon_lunge:SetSideRange(1)
     inst.components.aoeweapon_lunge:SetOnLungedFn(OnLunged)
     inst.components.aoeweapon_lunge:SetOnHitFn(OnLungedHit)
