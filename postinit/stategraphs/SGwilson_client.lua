@@ -180,7 +180,7 @@ for _, state in ipairs(states) do
 end
 
 local function fn(sg)
-    local old_onenter = sg.states["attack"].onenter
+    local _attack_onenter = sg.states["attack"].onenter
     sg.states["attack"].onenter = function(inst, ...)
         local equip = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
@@ -188,12 +188,14 @@ local function fn(sg)
             ReplaceSound("dontstarve/wilson/attack_weapon", "wintersfeast2019/winters_feast/oven/start")
         end
 
-        old_onenter(inst, ...)
+        if _attack_onenter ~= nil then
+            _attack_onenter(inst, ...)
+        end
 
         ReplaceSound("dontstarve/wilson/attack_weapon", nil)
     end
 
-    local old_CASTAOE = sg.actionhandlers[ACTIONS.CASTAOE].deststate
+    local _castaoe_actionhandler = sg.actionhandlers[ACTIONS.CASTAOE].deststate
     sg.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action)
         local weapon = action.invobject
         if weapon then
@@ -218,10 +220,13 @@ local function fn(sg)
                 end
             end
         end
-        return old_CASTAOE(inst, action)
+
+        if _castaoe_actionhandler ~= nil then
+            return _castaoe_actionhandler(inst, action)
+        end
     end
 
-    local attack_actionhandler = sg.actionhandlers[ACTIONS.ATTACK].deststate
+    local _attack_actionhandler = sg.actionhandlers[ACTIONS.ATTACK].deststate
     sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
         if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or IsEntityDead(inst)) then
             local weapon = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -242,8 +247,8 @@ local function fn(sg)
             end
         end
 
-        if attack_actionhandler ~= nil then
-            return attack_actionhandler(inst, action, ...)
+        if _attack_actionhandler ~= nil then
+            return _attack_actionhandler(inst, action, ...)
         end
     end
 end

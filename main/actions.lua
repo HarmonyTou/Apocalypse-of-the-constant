@@ -13,7 +13,7 @@ local function TriggerAbility(sanity_precent)
     end
 end
 
-local Old_DoToolWork = UpvalueUtil.GetUpvalue(ACTIONS.MINE.fn, "DoToolWork")
+local _DoToolWork = UpvalueUtil.GetUpvalue(ACTIONS.MINE.fn, "DoToolWork")
 local function DoToolWork(act, workaction, ...)
     local equip = act.invobject
     local worker = act.doer
@@ -22,7 +22,7 @@ local function DoToolWork(act, workaction, ...)
         act.doer.components.sanity:GetPercent()
 
     if not (equip and worker and target and sanity_precent) then --如果不是人就别搞事了
-        return Old_DoToolWork(act, workaction, ...)
+        return _DoToolWork(act, workaction, ...)
     end
 
     if worker ~= nil and worker.sg ~= nil and equip:HasTag("dread_pickaxe") and worker.sg.statemem.recoilstate ~= nil then
@@ -41,7 +41,7 @@ local function DoToolWork(act, workaction, ...)
         end
     end
 
-    return Old_DoToolWork(act, workaction, ...)
+    return _DoToolWork(act, workaction, ...)
 end
 
 UpvalueUtil.SetUpvalue(ACTIONS.MINE.fn, DoToolWork, "DoToolWork")

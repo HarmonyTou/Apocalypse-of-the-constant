@@ -296,16 +296,14 @@ for _, state in ipairs(states) do
     AddStategraphState("wilson", state)
 end
 
-local Old_PlayMiningFX = PlayMiningFX
+-- local _PlayMiningFX = PlayMiningFX
+-- overwrite it
 function PlayMiningFX(inst, target, nosound)
     if target ~= nil and target:IsValid() then
         local frozen = target:HasTag("frozen")
         local moonglass = target:HasTag("moonglass")
         local crystal = target:HasTag("crystal")
         local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        if not equip then
-            return Old_PlayMiningFX(inst, target, nosound)
-        end
         if target.Transform ~= nil then
             SpawnPrefab(
                 (frozen and "mining_ice_fx") or
@@ -318,18 +316,16 @@ function PlayMiningFX(inst, target, nosound)
             inst.SoundEmitter:PlaySound(
                 (frozen and "dontstarve_DLC001/common/iceboulder_hit") or
                 ((moonglass or crystal) and "turnoftides/common/together/moon_glass/mine") or
-                (equip:HasTag("dread_pickaxes") and "daywalker/pillar/pickaxe_hit_unbreakable") or
+                (equip ~= nil and equip:HasTag("dread_pickaxes") and "daywalker/pillar/pickaxe_hit_unbreakable") or
                 "dontstarve/wilson/use_pick_rock"
             )
         end
-    else
-        Old_PlayMiningFX(inst, target, nosound)
     end
 end
 
 local function fn(sg)
     -- 获取原来的attack状态中onenter函数
-    local old_attack_onenter = sg.states["attack"].onenter
+    local _attack_onenter = sg.states["attack"].onenter
     sg.states["attack"].onenter = function(inst, ...)
         -- 获取手中的装备
         local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
@@ -340,40 +336,28 @@ local function fn(sg)
         end
 
         -- 执行原来的onenter函数
-        old_attack_onenter(inst, ...)
+        if _attack_onenter ~= nil then
+            _attack_onenter(inst, ...)
+        end
 
         -- 播放完后把音效改回去
         ReplaceSound("dontstarve/wilson/attack_weapon", nil)
     end
 
-    local mine_timeevent = TimeEvent(7 * FRAMES, function(inst)
-        if inst.sg.statemem.action ~= nil then
-            PlayMiningFX(inst, inst.sg.statemem.action.target)
-        end
+    local _mine_timeline = sg.states["mine"].timeline
+    local _mine_timeevent_fn = _mine_timeline.fn
+    local mine_timeevent = TimeEvent(7 * FRAMES, function(inst, ...)
         local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         if equip ~= nil and equip:HasTag("dread_pickaxe") then
             inst.SoundEmitter:PlaySound("daywalker/pillar/pickaxe_hit_unbreakable")
         end
-        inst.sg.statemem.recoilstate = "mine_recoil"
-        inst:PerformBufferedAction()
+        _mine_timeevent_fn(inst, ...)
     end)
 
-    local old_hammer_timeline = sg.states["mine"].timeline
-    table.remove(old_hammer_timeline, 1)
-    table.insert(old_hammer_timeline, 1, mine_timeevent)
+    table.remove(_mine_timeline, 1)
+    table.insert(_mine_timeline, 1, mine_timeevent)
 
-    local mine_recoil_timeevent = TimeEvent(7 * FRAMES, function(inst)
-        inst.sg.statemem.recoilstate = "mine_recoil"
-        inst.SoundEmitter:PlaySound(inst.sg.statemem.action ~= nil and inst.sg.statemem.action.invobject ~= nil and
-            inst.sg.statemem.action.invobject.hit_skin_sound or "dontstarve/wilson/hit")
-        inst:PerformBufferedAction()
-    end)
-
-    local old_hammer_timeline = sg.states["hammer"].timeline
-    table.remove(old_hammer_timeline, 1)
-    table.insert(old_hammer_timeline, 1, mine_recoil_timeevent)
-
-    local castaoe_actionhandler = sg.actionhandlers[ACTIONS.CASTAOE].deststate
+    local _castaoe_actionhandler = sg.actionhandlers[ACTIONS.CASTAOE].deststate
     sg.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action)
         local weapon = action.invobject
         if weapon then
@@ -400,12 +384,12 @@ local function fn(sg)
             end
         end
 
-        if castaoe_actionhandler ~= nil then
-            return castaoe_actionhandler(inst, action)
+        if _castaoe_actionhandler ~= nil then
+            return _castaoe_actionhandler(inst, action)
         end
     end
 
-    local attack_actionhandler = sg.actionhandlers[ACTIONS.ATTACK].deststate
+    local _attack_actionhandler = sg.actionhandlers[ACTIONS.ATTACK].deststate
     sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
         inst.sg.mem.localchainattack = not action.forced or nil
         local playercontroller = inst.components.playercontroller
@@ -431,8 +415,8 @@ local function fn(sg)
             end
         end
 
-        if attack_actionhandler ~= nil then
-            return attack_actionhandler(inst, action, ...)
+        if _attack_actionhandler ~= nil then
+            return _attack_actionhandler(inst, action, ...)
         end
     end
 end
