@@ -84,7 +84,7 @@ local states = {
                 -- inst.components.playercontroller:Enable(false)
                 ShakeAllCameras(CAMERASHAKE.VERTICAL, .7, .015, .8, inst, 20)
 
-                inst.SoundEmitter:PlaySound("dontstarve/common/destroy_smoke", nil, nil, true)
+                inst.SoundEmitter:PlaySound("Aoc/spark", nil, nil, true)
             end),
 
             TimeEvent(24 * FRAMES, function(inst)
