@@ -1,6 +1,8 @@
 require("stategraphs/commonstates")
 local SoundUtil = require("utils/soundutil")
 local ReplaceSound = SoundUtil.ReplaceSound
+local StateGraphUtil = require("utils/stategraphutil")
+local AddTimeEventPostInit = StateGraphUtil.AddTimeEventPostInit
 local AddStategraphState = AddStategraphState
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
@@ -344,18 +346,12 @@ local function fn(sg)
         ReplaceSound("dontstarve/wilson/attack_weapon", nil)
     end
 
-    local _mine_timeline = sg.states["mine"].timeline
-    local _mine_timeevent_fn = _mine_timeline.fn
-    local mine_timeevent = TimeEvent(7 * FRAMES, function(inst, ...)
+    AddTimeEventPostInit(sg, "mine", 1, function(inst)
         local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
         if equip ~= nil and equip:HasTag("dread_pickaxe") then
             inst.SoundEmitter:PlaySound("daywalker/pillar/pickaxe_hit_unbreakable")
         end
-        _mine_timeevent_fn(inst, ...)
     end)
-
-    table.remove(_mine_timeline, 1)
-    table.insert(_mine_timeline, 1, mine_timeevent)
 
     local _castaoe_actionhandler = sg.actionhandlers[ACTIONS.CASTAOE].deststate
     sg.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action)
