@@ -79,6 +79,13 @@ local function onequip(inst, owner)
     owner.AnimState:Hide("ARM_normal")
 
     inst._owner:set(owner)
+
+    if inst.increase_charge_task then
+        inst.increase_charge_task:Cancel()
+    end
+    inst.increase_charge_task = inst:DoPeriodicTask(0, function()
+        inst.components.dc_chargeable_item:DoDelta(FRAMES * 0.5)
+    end)
 end
 
 local function onunequip(inst, owner)
@@ -88,6 +95,10 @@ local function onunequip(inst, owner)
     owner.AnimState:Show("ARM_normal")
 
     inst._owner:set(nil)
+    if inst.increase_charge_task then
+        inst.increase_charge_task:Cancel()
+        inst.increase_charge_task = nil
+    end
 end
 
 local function OnChargeValChange(inst, old, new)
@@ -107,7 +118,11 @@ local function GetDamage(inst, attacker, target)
 end
 
 local function OnAttack(inst, attacker, target)
-    inst.components.dc_chargeable_item:DoDelta(1)
+    if attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap" then
+        inst.components.dc_chargeable_item:DoDelta(-1)
+    else
+        inst.components.dc_chargeable_item:DoDelta(1)
+    end
 end
 
 local function SpellFn(inst, caster, pos)
@@ -231,8 +246,8 @@ local function fn()
 
     inst:AddComponent("dc_chargeable_item")
     inst.components.dc_chargeable_item:SetMax(20)
-    inst.components.dc_chargeable_item:SetDrainPerSecond(1)
-    inst.components.dc_chargeable_item:SetResumeDrainCD(2)
+    -- inst.components.dc_chargeable_item:SetDrainPerSecond(1)
+    -- inst.components.dc_chargeable_item:SetResumeDrainCD(2)
     inst.components.dc_chargeable_item:SetOnValChangeFn(OnChargeValChange)
     inst.components.dc_chargeable_item:SetVal(0)
 

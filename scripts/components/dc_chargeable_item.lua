@@ -2,14 +2,14 @@ local DCChargeableItem = Class(function(self, inst)
     self.inst = inst
     self.total = 100
     self.current = 100
-    self.drain_per_second = 1              -- self.current decrease value per second when drained
-    self.pause_drain_time_when_recover = 5 -- pause drain time when increasing self.current
-    self.val_change_callback = nil         -- when self.current changed, trigger this fn
+    -- self.drain_per_second = 1              -- self.current decrease value per second when drained
+    -- self.pause_drain_time_when_recover = 5 -- pause drain time when increasing self.current
+    self.val_change_callback = nil -- when self.current changed, trigger this fn
 
-    self.pause_drain_end_time = nil
-    self.drain_paused = false
+    -- self.pause_drain_end_time = nil
+    -- self.drain_paused = false
 
-    self.inst:StartUpdatingComponent(self)
+    -- self.inst:StartUpdatingComponent(self)
 end)
 
 function DCChargeableItem:OnRemoveFromEntity()
@@ -17,7 +17,8 @@ function DCChargeableItem:OnRemoveFromEntity()
 end
 
 function DCChargeableItem:GetDebugString()
-    return string.format("%.2f/%d%s", self.current, self.total, self.drain_paused and " (drain paused)" or "")
+    -- return string.format("%.2f/%d%s", self.current, self.total, self.drain_paused and " (drain paused)" or "")
+    return string.format("%.2f/%d", self.current, self.total)
 end
 
 function DCChargeableItem:OnSave()
@@ -34,25 +35,25 @@ function DCChargeableItem:OnLoad(data)
     end
 end
 
-function DCChargeableItem:PauseDrain(cd)
-    self.drain_paused = true
-    if cd then
-        self.pause_drain_end_time = GetTime() + cd
-    end
-end
+-- function DCChargeableItem:PauseDrain(cd)
+--     self.drain_paused = true
+--     if cd then
+--         self.pause_drain_end_time = GetTime() + cd
+--     end
+-- end
 
-function DCChargeableItem:ResumeDrain()
-    self.drain_paused = false
-    self.pause_drain_end_time = nil
-end
+-- function DCChargeableItem:ResumeDrain()
+--     self.drain_paused = false
+--     self.pause_drain_end_time = nil
+-- end
 
-function DCChargeableItem:SetDrainPerSecond(val)
-    self.drain_per_second = val
-end
+-- function DCChargeableItem:SetDrainPerSecond(val)
+--     self.drain_per_second = val
+-- end
 
-function DCChargeableItem:SetResumeDrainCD(val)
-    self.pause_drain_time_when_recover = val
-end
+-- function DCChargeableItem:SetResumeDrainCD(val)
+--     self.pause_drain_time_when_recover = val
+-- end
 
 function DCChargeableItem:SetOnValChangeFn(fn)
     self.val_change_callback = fn
@@ -67,9 +68,9 @@ function DCChargeableItem:SetVal(val)
     self.current = math.clamp(val, 0, self.total)
 
     local delta = self.current - old_val
-    if val > old_val then
-        self:PauseDrain(self.pause_drain_time_when_recover)
-    end
+    -- if val > old_val then
+    --     self:PauseDrain(self.pause_drain_time_when_recover)
+    -- end
 
     if self.val_change_callback then
         self.val_change_callback(self.inst, old_val, self.current)
@@ -84,7 +85,7 @@ function DCChargeableItem:DoDelta(delta)
     return self:SetVal(self.current + delta)
 end
 
-function DCChargeableItem:GetUses()
+function DCChargeableItem:GetVal()
     return self.current
 end
 
@@ -96,16 +97,16 @@ function DCChargeableItem:SetPercent(amount)
     self:SetVal(self.total * amount)
 end
 
-function DCChargeableItem:OnUpdate(dt)
-    if self.drain_paused and self.pause_drain_end_time and GetTime() >= self.pause_drain_end_time then
-        self:ResumeDrain()
-    end
+-- function DCChargeableItem:OnUpdate(dt)
+--     if self.drain_paused and self.pause_drain_end_time and GetTime() >= self.pause_drain_end_time then
+--         self:ResumeDrain()
+--     end
 
-    if not self.drain_paused then
-        self:DoDelta(-dt * self.drain_per_second)
-    else
+--     if not self.drain_paused then
+--         self:DoDelta(-dt * self.drain_per_second)
+--     else
 
-    end
-end
+--     end
+-- end
 
 return DCChargeableItem
