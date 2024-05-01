@@ -20,6 +20,8 @@ tiled
 *.obj
 *.fobj
 *.rar
+*.h
+*.lst
 .vscode
 .idea
 .fsbcache
