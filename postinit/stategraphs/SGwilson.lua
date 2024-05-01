@@ -84,7 +84,7 @@ local states = {
                 -- inst.components.playercontroller:Enable(false)
                 ShakeAllCameras(CAMERASHAKE.VERTICAL, .7, .015, .8, inst, 20)
 
-                inst.SoundEmitter:PlaySound("Aoc/lunar_spark_blade/spark")
+                inst.SoundEmitter:PlaySound("Aoc/lunar_spark_blade/spark", nil, 0.3)
             end),
 
             TimeEvent(24 * FRAMES, function(inst)
