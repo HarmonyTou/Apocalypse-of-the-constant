@@ -230,7 +230,7 @@ local function fn(sg)
     sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
         if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or IsEntityDead(inst)) then
             local weapon = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            local inventoryitem = weapon.replica.inventoryitem
+            local inventoryitem = weapon ~= nil and weapon.replica.inventoryitem
             if (inventoryitem ~= nil and inventoryitem:IsWeapon()) then
                 local target = action.target
                 if weapon then

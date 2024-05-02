@@ -4,7 +4,8 @@
 
 ]]
 
-local modimport = modimport
+-- 灵衣：一键GLOBAL
+GLOBAL.setmetatable(env, { __index = function(t, k) return GLOBAL.rawget(GLOBAL, k) end })
 
 local modules = {
 	"config",
@@ -15,7 +16,8 @@ local modules = {
 	"strings",
 	"actions",
 	"commands",
-    "prefabskin",
+	"prefabskin",
+	"widgets",
 }
 
 for i = 1, #modules do

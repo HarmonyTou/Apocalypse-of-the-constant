@@ -84,7 +84,7 @@ local function onequip(inst, owner)
         inst.increase_charge_task:Cancel()
     end
     inst.increase_charge_task = inst:DoPeriodicTask(0, function()
-        inst.components.dc_chargeable_item:DoDelta(FRAMES * 0.5)
+        inst.components.dc_chargeable_item:DoDelta(FRAMES * 0.1)
     end)
 end
 

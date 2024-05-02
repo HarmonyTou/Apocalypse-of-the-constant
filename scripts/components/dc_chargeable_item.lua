@@ -1,19 +1,33 @@
+local function onpercentchange(self, val)
+    if self.current ~= nil and self.total ~= nil then
+        self.inst.replica.dc_chargeable_item:SetPercent(self:GetPercent())
+    end
+end
+
 local DCChargeableItem = Class(function(self, inst)
-    self.inst = inst
-    self.total = 100
-    self.current = 100
-    -- self.drain_per_second = 1              -- self.current decrease value per second when drained
-    -- self.pause_drain_time_when_recover = 5 -- pause drain time when increasing self.current
-    self.val_change_callback = nil -- when self.current changed, trigger this fn
+        self.inst = inst
+        self.total = 100
+        self.current = 100
+        -- self.drain_per_second = 1              -- self.current decrease value per second when drained
+        -- self.pause_drain_time_when_recover = 5 -- pause drain time when increasing self.current
+        self.val_change_callback = nil -- when self.current changed, trigger this fn
 
-    -- self.pause_drain_end_time = nil
-    -- self.drain_paused = false
+        -- self.pause_drain_end_time = nil
+        -- self.drain_paused = false
 
-    -- self.inst:StartUpdatingComponent(self)
-end)
+        -- self.inst:StartUpdatingComponent(self)
+
+        inst:AddTag("dc_chargeable_item")
+    end,
+    nil,
+    {
+        total = onpercentchange,
+        current = onpercentchange,
+    }
+)
 
 function DCChargeableItem:OnRemoveFromEntity()
-
+    self.inst:RemoveTag("dc_chargeable_item")
 end
 
 function DCChargeableItem:GetDebugString()

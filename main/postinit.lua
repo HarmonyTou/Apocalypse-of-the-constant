@@ -7,6 +7,7 @@ local postinit = {
         "armordreadstone",
     },
     components = {
+        "dc_chargeable_item",
         "projectile",
     },
     stategraphs = {
