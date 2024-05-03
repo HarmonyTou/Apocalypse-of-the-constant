@@ -331,9 +331,10 @@ local function fn(sg)
     sg.states["attack"].onenter = function(inst, ...)
         -- 获取手中的装备
         local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        local is_dreadsword = equip ~= nil and equip:HasTag("dreadsword")
 
         -- 如果装备存在且装备有dreadsword标签，那么将attack_weapon替换为hit_metal
-        if equip ~= nil and equip:HasTag("dreadsword") then
+        if is_dreadsword then
             ReplaceSound("dontstarve/wilson/attack_weapon", "rifts2/thrall_wings/projectile")
         end
 
@@ -343,7 +344,10 @@ local function fn(sg)
         end
 
         -- 播放完后把音效改回去
-        ReplaceSound("dontstarve/wilson/attack_weapon", nil)
+        -- 不是绝望剑就别没改
+        if is_dreadsword then
+            ReplaceSound("dontstarve/wilson/attack_weapon", nil)
+        end
     end
 
     AddTimeEventPostInit(sg, "mine", 1, function(inst)
