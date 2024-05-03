@@ -19,7 +19,7 @@ Assets = {
     Asset("IMAGE", "images/apocalypse-of-the-constant.tex"),
     Asset("ATLAS", "images/apocalypse-of-the-constant.xml"),
     Asset("ATLAS_BUILD", "images/apocalypse-of-the-constant.xml", 256), -- for minisign
-    Asset("ANIM", "lunar_spark_meter.zip"),
+    Asset("ANIM", "anim/lunar_spark_meter.zip"),
 }
 
 AssetUtil.RegisterImageAtlas("images/apocalypse-of-the-constant.xml")
