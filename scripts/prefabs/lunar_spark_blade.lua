@@ -261,9 +261,6 @@ local function fn()
     inst.components.finiteuses:SetUses(500)
     inst.components.finiteuses:SetOnFinished(inst.Remove)
 
-    local planardamage = inst:AddComponent("planardamage")
-    planardamage:SetBaseDamage(TUNING.SWORD_LUNARPLANT_PLANAR_DAMAGE)
-
     local damagetypebonus = inst:AddComponent("damagetypebonus")
     damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.WEAPONS_LUNARPLANT_VS_SHADOW_BONUS)
 
