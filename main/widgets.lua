@@ -3,8 +3,8 @@ local UIAnim = require "widgets/uianim"
 AddClassPostConstruct("widgets/itemtile", function(self, invitem)
     if self.item:HasTag("dc_chargeable_item") then
         self.dc_charge_progress = self:AddChild(UIAnim())
-        self.dc_charge_progress:GetAnimState():SetBank("obsidian_tool_meter")
-        self.dc_charge_progress:GetAnimState():SetBuild("obsidian_tool_meter")
+        self.dc_charge_progress:GetAnimState():SetBank("lunar_spark_meter")
+        self.dc_charge_progress:GetAnimState():SetBuild("lunar_spark_meter")
         -- self.dc_charge_progress:GetAnimState():OverrideSymbol("meter", "spoiled_meter", "meter_yellow")
         -- self.dc_charge_progress:GetAnimState():OverrideSymbol("frame", "spoiled_meter", "frame_yellow")
         -- self.dc_charge_progress:GetAnimState():SetMultColour(1, 0, 0, 1)
