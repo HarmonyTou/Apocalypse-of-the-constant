@@ -14,6 +14,9 @@ local postinit = {
         "SGwilson",
         "SGwilson_client",
     },
+    widgets = {
+        "itemtile",
+    },
 }
 
 for k, v in pairs(postinit) do

@@ -1,7 +1,4 @@
-local assets =
-{
-    Asset("ANIM", "anim/spear.zip"),
-    Asset("ANIM", "anim/swap_spear.zip"),
+local assets = {
     Asset("ANIM", "anim/lunar_spark_blade.zip"),
 }
 
@@ -76,7 +73,6 @@ local function CheckSwapAnims(inst, owneroverride)
 end
 
 local function onequip(inst, owner)
-    -- owner.AnimState:OverrideSymbol("swap_object", "swap_spear", "swap_spear")
     owner.AnimState:ClearOverrideSymbol("swap_object")
     CheckSwapAnims(inst)
 
@@ -130,7 +126,7 @@ local function OnAttack(inst, attacker, target)
     end
 
     if target ~= nil and target:IsValid() then
-    SpawnPrefab("hitsparks_fx"):Setup(attacker, target)
+        SpawnPrefab("hitsparks_fx"):Setup(attacker, target)
     end
 end
 
@@ -271,11 +267,10 @@ local function fn()
     local damagetypebonus = inst:AddComponent("damagetypebonus")
     damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.WEAPONS_LUNARPLANT_VS_SHADOW_BONUS)
 
-    
+
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.imagename = "lunar_spark_blade"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
@@ -314,5 +309,5 @@ local function animfn()
     return inst
 end
 
-return Prefab("lunar_spark_blade", fn, assets),
+return Prefab("lunar_spark_blade", fn, assets. prefabs),
     Prefab("lunar_spark_blade_swapanim", animfn, assets)
