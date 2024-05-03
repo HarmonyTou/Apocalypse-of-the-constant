@@ -5,6 +5,11 @@ local assets =
     Asset("ANIM", "anim/lunar_spark_blade.zip"),
 }
 
+local prefabs =
+{
+    "hitsparks_fx",
+}
+
 ------------------------------------------------------------------------------------------------------------------------
 
 local function ReticuleTargetFn()
@@ -119,9 +124,13 @@ end
 
 local function OnAttack(inst, attacker, target)
     if attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap" then
-        inst.components.dc_chargeable_item:DoDelta(-1)
+        inst.components.dc_chargeable_item:DoDelta(-8)
     else
         inst.components.dc_chargeable_item:DoDelta(1)
+    end
+
+    if target ~= nil and target:IsValid() then
+    SpawnPrefab("hitsparks_fx"):Setup(attacker, target)
     end
 end
 
@@ -256,10 +265,17 @@ local function fn()
     inst.components.finiteuses:SetUses(500)
     inst.components.finiteuses:SetOnFinished(inst.Remove)
 
+    local planardamage = inst:AddComponent("planardamage")
+    planardamage:SetBaseDamage(TUNING.SWORD_LUNARPLANT_PLANAR_DAMAGE)
+
+    local damagetypebonus = inst:AddComponent("damagetypebonus")
+    damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.WEAPONS_LUNARPLANT_VS_SHADOW_BONUS)
+
+    
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.imagename = "spear"
+    inst.components.inventoryitem.imagename = "lunar_spark_blade"
 
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip(onequip)
