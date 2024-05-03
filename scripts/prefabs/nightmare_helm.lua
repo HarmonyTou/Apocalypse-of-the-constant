@@ -229,8 +229,6 @@ local function MakeHat(name)
         return inst
     end
 
-    table.insert(ALL_HAT_PREFAB_NAMES, prefabname)
-
     return Prefab(prefabname, fn, assets)
 end
 
