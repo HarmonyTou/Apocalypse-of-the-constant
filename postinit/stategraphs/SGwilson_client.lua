@@ -218,6 +218,10 @@ local function fn(sg)
                     inst:PerformPreviewBufferedAction()
                     return
                 end
+
+                if weapon.prefab == "dread_axe" then
+                    return "throw"
+                end
             end
         end
 

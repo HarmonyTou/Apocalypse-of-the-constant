@@ -381,6 +381,10 @@ local function fn(sg)
                 if weapon.prefab == "lunar_spark_blade" then
                     return "lunar_spark_blade_skill_entry"
                 end
+
+                if weapon.prefab == "dread_axe" then
+                    return "throw"
+                end
             end
         end
 

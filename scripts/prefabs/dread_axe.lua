@@ -38,18 +38,18 @@ local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt
 end
 
 local function SetFxOwner(inst, owner)
-	if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
-		inst._fxowner.components.colouradder:DetachChild(inst.fx)
-	end
-	inst._fxowner = owner
+    if inst._fxowner ~= nil and inst._fxowner.components.colouradder ~= nil then
+        inst._fxowner.components.colouradder:DetachChild(inst.fx)
+    end
+    inst._fxowner = owner
     if owner ~= nil then
         inst.fx.entity:SetParent(owner.entity)
         inst.fx.Follower:FollowSymbol(owner.GUID, "swap_object", nil, nil, nil, true, nil, 2)
         inst.fx.components.highlightchild:SetOwner(owner)
         inst.fx:ToggleEquipped(true)
-		if owner.components.colouradder ~= nil then
-			owner.components.colouradder:AttachChild(inst.fx)
-		end
+        if owner.components.colouradder ~= nil then
+            owner.components.colouradder:AttachChild(inst.fx)
+        end
     else
         inst.fx.entity:SetParent(inst.entity)
         --For floating
@@ -83,105 +83,119 @@ local function OnStopFloating(inst)
 end
 
 local function SpellFn(inst, caster, pos)
-	-- inst.components.projectile:AimedThrow(inst, caster, pos, caster.components.combat:CalcDamage(nil, inst, nil, true, nil, TUNING.DREAD_AXE.ALT_STIMULI), true)
-    -- inst.components.aoespell:OnSpellCast(caster, nil, inst)
-end
+    inst.components.rechargeable:Discharge(5)
+    caster.components.inventory:DropItem(inst)
 
-local function IsValidPosition(inst)
-    local pos = inst:GetPosition()
-	return TheWorld.Map:IsGroundTargetBlocked(pos) or not TheWorld.Map:IsPassableAtPoint(pos:Get()) or not TheWorld.Map:IsValidTileAtPoint(pos:Get())
-end
-
-local function ReturnToInit(inst)
-    inst.Physics:Stop()
-    inst:RemoveTag("NOCLICK")
-    ChangeToInventoryPhysics(inst)
-    inst.AnimState:SetMultColour(1,1,1,1)
-    inst.components.inventoryitem.canbepickedup = true
-    inst.components.projectile:Stop()
-    inst.components.scaler:ApplyScale()
+    inst:MakeProjectile()
+    inst.components.complexprojectile:Launch(pos, caster)
 end
 
 local function StartReturn(inst, attacker)
-    local returnfrompos = inst:GetPosition()
-
     inst.Physics:Stop()
-    -- Return to thrower if Woodie
-    if attacker and attacker.prefab == "woodie" and not inst.no_return then
-        inst.AnimState:SetMultColour(0,0,0,0)
-        SpawnPrefab("lucy_transform_fx").Transform:SetPosition(inst:GetPosition():Get())
-        inst.projectileowner = nil
-        inst:DoTaskInTime(12*FRAMES, function()
-            if attacker and attacker.entity and attacker.entity:IsValid() and attacker.entity:IsVisible() then
-                local origin_pos = returnfrompos or inst:GetPosition() or Vector3(0,0,0)
-                if attacker.sg:HasStateTag("idle") then
-                    inst.projectileowner = attacker
-                end
-                attacker.components.inventory:Equip(inst)
-                -- attacker:SpawnChild("lucyspin_fx"):SetOrigin(origin_pos:Get())
-                if not attacker.sg.statemem.playedfx then
-                    SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50, -25, -1)
-                end
-            elseif IsValidPosition(inst) then
-                local pos = inst:GetPosition()
-                local result_offset
-                local distance = 0
-                local step = 0.5
-                while result_offset == nil do
-                    result_offset = FindValidPositionByFan(distance, distance, distance, function(offset)
-                        local test_point = pos + offset
-                        return not TheWorld.Map:IsGroundTargetBlocked(test_point) and TheWorld.Map:IsPassableAtPoint(test_point:Get()) and TheWorld.Map:IsValidTileAtPoint(test_point:Get())
-                    end)
-                    distance = distance + step
-                end
+    inst.components.inventoryitem.canbepickedup = true
+    inst.components.scaler:ApplyScale()
+    inst:MakeNonProjectile()
 
-                local target_pos = result_offset and pos + result_offset
-
-                local fx = SpawnPrefab("splash_lavafx")
-                fx.Transform:SetPosition(pos:Get())
-
-                if inst.components.inventoryitem then
-                    inst.components.inventoryitem:DoDropPhysics(target_pos.x, 10, target_pos.z, false, false)
-                else
-                    inst.Physics:Teleport(target_pos.x, 0, target_pos.z)
-                end
-            end
-            ReturnToInit(inst)
-            returnfrompos = nil
-        end)
+    if attacker and attacker:IsValid() then
+        -- return to attacker
+        SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50,
+            -25, -1)
+        attacker.components.inventory:Equip(inst)
     else
-        ReturnToInit(inst)
+        -- Drop on ground
+        local x, y, z = inst.Transform:GetWorldPosition()
+        inst.components.inventoryitem:DoDropPhysics(x, y, z, true)
     end
 end
 
-local function ReturnToAttacker(inst, attacker)
-	attacker.components.combat.ignorehitrange = false
-	inst.Physics:SetMotorVel(5, 0, 0)
-    inst.components.inventoryitem.pushlandedevents = not attacker
-	inst:DoTaskInTime(15*FRAMES, StartReturn, attacker)
-end
+
 
 local function OnThrown(inst, attacker, targetpos)
-	inst:AddTag("NOCLICK")
-	inst.Physics:ClearCollisionMask()
-	inst.AnimState:PlayAnimation("spin_loop", true)
+    inst.AnimState:PlayAnimation("spin_loop", true)
     inst.components.inventoryitem.canbepickedup = false
-	attacker.components.combat.ignorehitrange = true
-    attacker.components.inventory:DropItem(inst)
+
+    -- Personal params stored in complexprojectile
+    inst.components.complexprojectile.startpos  = attacker:GetPosition()
+    inst.components.complexprojectile.targetpos = targetpos
 end
+
 
 local function OnHit(inst, attacker, target)
     inst.AnimState:PlayAnimation("bounce")
-	inst.AnimState:PushAnimation("idle")
-
-	inst.components.projectile:RotateToTarget(attacker:GetPosition())
-	ReturnToAttacker(inst, attacker)
+    inst.AnimState:PushAnimation("idle")
+    if target ~= nil then
+        -- DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
+        attacker.components.combat:DoAttack(target, inst, inst, TUNING.DREAD_AXE.ALT_STIMULI, nil, 999,
+            inst:GetPosition())
+    end
+    inst.Physics:SetMotorVel(5, 0, 0)
+    -- inst.components.inventoryitem.pushlandedevents = not attacker
+    inst:DoTaskInTime(15 * FRAMES, StartReturn, attacker)
 end
 
-local function OnMiss(inst, attacker, target)
-    inst.AnimState:PlayAnimation("bounce")
-	inst.AnimState:PushAnimation("idle")
-    ReturnToAttacker(inst, attacker)
+local function OnProjectileUpdate(inst, dt)
+    dt = dt or FRAMES
+    local x, y, z = inst:GetPosition():Get()
+    local attacker = inst.components.complexprojectile.attacker
+    if attacker == nil then
+        print("Warning: attacker = nil")
+        return
+    end
+
+    if (inst:GetPosition() - inst.components.complexprojectile.startpos):Length() > TUNING.DREAD_AXE.ALT_DIST then
+        -- Hit none target, miss...
+        inst.components.complexprojectile:Hit()
+        return
+    end
+
+    inst.Physics:SetMotorVel(TUNING.DREAD_AXE.ALT_SPEED, 0, 0)
+
+    local ents = TheSim:FindEntities(x, y, z, TUNING.DREAD_AXE.ALT_HIT_RANGE, { "_combat", "_health" }, { "INLIMBO" })
+    for _, v in pairs(ents) do
+        if attacker.components.combat:CanTarget(v)
+            and not attacker.components.combat:IsAlly(v) then
+            inst.components.complexprojectile:Hit(v)
+            break
+        end
+    end
+end
+
+local function MakeProjectile(inst)
+    inst:AddTag("NOCLICK")
+
+    inst.Physics:ClearCollisionMask()
+    inst.Physics:CollidesWith(COLLISION.GROUND)
+
+    inst.AnimState:SetSixFaced()
+
+    if not inst.components.complexprojectile then
+        inst:AddComponent("complexprojectile")
+    end
+
+    -- Still required:
+    -- TUNING.DREAD_AXE.ALT_SPEED
+    -- TUNING.DREAD_AXE.ALT_DIST
+    -- TUNING.DREAD_AXE.ALT_HIT_RANGE
+    -- TUNING.DREAD_AXE.ALT_STIMULI
+    -- TUNING.DREAD_AXE.ALT_DAMAGE
+    inst.components.complexprojectile.onupdatefn = OnProjectileUpdate
+    inst.components.complexprojectile:SetOnLaunch(OnThrown)
+    inst.components.complexprojectile:SetOnHit(OnHit)
+end
+
+local function MakeNonProjectile(inst)
+    inst:RemoveTag("NOCLICK")
+
+    inst.Physics:ClearCollisionMask()
+    inst.Physics:CollidesWith(COLLISION.WORLD)
+    inst.Physics:CollidesWith(COLLISION.OBSTACLES)
+    inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
+
+    inst.AnimState:SetNoFaced()
+
+    if inst.components.complexprojectile then
+        inst:RemoveComponent("complexprojectile")
+    end
 end
 
 local function OnDischarged(inst)
@@ -239,8 +253,8 @@ local function fn()
     inst.components.aoetargeting.reticule.ease = true
     inst.components.aoetargeting.reticule.mouseenabled = true
 
-    local swap_data = {sym_build = "dread_axe", bank = "dread_axe"}
-    MakeInventoryFloatable(inst, "small", 0.05, {1.2, 0.75, 1.2}, true, -11, swap_data)
+    local swap_data = { sym_build = "dread_axe", bank = "dread_axe" }
+    MakeInventoryFloatable(inst, "small", 0.05, { 1.2, 0.75, 1.2 }, true, -11, swap_data)
 
     inst.entity:SetPristine()
 
@@ -254,6 +268,10 @@ local function fn()
     inst.fx.AnimState:SetFrame(frame)
     SetFxOwner(inst, nil)
     inst:ListenForEvent("floater_stopfloating", OnStopFloating)
+
+
+    inst.MakeProjectile = MakeProjectile
+    inst.MakeNonProjectile = MakeNonProjectile
 
     inst:AddComponent("scaler")
     inst:AddComponent("inspectable")
@@ -290,20 +308,9 @@ local function fn()
 
     inst:AddComponent("equippable")
     inst.components.equippable.dapperness = -TUNING.DAPPERNESS_MED
-	inst.components.equippable.is_magic_dapperness = true
+    inst.components.equippable.is_magic_dapperness = true
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
-
-	-- inst:AddComponent("projectile")
-	-- inst.components.projectile:SetSpeed(TUNING.DREAD_AXE.ALT_SPEED)
-	-- inst.components.projectile:SetRange(TUNING.DREAD_AXE.ALT_DIST)
-	-- inst.components.projectile:SetHitDist(TUNING.DREAD_AXE.ALT_HIT_RANGE)
-	-- inst.components.projectile:SetStimuli(TUNING.DREAD_AXE.ALT_STIMULI)
-	-- inst.components.projectile:SetDamage(TUNING.DREAD_AXE.ALT_DAMAGE)
-	-- inst.components.projectile:SetOnThrownFn(OnThrown)
-    -- inst.components.projectile:SetOnHitFn(OnHit)
-	-- inst.components.projectile:SetOnMissFn(OnMiss)
-	-- inst.components.projectile:SetMeleeWeapon(true)
 
     MakeHauntableLaunch(inst)
 
@@ -346,9 +353,9 @@ local function FxRemoveAll(inst)
 end
 
 local function FxColourChanged(inst, r, g, b, a)
-	for i = 1, #inst.fx do
-		inst.fx[i].AnimState:SetAddColour(r, g, b, a)
-	end
+    for i = 1, #inst.fx do
+        inst.fx[i].AnimState:SetAddColour(r, g, b, a)
+    end
 end
 
 local function FxOnEquipToggle(inst)
@@ -374,7 +381,7 @@ local function FxOnEquipToggle(inst)
         inst.OnRemoveEntity = FxRemoveAll
     elseif inst.OnRemoveEntity ~= nil then
         inst.OnRemoveEntity = nil
-		inst.components.colouraddersync:SetColourChangedFn(nil)
+        inst.components.colouraddersync:SetColourChangedFn(nil)
         FxRemoveAll(inst)
     end
 end
@@ -404,7 +411,7 @@ local function FollowSymbolFxFn()
     inst.AnimState:PlayAnimation("swap_loop_3", true) --frame 3 is used for floating
 
     inst:AddComponent("highlightchild")
-	inst:AddComponent("colouraddersync")
+    inst:AddComponent("colouraddersync")
 
     inst.equiptoggle = net_bool(inst.GUID, "dread_axe_fx.equiptoggle", "equiptoggledirty")
 
