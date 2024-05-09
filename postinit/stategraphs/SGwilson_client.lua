@@ -220,7 +220,7 @@ local function fn(sg)
                 end
 
                 if weapon.prefab == "dread_axe" then
-                    return "throw"
+                    return "throw_line"
                 end
             end
         end

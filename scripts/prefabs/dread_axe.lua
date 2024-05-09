@@ -84,24 +84,45 @@ end
 
 local function SpellFn(inst, caster, pos)
     inst.components.rechargeable:Discharge(5)
-    caster.components.inventory:DropItem(inst)
-
     inst:MakeProjectile()
+
+    caster.components.inventory:DropItem(inst)
     inst.components.complexprojectile:Launch(pos, caster)
 end
 
 local function StartReturn(inst, attacker)
     inst.Physics:Stop()
-    inst.components.inventoryitem.canbepickedup = true
-    inst.components.scaler:ApplyScale()
-    inst:MakeNonProjectile()
 
     if attacker and attacker:IsValid() then
-        -- return to attacker
-        SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50,
-            -25, -1)
-        attacker.components.inventory:Equip(inst)
+        attacker:AddChild(inst)
+        inst.Transform:SetPosition(0, 0, 0)
+        inst.AnimState:PlayAnimation("return")
+
+        inst.Follower:FollowSymbol(attacker.GUID, "swap_object", 0, 0, 0)
+
+        inst:DoTaskInTime(12 * FRAMES, function()
+            inst.Follower:StopFollowing()
+
+            attacker:RemoveChild(inst)
+            inst.Transform:SetPosition(attacker:GetPosition():Get())
+
+
+            inst.components.inventoryitem.canbepickedup = true
+            inst.components.scaler:ApplyScale()
+            inst:MakeNonProjectile()
+            inst.AnimState:PlayAnimation("idle", true)
+
+            -- return to attacker
+            SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50,
+                -25, -1)
+            attacker.components.inventory:Equip(inst)
+        end)
     else
+        inst.components.inventoryitem.canbepickedup = true
+        inst.components.scaler:ApplyScale()
+        inst:MakeNonProjectile()
+        inst.AnimState:PlayAnimation("idle", true)
+
         -- Drop on ground
         local x, y, z = inst.Transform:GetWorldPosition()
         inst.components.inventoryitem:DoDropPhysics(x, y, z, true)
@@ -110,13 +131,15 @@ end
 
 
 
-local function OnThrown(inst, attacker, targetpos)
+local function OnLaunch(inst, attacker, targetpos)
     inst.AnimState:PlayAnimation("spin_loop", true)
     inst.components.inventoryitem.canbepickedup = false
 
     -- Personal params stored in complexprojectile
     inst.components.complexprojectile.startpos  = attacker:GetPosition()
     inst.components.complexprojectile.targetpos = targetpos
+
+    inst.Physics:SetMotorVel(TUNING.DREAD_AXE.ALT_SPEED, 0, 0)
 end
 
 
@@ -148,8 +171,6 @@ local function OnProjectileUpdate(inst, dt)
         return
     end
 
-    inst.Physics:SetMotorVel(TUNING.DREAD_AXE.ALT_SPEED, 0, 0)
-
     local ents = TheSim:FindEntities(x, y, z, TUNING.DREAD_AXE.ALT_HIT_RANGE, { "_combat", "_health" }, { "INLIMBO" })
     for _, v in pairs(ents) do
         if attacker.components.combat:CanTarget(v)
@@ -158,15 +179,21 @@ local function OnProjectileUpdate(inst, dt)
             break
         end
     end
+
+    return true
 end
 
 local function MakeProjectile(inst)
     inst:AddTag("NOCLICK")
 
+    inst.Physics:SetCollisionGroup(COLLISION.ITEMS)
     inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.GROUND)
 
-    inst.AnimState:SetSixFaced()
+    inst.Transform:SetSixFaced()
+
+    inst.AnimState:SetBank("dread_axe_throw")
+    inst.AnimState:SetBuild("dread_axe_throw")
 
     if not inst.components.complexprojectile then
         inst:AddComponent("complexprojectile")
@@ -179,19 +206,24 @@ local function MakeProjectile(inst)
     -- TUNING.DREAD_AXE.ALT_STIMULI
     -- TUNING.DREAD_AXE.ALT_DAMAGE
     inst.components.complexprojectile.onupdatefn = OnProjectileUpdate
-    inst.components.complexprojectile:SetOnLaunch(OnThrown)
+    inst.components.complexprojectile:SetOnLaunch(OnLaunch)
     inst.components.complexprojectile:SetOnHit(OnHit)
+    inst.components.complexprojectile:SetLaunchOffset(Vector3(0, 0, 0))
 end
 
 local function MakeNonProjectile(inst)
     inst:RemoveTag("NOCLICK")
 
+    inst.Physics:SetCollisionGroup(COLLISION.ITEMS)
     inst.Physics:ClearCollisionMask()
     inst.Physics:CollidesWith(COLLISION.WORLD)
     inst.Physics:CollidesWith(COLLISION.OBSTACLES)
     inst.Physics:CollidesWith(COLLISION.SMALLOBSTACLES)
 
-    inst.AnimState:SetNoFaced()
+    inst.Transform:SetNoFaced()
+
+    inst.AnimState:SetBank("dread_axe")
+    inst.AnimState:SetBuild("dread_axe")
 
     if inst.components.complexprojectile then
         inst:RemoveComponent("complexprojectile")
@@ -213,6 +245,7 @@ local function fn()
     inst.entity:AddAnimState()
     -- inst.entity:AddMiniMapEntity()
     inst.entity:AddNetwork()
+    inst.entity:AddFollower()
 
     MakeInventoryPhysics(inst)
 
