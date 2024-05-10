@@ -21,11 +21,7 @@ local function DoToolWork(act, workaction, ...)
     local sanity_precent = act.doer ~= nil and act.doer.components.sanity ~= nil and
         act.doer.components.sanity:GetPercent()
 
-    if not (equip and worker and target and sanity_precent) then --如果不是人就别搞事了
-        return _DoToolWork(act, workaction, ...)
-    end
-
-    if worker ~= nil and worker.sg ~= nil and equip:HasTag("dread_pickaxe") and worker.sg.statemem.recoilstate ~= nil then
+    if worker ~= nil and worker.sg ~= nil and worker:HasTag("player") and equip:HasTag("dread_pickaxe") and worker.sg.statemem.recoilstate ~= nil then
         worker.sg:GoToState(worker.sg.statemem.recoilstate, { target = target })
     end
 

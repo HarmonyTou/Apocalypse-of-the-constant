@@ -305,7 +305,7 @@ function PlayMiningFX(inst, target, nosound)
         local frozen = target:HasTag("frozen")
         local moonglass = target:HasTag("moonglass")
         local crystal = target:HasTag("crystal")
-        local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        local equip = inst.components.inventory ~= nil and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
         if target.Transform ~= nil then
             SpawnPrefab(
                 (frozen and "mining_ice_fx") or
@@ -318,7 +318,7 @@ function PlayMiningFX(inst, target, nosound)
             inst.SoundEmitter:PlaySound(
                 (frozen and "dontstarve_DLC001/common/iceboulder_hit") or
                 ((moonglass or crystal) and "turnoftides/common/together/moon_glass/mine") or
-                (equip ~= nil and equip:HasTag("dread_pickaxes") and "daywalker/pillar/pickaxe_hit_unbreakable") or
+                (equip ~= nil and equip:HasTag("dread_pickaxe") and "daywalker/pillar/pickaxe_hit_unbreakable") or
                 "dontstarve/wilson/use_pick_rock"
             )
         end
@@ -349,13 +349,6 @@ local function fn(sg)
             ReplaceSound("dontstarve/wilson/attack_weapon", nil)
         end
     end
-
-    AddTimeEventPostInit(sg, "mine", 1, function(inst)
-        local equip = inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-        if equip ~= nil and equip:HasTag("dread_pickaxe") then
-            inst.SoundEmitter:PlaySound("daywalker/pillar/pickaxe_hit_unbreakable")
-        end
-    end)
 
     local _castaoe_actionhandler = sg.actionhandlers[ACTIONS.CASTAOE].deststate
     sg.actionhandlers[ACTIONS.CASTAOE].deststate = function(inst, action)
