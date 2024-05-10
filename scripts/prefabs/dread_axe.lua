@@ -133,6 +133,7 @@ end
 
 
 local function SimpleDropOnGround(inst)
+    inst:Show()
     inst.components.inventoryitem.canbepickedup = true
     inst.components.scaler:ApplyScale()
     inst:MakeNonProjectile()
@@ -166,21 +167,28 @@ local function OnHit(inst, attacker, target)
     end
     inst.Physics:SetMotorVel(5, 0, 0)
 
-    inst:DoTaskInTime(15 * FRAMES, function()
+    local HIDE_TIME = 15 * FRAMES
+    local PLAY_RETURN_ANIM_TIME = HIDE_TIME + 33 * FRAMES
+    local TRUELY_RETURN_TIME = 12 * FRAMES
+
+    inst:DoTaskInTime(HIDE_TIME, function()
         inst.Physics:Stop()
         inst:Hide()
-        SpawnAt("lucy_transform_fx", inst)
+        -- SpawnAt("lucy_transform_fx", inst)
+        SpawnAt("shadow_despawn", inst)
+        SpawnAt("statue_transition_2", inst)
     end)
 
-    inst:DoTaskInTime(27 * FRAMES, function()
+    inst:DoTaskInTime(PLAY_RETURN_ANIM_TIME, function()
         if attacker and attacker:IsValid() then
+            inst:Show()
             attacker:AddChild(inst)
             inst.Transform:SetPosition(0, 0, 0)
             inst.AnimState:PlayAnimation("return")
 
             inst.Follower:FollowSymbol(attacker.GUID, "swap_object", 0, 0, 0)
 
-            inst:DoTaskInTime(39 * FRAMES, function()
+            inst:DoTaskInTime(TRUELY_RETURN_TIME, function()
                 inst.Follower:StopFollowing()
 
                 if attacker and attacker:IsValid() then
