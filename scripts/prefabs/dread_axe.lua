@@ -94,6 +94,8 @@ local function StartReturn(inst, attacker)
     inst.Physics:Stop()
 
     if attacker and attacker:IsValid() then
+        -- SpawnAt("lucy_transform_fx", inst)
+
         attacker:AddChild(inst)
         inst.Transform:SetPosition(0, 0, 0)
         inst.AnimState:PlayAnimation("return")
@@ -130,6 +132,17 @@ local function StartReturn(inst, attacker)
 end
 
 
+local function SimpleDropOnGround(inst)
+    inst.components.inventoryitem.canbepickedup = true
+    inst.components.scaler:ApplyScale()
+    inst:MakeNonProjectile()
+    inst.AnimState:PlayAnimation("idle", true)
+
+    -- Drop on ground
+    local x, y, z = inst.Transform:GetWorldPosition()
+    inst.components.inventoryitem:DoDropPhysics(x, y, z, true)
+end
+
 
 local function OnLaunch(inst, attacker, targetpos)
     inst.AnimState:PlayAnimation("spin_loop", true)
@@ -152,8 +165,44 @@ local function OnHit(inst, attacker, target)
             inst:GetPosition())
     end
     inst.Physics:SetMotorVel(5, 0, 0)
-    -- inst.components.inventoryitem.pushlandedevents = not attacker
-    inst:DoTaskInTime(15 * FRAMES, StartReturn, attacker)
+
+    inst:DoTaskInTime(15 * FRAMES, function()
+        inst.Physics:Stop()
+        inst:Hide()
+        SpawnAt("lucy_transform_fx", inst)
+    end)
+
+    inst:DoTaskInTime(27 * FRAMES, function()
+        if attacker and attacker:IsValid() then
+            attacker:AddChild(inst)
+            inst.Transform:SetPosition(0, 0, 0)
+            inst.AnimState:PlayAnimation("return")
+
+            inst.Follower:FollowSymbol(attacker.GUID, "swap_object", 0, 0, 0)
+
+            inst:DoTaskInTime(39 * FRAMES, function()
+                inst.Follower:StopFollowing()
+
+                if attacker and attacker:IsValid() then
+                    attacker:RemoveChild(inst)
+                    inst.Transform:SetPosition(attacker:GetPosition():Get())
+                    inst.components.inventoryitem.canbepickedup = true
+                    inst.components.scaler:ApplyScale()
+                    inst:MakeNonProjectile()
+                    inst.AnimState:PlayAnimation("idle", true)
+
+                    -- return to attacker
+                    SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50,
+                        -25, -1)
+                    attacker.components.inventory:Equip(inst)
+                else
+                    SimpleDropOnGround(inst)
+                end
+            end)
+        else
+            SimpleDropOnGround(inst)
+        end
+    end)
 end
 
 local function OnProjectileUpdate(inst, dt)
