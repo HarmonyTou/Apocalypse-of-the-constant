@@ -168,7 +168,7 @@ local function OnHit(inst, attacker, target)
     inst.Physics:SetMotorVel(5, 0, 0)
 
     local HIDE_TIME = 15 * FRAMES
-    local PLAY_RETURN_ANIM_TIME = HIDE_TIME + 33 * FRAMES
+    local PLAY_RETURN_ANIM_TIME = HIDE_TIME + 20 * FRAMES
     local TRUELY_RETURN_TIME = 12 * FRAMES
 
     inst:DoTaskInTime(HIDE_TIME, function()
@@ -200,8 +200,8 @@ local function OnHit(inst, attacker, target)
                     inst.AnimState:PlayAnimation("idle", true)
 
                     -- return to attacker
-                    SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50,
-                        -25, -1)
+                    -- SpawnPrefab("lucy_transform_fx").entity:AddFollower():FollowSymbol(attacker.GUID, "swap_object", 50,
+                    --     -25, -1)
                     attacker.components.inventory:Equip(inst)
                 else
                     SimpleDropOnGround(inst)
