@@ -71,9 +71,12 @@ end
 local function onequip(inst, owner)
     CheckSwapAnims(inst)
 
-    inst.protect_fx = SpawnPrefab("spawnprotectionbuff")
-    owner:AddChild(inst.protect_fx)
-    owner.AnimState:SetHaunted(true)
+    -- Anim fx
+    -- inst.protect_fx = SpawnPrefab("spawnprotectionbuff")
+    -- owner:AddChild(inst.protect_fx)
+
+    -- Haunted light fx
+    -- owner.AnimState:SetHaunted(true)
 
 
     inst:ListenForEvent("blocked", OnBlocked, owner)
@@ -83,11 +86,11 @@ local function onunequip(inst, owner)
     CheckSwapAnims(inst, owner)
     owner.AnimState:ClearOverrideSymbol("swap_body")
 
-    if inst.protect_fx and inst.protect_fx:IsValid() then
-        inst.protect_fx:Remove()
-    end
-    inst.protect_fx = nil
-    owner.AnimState:SetHaunted(false)
+    -- if inst.protect_fx and inst.protect_fx:IsValid() then
+    --     inst.protect_fx:Remove()
+    -- end
+    -- inst.protect_fx = nil
+    -- owner.AnimState:SetHaunted(false)
 
     inst:RemoveEventCallback("blocked", OnBlocked, owner)
 end
