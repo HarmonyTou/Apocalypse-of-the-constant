@@ -113,7 +113,7 @@ local function OnChargeValChange(inst, old, new)
 end
 
 local function GetDamage(inst, attacker, target)
-    local base_dmg = 76.5
+    local base_dmg = 68
     local leap_dmg = base_dmg * 2
     return (attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap") and leap_dmg or base_dmg
 end
