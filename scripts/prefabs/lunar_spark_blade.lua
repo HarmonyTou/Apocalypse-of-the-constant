@@ -103,7 +103,7 @@ local function onunequip(inst, owner)
 end
 
 local function OnChargeValChange(inst, old, new)
-    if inst.components.dc_chargeable_item:GetPercent() >= 0.66 then
+    if inst.components.dc_chargeable_item:GetPercent() >= 0.6 then
         inst._leap_range:set(1.9)
         inst.components.weapon:SetRange(10, 0)
     else
@@ -113,8 +113,8 @@ local function OnChargeValChange(inst, old, new)
 end
 
 local function GetDamage(inst, attacker, target)
-    local base_dmg = 85
-    local leap_dmg = base_dmg * 1.2
+    local base_dmg = 76.5
+    local leap_dmg = base_dmg * 2
     return (attacker.sg and attacker.sg.currentstate.name == "lunar_spark_blade_leap") and leap_dmg or base_dmg
 end
 
@@ -224,7 +224,7 @@ local function fn()
     end
 
     inst:AddComponent("planardamage")
-    inst.components.planardamage:SetBaseDamage(34)
+    inst.components.planardamage:SetBaseDamage(51)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(GetDamage)
@@ -257,8 +257,8 @@ local function fn()
     inst.components.dc_chargeable_item:SetVal(0)
 
     inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(500)
-    inst.components.finiteuses:SetUses(500)
+    inst.components.finiteuses:SetMaxUses(300)
+    inst.components.finiteuses:SetUses(300)
     inst.components.finiteuses:SetOnFinished(inst.Remove)
 
     local damagetypebonus = inst:AddComponent("damagetypebonus")
