@@ -185,7 +185,7 @@ local function fn(sg)
         local equip = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 
         if equip ~= nil and equip:HasTag("dreadsword") then
-            ReplaceSound("dontstarve/wilson/attack_weapon", "wintersfeast2019/winters_feast/oven/start")
+            ReplaceSound("dontstarve/wilson/attack_weapon", "rifts2/thrall_wings/projectile")
         end
 
         if _attack_onenter ~= nil then
