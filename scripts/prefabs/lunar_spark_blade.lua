@@ -112,6 +112,17 @@ local function OnChargeValChange(inst, old, new)
     end
 end
 
+local function OnFinished(inst)
+    local broken = SpawnAt("lunar_spark_blade_broken", inst)
+    local owner = inst.components.inventoryitem:GetGrandOwner()
+    if owner then
+        owner.components.inventory:GiveItem(broken)
+    else
+        local x, y, z = broken.Transform:GetWorldPosition()
+        broken.components.inventoryitem:DoDropPhysics(x, y, z, false)
+    end
+end
+
 local function GetDamage(inst, attacker, target)
     local base_dmg = 68
     local leap_dmg = base_dmg * 2
@@ -259,7 +270,7 @@ local function fn()
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetMaxUses(300)
     inst.components.finiteuses:SetUses(300)
-    inst.components.finiteuses:SetOnFinished(inst.Remove)
+    inst.components.finiteuses:SetOnFinished(OnFinished)
 
     local damagetypebonus = inst:AddComponent("damagetypebonus")
     damagetypebonus:AddBonus("shadow_aligned", inst, TUNING.WEAPONS_LUNARPLANT_VS_SHADOW_BONUS)
@@ -306,5 +317,67 @@ local function animfn()
     return inst
 end
 
-return Prefab("lunar_spark_blade", fn, assets. prefabs),
-    Prefab("lunar_spark_blade_swapanim", animfn, assets)
+-------------------------------------------------------------------------------------------
+
+local function broken_ShouldAcceptItem(inst, item)
+    return item.prefab == "security_pulse_cage_full"
+end
+
+local function broken_OnGetItemFromPlayer(inst, giver, item)
+    local new_blade = SpawnAt("lunar_spark_blade", inst)
+
+    if giver == inst.components.inventoryitem:GetGrandOwner() then
+        if giver.components.inventory then
+            giver.components.inventory:GiveItem(new_blade)
+        end
+    end
+
+
+    inst:Remove()
+end
+
+local function broken_OnRefuseItem(inst, giver, item)
+    if giver.components.talker then
+        giver.components.talker:Say("I should give it a Huo-Hua-Gui !")
+    end
+end
+
+local function brokenfn()
+    local inst = CreateEntity()
+
+    inst.entity:AddTransform()
+    inst.entity:AddAnimState()
+    inst.entity:AddNetwork()
+
+    MakeInventoryPhysics(inst)
+
+    inst.AnimState:SetBank("lunar_spark_blade")
+    inst.AnimState:SetBuild("lunar_spark_blade")
+    inst.AnimState:PlayAnimation("broken")
+
+    MakeInventoryFloatable(inst, "med", 0.05, { 1.1, 0.5, 1.1 }, true, -9)
+
+
+    inst.entity:SetPristine()
+
+    if not TheWorld.ismastersim then
+        return inst
+    end
+
+    inst:AddComponent("inspectable")
+
+    inst:AddComponent("inventoryitem")
+
+    inst:AddComponent("trader")
+    inst.components.trader:SetAcceptTest(broken_ShouldAcceptItem)
+    inst.components.trader.onaccept = broken_OnGetItemFromPlayer
+    inst.components.trader.onrefuse = broken_OnRefuseItem
+
+    MakeHauntableLaunch(inst)
+
+    return inst
+end
+
+return Prefab("lunar_spark_blade", fn, assets, prefabs),
+    Prefab("lunar_spark_blade_swapanim", animfn, assets),
+    Prefab("lunar_spark_blade_broken", brokenfn, assets)
