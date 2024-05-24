@@ -113,14 +113,16 @@ local function OnChargeValChange(inst, old, new)
 end
 
 local function OnFinished(inst)
-    local broken = SpawnAt("lunar_spark_blade_broken", inst)
+    local recipe = SpawnAt("security_pulse_cage", inst)
     local owner = inst.components.inventoryitem:GetGrandOwner()
     if owner then
-        owner.components.inventory:GiveItem(broken)
+        owner.components.inventory:GiveItem(recipe)
     else
-        local x, y, z = broken.Transform:GetWorldPosition()
-        broken.components.inventoryitem:DoDropPhysics(x, y, z, false)
+        local x, y, z = recipe.Transform:GetWorldPosition()
+        recipe.components.inventoryitem:DoDropPhysics(x, y, z, false)
     end
+
+    inst:Remove()
 end
 
 local function GetDamage(inst, attacker, target)
@@ -166,7 +168,6 @@ end
 local function OnCharged(inst)
     inst.components.aoetargeting:SetEnabled(true)
 end
-
 
 local function fn()
     local inst = CreateEntity()
@@ -318,7 +319,7 @@ local function animfn()
 end
 
 -------------------------------------------------------------------------------------------
-
+-- Unused broken blade code
 local function broken_ShouldAcceptItem(inst, item)
     return item.prefab == "security_pulse_cage_full"
 end
@@ -379,5 +380,5 @@ local function brokenfn()
 end
 
 return Prefab("lunar_spark_blade", fn, assets, prefabs),
-    Prefab("lunar_spark_blade_swapanim", animfn, assets),
-    Prefab("lunar_spark_blade_broken", brokenfn, assets)
+    Prefab("lunar_spark_blade_swapanim", animfn, assets)
+-- Prefab("lunar_spark_blade_broken", brokenfn, assets)
