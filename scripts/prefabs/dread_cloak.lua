@@ -127,7 +127,7 @@ local function fn()
     inst.components.inventoryitem.imagename = "armorwood"
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(1000, 1.0)
+    inst.components.armor:InitCondition(1000, 0.9)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
