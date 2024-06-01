@@ -189,7 +189,7 @@ local function MakeHat(name)
         end
 
         inst:AddComponent("inventoryitem")
-
+        inst.components.inventoryitem.imagename = "hat_nightmare"
         inst:AddComponent("inspectable")
 
         inst:AddComponent("tradable")

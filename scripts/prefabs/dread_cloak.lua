@@ -1,12 +1,11 @@
 local assets =
 {
-    Asset("ANIM", "anim/armor_wood.zip"),
     Asset("ANIM", "anim/swap_dread_cloak.zip"),
     Asset("ANIM", "anim/swap_dread_cloak2.zip"),
 }
 
 local function OnBlocked(owner)
-    owner.SoundEmitter:PlaySound("dontstarve/wilson/hit_armour")
+    owner.SoundEmitter:PlaySound("dontstarve/wilson/hit_dreadstone")
 end
 
 local function CheckSwapAnims(inst, owner_unequip)
@@ -78,8 +77,6 @@ local function onequip(inst, owner)
     -- Haunted light fx
     -- owner.AnimState:SetHaunted(true)
 
-
-    inst:ListenForEvent("blocked", OnBlocked, owner)
 end
 
 local function onunequip(inst, owner)
@@ -91,8 +88,6 @@ local function onunequip(inst, owner)
     -- end
     -- inst.protect_fx = nil
     -- owner.AnimState:SetHaunted(false)
-
-    inst:RemoveEventCallback("blocked", OnBlocked, owner)
 end
 
 
@@ -106,13 +101,13 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-    inst.AnimState:SetBank("armor_wood")
-    inst.AnimState:SetBuild("armor_wood")
-    inst.AnimState:PlayAnimation("anim")
+        inst.AnimState:SetBank("swap_dread_cloak2")
+        inst.AnimState:SetBuild("swap_dread_cloak2")
+        inst.AnimState:PlayAnimation("anim")
 
     inst.foleysound = "dontstarve/movement/foley/logarmour"
 
-    local swap_data = { bank = "armor_wood", anim = "anim" }
+    local swap_data = { bank = "swap_dread_cloak2", anim = "anim" }
     MakeInventoryFloatable(inst, "small", 0.2, 0.80, nil, nil, swap_data)
 
     inst.entity:SetPristine()
@@ -124,10 +119,10 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.imagename = "armorwood"
+    inst.components.inventoryitem.imagename = "armor_nightmare"
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(1000, 0.9)
+    inst.components.armor:InitCondition(1000, 1.0)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
