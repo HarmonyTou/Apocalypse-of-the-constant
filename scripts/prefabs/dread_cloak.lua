@@ -25,26 +25,32 @@ local function CheckSwapAnims(inst, owner_unequip)
             end
         end
 
-
-        inst.swap_anims.cloak_up.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 6, 9)
-        -- inst.swap_anims.cloak_side.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 10)
         inst.swap_anims.cloak_down.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 9)
+        inst.swap_anims.cloak_side.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 3, 6)
 
         local lut = {
-            "armor_up_1",
-            "armor_up_2",
-            "armor_up_3",
+            "armor_down_1",
+            "armor_down_2",
+            "armor_down_3",
+
             "armor_side_1",
             "armor_side_2",
             "armor_side_3",
+
+            "armor_up_1",
+            "armor_up_2",
+            "armor_up_3",
         }
 
         for i, v in pairs(lut) do
             inst.swap_anims[v].Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, i - 1)
         end
 
+        inst.swap_anims.cloak_up.Follower:FollowSymbol(owner.GUID, "swap_body", nil, nil, nil, true, nil, 6, 9)
+
+
         -- Static symbol, only contains up body anim
-        owner.AnimState:OverrideSymbol("swap_body", "swap_dread_cloak2", "swap_body")
+        -- owner.AnimState:OverrideSymbol("swap_body", "swap_dread_cloak2", "swap_body")
     else
         for k, v in pairs(inst.swap_anims) do
             v:Hide()
@@ -76,7 +82,6 @@ local function onequip(inst, owner)
 
     -- Haunted light fx
     -- owner.AnimState:SetHaunted(true)
-
 end
 
 local function onunequip(inst, owner)
@@ -101,9 +106,9 @@ local function fn()
 
     MakeInventoryPhysics(inst)
 
-        inst.AnimState:SetBank("swap_dread_cloak2")
-        inst.AnimState:SetBuild("swap_dread_cloak2")
-        inst.AnimState:PlayAnimation("anim")
+    inst.AnimState:SetBank("swap_dread_cloak2")
+    inst.AnimState:SetBuild("swap_dread_cloak2")
+    inst.AnimState:PlayAnimation("anim")
 
     inst.foleysound = "dontstarve/movement/foley/logarmour"
 
@@ -136,16 +141,21 @@ local function fn()
     -- Create swapanims
     inst.swap_anims = {
         cloak_up = inst:SpawnChild("dread_cloak_swapanim_cloak"),
-        -- cloak_side = inst:SpawnChild("dread_cloak_swapanim_cloak"),
+        cloak_side = inst:SpawnChild("dread_cloak_swapanim_cloak"),
         cloak_down = inst:SpawnChild("dread_cloak_swapanim_cloak"),
 
-        armor_up_1 = inst:SpawnChild("dread_cloak_swapanim_armor"),
-        armor_up_2 = inst:SpawnChild("dread_cloak_swapanim_armor"),
-        armor_up_3 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+
+        armor_down_1 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_down_2 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_down_3 = inst:SpawnChild("dread_cloak_swapanim_armor"),
 
         armor_side_1 = inst:SpawnChild("dread_cloak_swapanim_armor"),
         armor_side_2 = inst:SpawnChild("dread_cloak_swapanim_armor"),
         armor_side_3 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+
+        armor_up_1 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_up_2 = inst:SpawnChild("dread_cloak_swapanim_armor"),
+        armor_up_3 = inst:SpawnChild("dread_cloak_swapanim_armor"),
     }
 
     for k, v in pairs(inst.swap_anims) do
@@ -153,16 +163,22 @@ local function fn()
     end
 
     inst.swap_anims.cloak_up.AnimState:PlayAnimation("idle1", true)
-    -- inst.swap_anims.cloak_side.AnimState:PlayAnimation("idle1", true)
+    inst.swap_anims.cloak_side.AnimState:PlayAnimation("idle4", true)
     inst.swap_anims.cloak_down.AnimState:PlayAnimation("idle1", true)
+
+    inst.swap_anims.armor_down_1.AnimState:PlayAnimation("idle1", true)
+    inst.swap_anims.armor_down_2.AnimState:PlayAnimation("idle2", true)
+    inst.swap_anims.armor_down_3.AnimState:PlayAnimation("idle3", true)
+
+    inst.swap_anims.armor_side_1.AnimState:PlayAnimation("idle4", true)
+    inst.swap_anims.armor_side_2.AnimState:PlayAnimation("idle5", true)
+    inst.swap_anims.armor_side_3.AnimState:PlayAnimation("idle6", true)
 
     inst.swap_anims.armor_up_1.AnimState:PlayAnimation("idle1", true)
     inst.swap_anims.armor_up_2.AnimState:PlayAnimation("idle2", true)
     inst.swap_anims.armor_up_3.AnimState:PlayAnimation("idle3", true)
 
-    inst.swap_anims.armor_side_1.AnimState:PlayAnimation("idle4", true)
-    inst.swap_anims.armor_side_2.AnimState:PlayAnimation("idle5", true)
-    inst.swap_anims.armor_side_3.AnimState:PlayAnimation("idle6", true)
+
 
     CheckSwapAnims(inst)
 
