@@ -127,7 +127,7 @@ local function fn()
     inst.components.inventoryitem.imagename = "armor_nightmare"
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(1000, 1.0)
+    inst.components.armor:InitCondition(1000, 0.9)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
@@ -174,9 +174,9 @@ local function fn()
     inst.swap_anims.armor_side_2.AnimState:PlayAnimation("idle5", true)
     inst.swap_anims.armor_side_3.AnimState:PlayAnimation("idle6", true)
 
-    inst.swap_anims.armor_up_1.AnimState:PlayAnimation("idle1", true)
-    inst.swap_anims.armor_up_2.AnimState:PlayAnimation("idle2", true)
-    inst.swap_anims.armor_up_3.AnimState:PlayAnimation("idle3", true)
+    inst.swap_anims.armor_up_1.AnimState:PlayAnimation("idle7", true)
+    inst.swap_anims.armor_up_2.AnimState:PlayAnimation("idle8", true)
+    inst.swap_anims.armor_up_3.AnimState:PlayAnimation("idle9", true)
 
 
 
