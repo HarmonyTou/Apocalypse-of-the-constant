@@ -11,7 +11,8 @@ PrefabFiles = {
     "dread_cloak",
     "dread_axe",
     "aoc_skins",
-    "nightmare_hat"
+    "nightmare_hat",
+    "dread_spear"
 }
 
 Assets = {
