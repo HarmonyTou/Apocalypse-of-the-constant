@@ -292,6 +292,43 @@ local states = {
             end),
         },
     },
+
+    State {
+        name = "dread_cloak_start_using_container",
+        tags = { "doing", "busy", "nodangle" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/make_trap", "make")
+            inst.AnimState:PlayAnimation("build_pre")
+            inst.AnimState:PushAnimation("build_loop", true)
+
+            inst:PerformBufferedAction()
+        end,
+
+        timeline =
+        {
+            TimeEvent(4 * FRAMES, function(inst)
+                inst.sg:RemoveStateTag("busy")
+            end),
+        },
+
+        onexit = function(inst)
+            inst.SoundEmitter:KillSound("make")
+            inst.components.channelcaster:StopChanneling()
+        end,
+    },
+
+    State {
+        name = "dread_cloak_stop_using_container",
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("build_pst")
+            inst:PerformBufferedAction()
+            inst.sg:GoToState("idle", true)
+        end,
+    },
 }
 
 for _, state in ipairs(states) do
@@ -305,7 +342,8 @@ function PlayMiningFX(inst, target, nosound)
         local frozen = target:HasTag("frozen")
         local moonglass = target:HasTag("moonglass")
         local crystal = target:HasTag("crystal")
-        local equip = inst.components.inventory ~= nil and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or nil
+        local equip = inst.components.inventory ~= nil and inst.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS) or
+            nil
         if target.Transform ~= nil then
             SpawnPrefab(
                 (frozen and "mining_ice_fx") or
@@ -415,6 +453,26 @@ local function fn(sg)
         if _attack_actionhandler ~= nil then
             return _attack_actionhandler(inst, action, ...)
         end
+    end
+
+    local _start_channelcast_actionhandler = sg.actionhandlers[ACTIONS.START_CHANNELCAST].deststate
+    sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
+        local item = action.invobject
+        if item and item.prefab == "dread_cloak" then
+            return "dread_cloak_start_using_container"
+        end
+
+        return FunctionOrValue(_start_channelcast_actionhandler, inst, action, ...)
+    end
+
+    local _stop_channelcast_actionhandler = sg.actionhandlers[ACTIONS.STOP_CHANNELCAST].deststate
+    sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
+        local item = action.invobject
+        if item and item.prefab == "dread_cloak" then
+            return "dread_cloak_stop_using_container"
+        end
+
+        return FunctionOrValue(_stop_channelcast_actionhandler, inst, action, ...)
     end
 end
 

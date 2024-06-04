@@ -173,6 +173,41 @@ local states = {
             end
         end,
     },
+
+    State {
+        name = "dread_cloak_start_using_container",
+        tags = { "doing", "busy", "nodangle" },
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("build_pre")
+            inst.AnimState:PushAnimation("build_loop", true)
+
+            inst:PerformPreviewBufferedAction()
+        end,
+
+        timeline =
+        {
+            TimeEvent(4 * FRAMES, function(inst)
+                inst.sg:RemoveStateTag("busy")
+            end),
+        },
+
+        onexit = function(inst)
+
+        end,
+    },
+
+    State {
+        name = "dread_cloak_stop_using_container",
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+            inst.AnimState:PlayAnimation("build_pst")
+            inst:PerformPreviewBufferedAction()
+            inst.sg:GoToState("idle", true)
+        end,
+    },
 }
 
 for _, state in ipairs(states) do
@@ -254,6 +289,26 @@ local function fn(sg)
         if _attack_actionhandler ~= nil then
             return _attack_actionhandler(inst, action, ...)
         end
+    end
+
+    local _start_channelcast_actionhandler = sg.actionhandlers[ACTIONS.START_CHANNELCAST].deststate
+    sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
+        local item = action.invobject
+        if item and item.prefab == "dread_cloak" then
+            return "dread_cloak_start_using_container"
+        end
+
+        return FunctionOrValue(_start_channelcast_actionhandler, inst, action, ...)
+    end
+
+    local _stop_channelcast_actionhandler = sg.actionhandlers[ACTIONS.STOP_CHANNELCAST].deststate
+    sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
+        local item = action.invobject
+        if item and item.prefab == "dread_cloak" then
+            return "dread_cloak_stop_using_container"
+        end
+
+        return FunctionOrValue(_stop_channelcast_actionhandler, inst, action, ...)
     end
 end
 
