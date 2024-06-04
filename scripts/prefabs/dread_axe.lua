@@ -23,7 +23,7 @@ local function ReticuleMouseTargetFn(inst, mousepos)
         l = 6.5 / math.sqrt(l)
         return Vector3(x + dx * l, 0, z + dz * l)
     end
-end
+end 
 
 local function ReticuleUpdatePositionFn(inst, pos, reticule, ease, smoothing, dt)
     local x, y, z = inst.Transform:GetWorldPosition()
@@ -222,6 +222,24 @@ local function OnProjectileUpdate(inst, dt)
         return
     end
 
+    
+    local WORKABLES_CANT_TAGS = { "insect", "INLIMBO" }
+    local WORKABLES_ONEOF_TAGS = { "CHOP_workable"}
+	local x, y, z = inst.Transform:GetWorldPosition()
+    local heading_angle = inst.Transform:GetRotation() * DEGREES
+    local x1, z1 = math.cos(heading_angle), -math.sin(heading_angle)
+	
+    for i, v in ipairs(TheSim:FindEntities(x, 0, z, 2, nil, WORKABLES_CANT_TAGS, WORKABLES_ONEOF_TAGS)) do
+        local x2, y2, z2 = v.Transform:GetWorldPosition()
+        local dx, dz = x2 - x, z2 - z
+        local len = math.sqrt(dx * dx + dz * dz)
+        if len <= 0 or x1 * dx / len + z1 * dz / len > .3 then
+            v.components.workable:WorkedBy(inst,20)
+			inst.components.complexprojectile:Hit() --破坏一个后直接结束
+			inst.components.finiteuses:Use(5)
+        end
+	end
+    
     if (inst:GetPosition() - inst.components.complexprojectile.startpos):Length() > TUNING.DREAD_AXE.ALT_DIST then
         -- Hit none target, miss...
         inst.components.complexprojectile:Hit()
