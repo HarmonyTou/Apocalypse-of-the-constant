@@ -21,3 +21,7 @@
 - Other:
 	- **Yearned**
 
+## License
+Apocalypse of the content is licensed under Apache License v2.0.
+
+
