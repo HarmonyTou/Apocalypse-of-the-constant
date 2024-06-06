@@ -1,4 +1,4 @@
-## The Team
+## Contributors
 
 - Programmers:
 	- **Sydney**
