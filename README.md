@@ -11,12 +11,12 @@
   	- **Alacl**
 	- **小八专**
 	- **噩梦猪咪**
-- Translators/Writers:
+- Translators & Writers:
 	- **Sydney**
 	- **Bishop**
 - Logo: **Bishop**
 - Designer: 
-	- **Dearfrisk**
+	- **DearFrisk**
 	- **Mr.鲁鲁**
 - Other:
 	- **Yearned**
