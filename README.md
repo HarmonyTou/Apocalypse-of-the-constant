@@ -5,7 +5,7 @@
 	- **噩梦猪咪**
 	- **dx11**
 	- **Guns of the Patriots**
-        - **Bering**
+	- **Bering**
 - Animators & Artists:
 	- **Bishop**
   	- **Alacl**
@@ -18,4 +18,4 @@
 - Other:
 	- **Dearfrisk**
 	- **Yearned**
-        - **Mr.鲁鲁**
+	- **Mr.鲁鲁**
