@@ -15,7 +15,9 @@
 	- **Sydney**
 	- **Bishop**
 - Logo: **Bishop**
-- Other:
+- Designer: 
 	- **Dearfrisk**
-	- **Yearned**
 	- **Mr.鲁鲁**
+- Other:
+	- **Yearned**
+
