@@ -20,7 +20,7 @@
 - Designer: 
 	- **DearFrisk**
 	- **Mr.鲁鲁**
-- Other:
+- Audio:
 	- **Yearned**
 
 ## Links
