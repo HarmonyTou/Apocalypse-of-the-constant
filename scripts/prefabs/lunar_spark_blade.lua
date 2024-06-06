@@ -1,4 +1,4 @@
-local assets = {
+ local assets = {
     Asset("ANIM", "anim/lunar_spark_blade.zip"),
 }
 
@@ -113,15 +113,30 @@ local function OnChargeValChange(inst, old, new)
 end
 
 local function OnFinished(inst)
-    local recipe = SpawnAt("security_pulse_cage", inst)
-    local owner = inst.components.inventoryitem:GetGrandOwner()
-    if owner then
-        owner.components.inventory:GiveItem(recipe)
-    else
-        local x, y, z = recipe.Transform:GetWorldPosition()
-        recipe.components.inventoryitem:DoDropPhysics(x, y, z, false)
+        local min_speed = 0
+        local max_speed = 2
+        local y_speed = 8
+        local y_speed_variance = 4
+        local pt = inst:GetPosition()  -- 获取生物的位置作为掉落位置
+    local extra_items = {"security_pulse_cage"} -- 额外的物品列表
+    for _, prefab in ipairs(extra_items) do
+        local loot = SpawnPrefab(prefab)
+        if loot then
+            -- 设置投掷目标点和方差
+            local fling_target_pt = pt + Vector3(math.random(-1, 1), 0, math.random(-1, 1))  -- 设置一个随机的目标点
+            loot.Transform:SetPosition(pt:Get())
+            -- 投掷额外的物品
+            local fling_speed = 5  -- 设置投掷速度
+            local fling_y_speed = 8  -- 设置投掷高度
+        if loot.Physics ~= nil then
+            local angle = 10
+            local speed = 2     
+                local sinangle = math.sin(angle)
+                local cosangle = math.cos(angle)                
+                loot.Physics:SetVel(speed * cosangle, GetRandomWithVariance(y_speed, y_speed_variance), speed * -sinangle)
+            end
+        end
     end
-
     inst:Remove()
 end
 
@@ -269,8 +284,8 @@ local function fn()
     inst.components.dc_chargeable_item:SetVal(0)
 
     inst:AddComponent("finiteuses")
-    inst.components.finiteuses:SetMaxUses(300)
-    inst.components.finiteuses:SetUses(300)
+    inst.components.finiteuses:SetMaxUses(350)
+    inst.components.finiteuses:SetUses(350)
     inst.components.finiteuses:SetOnFinished(OnFinished)
 
     local damagetypebonus = inst:AddComponent("damagetypebonus")
@@ -335,12 +350,6 @@ local function broken_OnGetItemFromPlayer(inst, giver, item)
 
 
     inst:Remove()
-end
-
-local function broken_OnRefuseItem(inst, giver, item)
-    if giver.components.talker then
-        giver.components.talker:Say("I should give it a Huo-Hua-Gui !")
-    end
 end
 
 local function brokenfn()
