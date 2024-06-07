@@ -95,42 +95,6 @@ local function onunequip(inst, owner)
     -- owner.AnimState:SetHaunted(false)
 end
 
--------------------------------------------------------------------
-local function OnContainerClose(container)
-    -- container.tophat.components.magiciantool:StopUsing()
-    -- container.dread_cloak.components
-    -- StopChanneling()
-    -- container.doer.components.channelcaster:StopChanneling()
-end
-
-local function OnStartUsingContainer(inst, doer)
-    if inst.container == nil then
-        inst.container = SpawnPrefab("dread_cloak_container")
-        inst.container.Network:SetClassifiedTarget(doer)
-        inst.container.dread_cloak = inst
-        inst.container.doer = doer
-        inst.container.components.container_proxy:SetOnCloseFn(OnContainerClose)
-    end
-    doer:PushEvent("opencontainer", { container = inst.container.components.container_proxy:GetMaster() })
-    inst.container.components.container_proxy:Open(doer)
-    if doer.SoundEmitter ~= nil and not doer.SoundEmitter:PlayingSound("dread_cloak_container_loop_sound") then
-        doer.SoundEmitter:PlaySound("maxwell_rework/shadow_magic/storage_void_LP", "dread_cloak_container_loop_sound")
-    end
-end
-
-local function OnStopUsingContainer(inst, doer)
-    if inst.container ~= nil then
-        inst.container.components.container_proxy:Close(doer)
-        doer:PushEvent("closecontainer", { container = inst.container.components.container_proxy:GetMaster() })
-        inst.container:Remove()
-        inst.container = nil
-    end
-    if doer.SoundEmitter ~= nil then
-        doer.SoundEmitter:KillSound("dread_cloak_container_loop_sound")
-    end
-end
--------------------------------------------------------------------
-
 local function fn()
     local inst = CreateEntity()
 
@@ -165,13 +129,10 @@ local function fn()
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
-
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("channelcastable")
-    inst.components.channelcastable:SetOnStartChannelingFn(OnStartUsingContainer)
-    inst.components.channelcastable:SetOnStopChannelingFn(OnStopUsingContainer)
+    inst:AddComponent("aoc_dimenson_container_linker")
 
     MakeHauntableLaunch(inst)
 

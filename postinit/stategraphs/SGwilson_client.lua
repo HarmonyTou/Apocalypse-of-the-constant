@@ -174,40 +174,40 @@ local states = {
         end,
     },
 
-    State {
-        name = "dread_cloak_start_using_container",
-        tags = { "doing", "busy", "nodangle" },
+    -- State {
+    --     name = "dread_cloak_start_using_container",
+    --     tags = { "doing", "busy", "nodangle" },
 
-        onenter = function(inst)
-            inst.components.locomotor:Stop()
-            inst.AnimState:PlayAnimation("build_pre")
-            inst.AnimState:PushAnimation("build_loop", true)
+    --     onenter = function(inst)
+    --         inst.components.locomotor:Stop()
+    --         inst.AnimState:PlayAnimation("build_pre")
+    --         inst.AnimState:PushAnimation("build_loop", true)
 
-            inst:PerformPreviewBufferedAction()
-        end,
+    --         inst:PerformPreviewBufferedAction()
+    --     end,
 
-        timeline =
-        {
-            TimeEvent(4 * FRAMES, function(inst)
-                inst.sg:RemoveStateTag("busy")
-            end),
-        },
+    --     timeline =
+    --     {
+    --         TimeEvent(4 * FRAMES, function(inst)
+    --             inst.sg:RemoveStateTag("busy")
+    --         end),
+    --     },
 
-        onexit = function(inst)
+    --     onexit = function(inst)
 
-        end,
-    },
+    --     end,
+    -- },
 
-    State {
-        name = "dread_cloak_stop_using_container",
+    -- State {
+    --     name = "dread_cloak_stop_using_container",
 
-        onenter = function(inst)
-            inst.components.locomotor:Stop()
-            inst.AnimState:PlayAnimation("build_pst")
-            inst:PerformPreviewBufferedAction()
-            inst.sg:GoToState("idle", true)
-        end,
-    },
+    --     onenter = function(inst)
+    --         inst.components.locomotor:Stop()
+    --         inst.AnimState:PlayAnimation("build_pst")
+    --         inst:PerformPreviewBufferedAction()
+    --         inst.sg:GoToState("idle", true)
+    --     end,
+    -- },
 }
 
 for _, state in ipairs(states) do
@@ -291,25 +291,25 @@ local function fn(sg)
         end
     end
 
-    local _start_channelcast_actionhandler = sg.actionhandlers[ACTIONS.START_CHANNELCAST].deststate
-    sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
-        local item = action.invobject
-        if item and item.prefab == "dread_cloak" then
-            return "dread_cloak_start_using_container"
-        end
+    -- local _start_channelcast_actionhandler = sg.actionhandlers[ACTIONS.START_CHANNELCAST].deststate
+    -- sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
+    --     local item = action.invobject
+    --     if item and item.prefab == "dread_cloak" then
+    --         return "dread_cloak_start_using_container"
+    --     end
 
-        return FunctionOrValue(_start_channelcast_actionhandler, inst, action, ...)
-    end
+    --     return FunctionOrValue(_start_channelcast_actionhandler, inst, action, ...)
+    -- end
 
-    local _stop_channelcast_actionhandler = sg.actionhandlers[ACTIONS.STOP_CHANNELCAST].deststate
-    sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
-        local item = action.invobject
-        if item and item.prefab == "dread_cloak" then
-            return "dread_cloak_stop_using_container"
-        end
+    -- local _stop_channelcast_actionhandler = sg.actionhandlers[ACTIONS.STOP_CHANNELCAST].deststate
+    -- sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
+    --     local item = action.invobject
+    --     if item and item.prefab == "dread_cloak" then
+    --         return "dread_cloak_stop_using_container"
+    --     end
 
-        return FunctionOrValue(_stop_channelcast_actionhandler, inst, action, ...)
-    end
+    --     return FunctionOrValue(_stop_channelcast_actionhandler, inst, action, ...)
+    -- end
 end
 
 AddStategraphPostInit("wilson_client", fn)
