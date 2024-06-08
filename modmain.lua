@@ -7,6 +7,7 @@ GLOBAL.setmetatable(env, { __index = function(t, k) return GLOBAL.rawget(GLOBAL,
 local modules = {
 	"config",
 	"postinit",
+    "replic",
 	"assets",
 	"tuning",
 	"recipes",
