@@ -5,7 +5,15 @@ local assets = {
 
 local prefabs = {
     "dread_axe_fx",
+    "hitsparks_fx",
 }
+
+local function Hitsparks(attacker, target, colour) 
+    local spark = SpawnPrefab("hitsparks_fx")
+    spark:Setup(attacker, target, nil, colour)
+    spark.black:set(true)
+end
+
 
 local function ReticuleTargetFn()
     return Vector3(ThePlayer.entity:LocalToWorldSpace(6.5, 0, 0))
@@ -161,9 +169,20 @@ local function OnHit(inst, attacker, target)
     inst.AnimState:PlayAnimation("bounce")
     inst.AnimState:PushAnimation("idle")
     if target ~= nil then
-        -- DoAttack(targ, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
-        attacker.components.combat:DoAttack(target, inst, inst, TUNING.DREAD_AXE.ALT_STIMULI, nil, 999,
-            inst:GetPosition())
+        attacker.components.combat:DoAttack(target, inst, inst, TUNING.DREAD_AXE.ALT_STIMULI, nil, 999,inst:GetPosition())
+        Hitsparks(attacker,target,{1,0,0})
+		attacker.SoundEmitter:PlaySound("dontstarve/wilson/hit_metal")
+		target:DoTaskInTime(0.15,function() 
+            attacker.components.combat:DoAttack(target, inst, inst, TUNING.DREAD_AXE.ALT_STIMULI, nil, 999,inst:GetPosition())
+            Hitsparks(attacker,target,{1,0,0})	
+            attacker.SoundEmitter:PlaySound("dontstarve/wilson/hit_metal")			
+		end)
+		target:DoTaskInTime(0.4,function() 
+            attacker.components.combat:DoAttack(target, inst, inst, TUNING.DREAD_AXE.ALT_STIMULI, nil, 999,inst:GetPosition())
+            Hitsparks(attacker,target,{1,0,0})
+            attacker.SoundEmitter:PlaySound("dontstarve/wilson/hit_metal")			
+		end)
+        inst:GetPosition())
     end
     inst.Physics:SetMotorVel(5, 0, 0)
 
@@ -187,7 +206,16 @@ local function OnHit(inst, attacker, target)
             inst.AnimState:PlayAnimation("return")
 
             inst.Follower:FollowSymbol(attacker.GUID, "swap_object", 0, 0, 0)
-
+            
+			if attacker.SoundEmitter then
+				attacker.SoundEmitter:PlaySound("dontstarve/wilson/boomerang_throw")
+				attacker.SoundEmitter:PlaySound("dontstarve/sanity/shadowrock_up")
+			end
+            
+            local fx = SpawnPrefab("dreadstone_spawn_fx")
+			fx.Transform:SetScale(0.75, 0.75, 0.75)
+            fx.entity:SetParent(inst.entity)
+            
             inst:DoTaskInTime(TRUELY_RETURN_TIME, function()
                 inst.Follower:StopFollowing()
 
@@ -313,6 +341,19 @@ local function OnCharged(inst)
     inst.components.aoetargeting:SetEnabled(true)
 end
 
+local function OnAttack(inst, owner, target)
+    --local suo = owner.replica.inventory and owner.replica.inventory:GetEquippedItem(EQUIPSLOTS.BODY) --通过取消后摇使砍伐攻击看起来不卡顿的代码，先注掉了
+    --if owner and owner.sg then
+	    --if suo == nil or (suo and suo.prefab ~= "klaus_amulet") then --与无锁不冲突
+	 	   --owner.sg:RemoveStateTag("attack")
+	        --owner.sg:RemoveStateTag("abouttoattack")
+	    --end
+	--end
+	if target then
+        Hitsparks(owner,target,{1,0,0})
+	end
+end
+
 local function fn()
     local inst = CreateEntity()
 
@@ -387,6 +428,7 @@ local function fn()
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(TUNING.DREAD_AXE.DAMAGE * .5)
+    inst.components.weapon:SetOnAttack(OnAttack)
 
     inst:AddComponent("aoespell")
     inst.components.aoespell:SetSpellFn(SpellFn)
