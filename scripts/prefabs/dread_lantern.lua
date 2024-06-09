@@ -322,7 +322,7 @@ local function fn()
     inst.components.fueled.accepting = true
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_AXE.SHADOW_LEVEL)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_LANTERN.SHADOW_LEVEL)
 
     CreateLight(inst)
 
