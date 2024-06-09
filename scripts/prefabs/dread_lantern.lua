@@ -288,6 +288,10 @@ local function fn()
 
     inst.light = nil
 
+    --shadowlevel (from shadowlevel component) added to pristine state for optimization
+	inst:AddTag("shadowlevel")
+    inst:AddTag("shadow_item")
+
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
@@ -317,10 +321,15 @@ local function fn()
     -- inst.components.fueled:SetFirstPeriod(TUNING.TURNON_FUELED_CONSUMPTION, TUNING.TURNON_FULL_FUELED_CONSUMPTION)
     inst.components.fueled.accepting = true
 
+    inst:AddComponent("shadowlevel")
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_AXE.SHADOW_LEVEL)
+
     CreateLight(inst)
 
     inst:WatchWorldState("nightmarephase", OnNightmarePhaseChanged)
     OnNightmarePhaseChanged(inst, TheWorld.state.nightmarephase)
+
+    MakeHauntableLaunch(inst)
 
     return inst
 end

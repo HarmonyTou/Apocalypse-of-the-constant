@@ -3,7 +3,7 @@
 
 #. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY"
-msgid "block"
+msgid "Block"
 msgstr 
 
 #. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_WAVE
@@ -13,12 +13,12 @@ msgstr
 
 #. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START"
-msgid "absorb miasma"
+msgid "Absorb Miasma"
 msgstr 
 
 #. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP"
-msgid "stop absorbing miasma"
+msgid "Stop Absorbing"
 msgstr 
 
 #. STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY
@@ -193,22 +193,22 @@ msgstr
 
 #. STRINGS.DREADSWORD_TALK.TALK.8
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.8"
-msgid "madness..."
+msgid "Madness..."
 msgstr 
 
 #. STRINGS.NAMES.DREADSWORD
 msgctxt "STRINGS.NAMES.DREADSWORD"
-msgid "Stone Sword of Despair"
+msgid "Dreadstone Sword"
 msgstr 
 
 #. STRINGS.NAMES.DREAD_LANTERN
 msgctxt "STRINGS.NAMES.DREAD_LANTERN"
-msgid "Despair Stone Lantern"
+msgid "Shroud Lantern"
 msgstr 
 
 #. STRINGS.NAMES.DREAD_PICKAXE
 msgctxt "STRINGS.NAMES.DREAD_PICKAXE"
-msgid "Despair Stone Pickaxe"
+msgid "Withered Lantern"
 msgstr 
 
 #. STRINGS.RECIPE_DESC.DREADSWORD

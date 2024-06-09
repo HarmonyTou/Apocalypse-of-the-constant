@@ -7,7 +7,7 @@ msgstr ""
 
 #. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY"
-msgid "block"
+msgid "Block"
 msgstr "格擋"
 
 #. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_WAVE
@@ -17,13 +17,13 @@ msgstr "暗影斬切"
 
 #. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START"
-msgid "absorb miasma"
+msgid "Absorb Miasma"
 msgstr "吸收瘴氣"
 
 #. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP"
-msgid "stop absorbing miasma"
-msgstr "停止吸收瘴氣"
+msgid "Stop Absorbing"
+msgstr "停止吸收"
 
 #. STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY
 msgctxt "STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY"
@@ -197,22 +197,22 @@ msgstr "....."
 
 #. STRINGS.DREADSWORD_TALK.TALK.8
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.8"
-msgid "madness..."
+msgid "Madness..."
 msgstr "愚蠢..."
 
 #. STRINGS.NAMES.DREADSWORD
 msgctxt "STRINGS.NAMES.DREADSWORD"
-msgid "Stone Sword of Despair"
+msgid "Dreadstone Sword"
 msgstr "絕望石劍"
 
 #. STRINGS.NAMES.DREAD_LANTERN
 msgctxt "STRINGS.NAMES.DREAD_LANTERN"
-msgid "Despair Stone Lantern"
-msgstr "絕望石提燈"
+msgid "Shroud Lantern"
+msgstr "祛雾提燈"
 
 #. STRINGS.NAMES.DREAD_PICKAXE
 msgctxt "STRINGS.NAMES.DREAD_PICKAXE"
-msgid "Despair Stone Pickaxe"
+msgid "Dreadstone Pickaxe"
 msgstr "絕望石鎬"
 
 #. STRINGS.RECIPE_DESC.DREADSWORD

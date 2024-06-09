@@ -45,57 +45,15 @@ local function OnStopFloating(inst)--回归帧
     inst:DoTaskInTime(0, PushIdleLoop)
 end
 
-local function DoRegen(inst, owner)
-    if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() and not (inst.components.finiteuses:GetPercent() == 1)  then
-        local setbonus = inst.components.setbonus ~= nil and inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.DREADSPEAR.REGEN_SETBONUS or 1
-        local rate = 1 / Lerp(1 / TUNING.DREADSPEAR.REGEN_MAXRATE, 1 / TUNING.DREADSPEAR.REGEN_MINRATE, owner.components.sanity:GetPercent())
-        if inst.isonattack then
-            rate = rate * 2.5
-        end
-        inst.components.finiteuses:Repair(inst.components.finiteuses.total * rate * setbonus)
-
-        if inst.isonattack then
-            inst.task = inst:DoPeriodicTask(2, function()
-                inst.isonattack = false
-                if inst.task then
-                    inst.task :Cancel()
-                    inst.task = nil
-                end
-            end)
-        end
-    end
-end
-
-local function StartRegen(inst, owner)
-    if inst.regentask == nil then
-        inst.regentask = inst:DoPeriodicTask(TUNING.DREADSPEAR.REGEN_PERIOD, DoRegen, nil, owner)
-    end
-end
-
-local function StopRegen(inst)
-    if inst.regentask ~= nil then
-        inst.regentask:Cancel()
-        inst.regentask = nil
-    end
-end
-
-local function GetSetBonusEquip(inst, owner, isbonus)
+local function GetSetBonusEquip(inst, owner)
     local inventory = owner.components.inventory
     local hat = inventory ~= nil and inventory:GetEquippedItem(EQUIPSLOTS.HEAD) or nil
     local armor = inventory ~= nil and inventory:GetEquippedItem(EQUIPSLOTS.BODY) or nil
-    if isbonus then
-        return hat ~= nil and hat.prefab == "dreadstonehat" and hat and armor ~= nil and armor.prefab == "armordreadstone" and armor or nil
-    end
-    return hat ~= nil and hat.prefab == "dreadstonehat" and hat or armor ~= nil and armor.prefab == "armordreadstone" and armor or nil
-end
-
-local function CalcDapperness(inst, owner)
-    local insanity = owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode()
-    local other = GetSetBonusEquip(inst, owner)
-    if other ~= nil then
-        return (insanity and (inst.regentask ~= nil or other.regentask ~= nil) and 0 or 0)
-    end
-    return insanity and inst.regentask ~= nil and TUNING.CRAZINESS_SMALL or 0
+    return hat ~= nil and hat.prefab == "dreadstonehat" and hat
+           or 
+           armor ~= nil and armor.prefab == "armordreadstone" and armor
+           or
+           nil
 end
 
 local function OnEquip(inst, owner)
@@ -122,8 +80,6 @@ local function OnUnEquip(inst, owner)
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
     SetFxOwner(inst, nil)
-
-    StopRegen(inst)
 end
 
 local function OnAttack(inst, attacker, target)
@@ -135,7 +91,7 @@ local function OnAttack(inst, attacker, target)
         end
         end
 
-        if attacker.components.sanity ~= nil and GetSetBonusEquip(inst, attacker, true) then
+        if attacker.components.sanity ~= nil and GetSetBonusEquip(inst, attacker) then
             local inventory = attacker.components.inventory
             local hat = inventory ~= nil and inventory:GetEquippedItem(EQUIPSLOTS.HEAD) or nil
             local armor = inventory ~= nil and inventory:GetEquippedItem(EQUIPSLOTS.BODY) or nil
@@ -204,9 +160,6 @@ local function fn()
     local damagetypebonus = inst:AddComponent("damagetypebonus")
     damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.WEAPONS_VOIDCLOTH_VS_LUNAR_BONUS)
 
-    inst:AddComponent("setbonus")
-    inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
-
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetMaxUses(TUNING.DREADSPEAR.USES)
     inst.components.finiteuses:SetUses(TUNING.DREADSPEAR.USES)
@@ -214,7 +167,6 @@ local function fn()
 
     inst:AddComponent("equippable")
     inst.components.equippable.is_magic_dapperness = true
-    inst.components.equippable.dapperfn = CalcDapperness
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnEquip)
 

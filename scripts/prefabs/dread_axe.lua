@@ -182,7 +182,7 @@ local function OnHit(inst, attacker, target)
             Hitsparks(attacker,target,{1,0,0})
             attacker.SoundEmitter:PlaySound("dontstarve/wilson/hit_metal")			
 		end)
-        inst:GetPosition())
+        inst:GetPosition()
     end
     inst.Physics:SetMotorVel(5, 0, 0)
 
@@ -434,7 +434,7 @@ local function fn()
     inst.components.aoespell:SetSpellFn(SpellFn)
 
     inst:AddComponent("tool")
-    inst.components.tool:SetAction(ACTIONS.CHOP, 1.5)
+    inst.components.tool:SetAction(ACTIONS.CHOP, TUNING.DREAD_AXE.EFFICIENCY)
 
     inst:AddComponent("planardamage")
     inst.components.planardamage:SetBaseDamage(TUNING.DREAD_AXE.PLANAR_DAMAGE)
@@ -443,10 +443,7 @@ local function fn()
     inst.components.damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.WEAPONS_VOIDCLOTH_VS_LUNAR_BONUS)
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.VOIDCLOTH_SCYTHE_SHADOW_LEVEL)
-
-    inst:AddComponent("setbonus")
-    inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_AXE.SHADOW_LEVEL)
 
     inst:AddComponent("rechargeable")
     inst.components.rechargeable:SetOnDischargedFn(OnDischarged)

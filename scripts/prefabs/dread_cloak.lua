@@ -4,6 +4,14 @@ local assets =
     Asset("ANIM", "anim/swap_dread_cloak2.zip"),
 }
 
+local function InSetBonusEnabled(inst)
+    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMOR_DREADSTONEHAT_SHADOW_RESIST, "setbonus")
+end
+
+local function OnSetBonusDisabled(inst)
+    inst.components.damagetyperesist:RemoveResist("shadow_aligned", inst, "setbonus")
+end
+
 local function OnBlocked(owner)
     owner.SoundEmitter:PlaySound("dontstarve/wilson/hit_dreadstone")
 end
@@ -119,6 +127,10 @@ local function fn()
         return inst
     end
 
+    --shadowlevel (from shadowlevel component) added to pristine state for optimization
+	inst:AddTag("shadowlevel")
+    inst:AddTag("shadow_item")
+
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
@@ -132,7 +144,19 @@ local function fn()
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
 
-    inst:AddComponent("aoc_dimenson_container_linker")
+    inst:AddComponent("damagetyperesist")
+	inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
+
+    inst:AddComponent("setbonus")
+    inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
+    inst.components.setbonus:SetOnEnabledFn(InSetBonusEnabled)
+    inst.components.setbonus:SetOnDisabledFn(OnSetBonusDisabled)
+
+    inst:AddComponent("shadowlevel")
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_CLOAK.SHADOW_LEVEL)
+
+    --inst:AddComponent("aoc_dimenson_container_linker")
+    --这个组件01还没上传
 
     MakeHauntableLaunch(inst)
 

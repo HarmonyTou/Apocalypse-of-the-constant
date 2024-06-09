@@ -3,32 +3,7 @@ local assets = {
 	Asset("ANIM", "anim/swap_dread_pickaxe.zip")
 }
 
-local function DoRegen(inst, owner)
-    if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() and not (inst.components.finiteuses:GetPercent() == 1)  then
-        local setbonus = inst.components.setbonus ~= nil and inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.DREAD_PICKAXE.REGEN_SETBONUS or 1
-        local rate = 1 / Lerp(1 / TUNING.DREAD_PICKAXE.REGEN_MAXRATE, 1 / TUNING.DREAD_PICKAXE.REGEN_MINRATE, owner.components.sanity:GetPercent())
-        inst.components.finiteuses:Repair(inst.components.finiteuses.total * rate * setbonus)
-    end
-end
-
-local function StartRegen(inst, owner)
-    if inst.regentask == nil then
-        inst.regentask = inst:DoPeriodicTask(TUNING.DREAD_PICKAXE.REGEN_PERIOD, DoRegen, nil, owner)
-    end
-end
-
-local function StopRegen(inst)
-    if inst.regentask ~= nil then
-        inst.regentask:Cancel()
-        inst.regentask = nil
-    end
-end
-
 local function OnEquip(inst, owner)
-    if not owner:HasTag("toughworker") then
-        owner:AddTag("toughworker")
-    end
-
     local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
         owner:PushEvent("equipskinneditem", inst:GetSkinName())
@@ -38,27 +13,15 @@ local function OnEquip(inst, owner)
     end
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
-
-    if owner.components.sanity ~= nil then
-        StartRegen(inst, owner)
-    else
-        StopRegen(inst)
-    end
 end
 
 local function OnUnequip(inst, owner)
-    if owner:HasTag("toughworker") then
-        owner:RemoveTag("toughworker")
-    end
-
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
     local skin_build = inst:GetSkinBuild()
     if skin_build ~= nil then
         owner:PushEvent("unequipskinneditem", inst:GetSkinName())
     end
-
-    StopRegen(inst)
 end
 
 local function fn()
@@ -83,6 +46,9 @@ local function fn()
     --weapon (from weapon component) added to pristine state for optimization
     inst:AddTag("weapon")
     inst:AddTag("dread_pickaxe")
+    --shadowlevel (from shadowlevel component) added to pristine state for optimization
+	inst:AddTag("shadowlevel")
+    inst:AddTag("shadow_item")
 
     MakeInventoryFloatable(inst, "med", 0.05, {0.75, 0.4, 0.75})
 
@@ -101,12 +67,10 @@ local function fn()
 	inst:AddComponent("planardamage")
 	inst.components.planardamage:SetBaseDamage(TUNING.DREAD_PICKAXE.PLANAR_DAMAGE)
 
-    inst:AddComponent("setbonus")
-    inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
-
     inst:AddComponent("tool")
     inst.components.tool:SetAction(ACTIONS.MINE, TUNING.DREAD_PICKAXE.EFFICIENCY)
 	inst.components.tool:SetAction(ACTIONS.HAMMER, TUNING.DREAD_PICKAXE.EFFICIENCY)
+    inst.components.tool:EnableToughWork(true)
 
     inst:AddComponent("finiteuses")
     inst.components.finiteuses:SetMaxUses(TUNING.DREAD_PICKAXE.USES)
@@ -117,8 +81,12 @@ local function fn()
 
     inst:AddComponent("equippable")
     inst.components.equippable.dapperness = TUNING.CRAZINESS_SMALL
+    inst.components.equippable.is_magic_dapperness = true
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
+
+    inst:AddComponent("shadowlevel")
+	inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_PICKAXE.SHADOW_LEVEL)
 
     MakeHauntableLaunch(inst)
 

@@ -32,26 +32,14 @@ local function SortAfter(a, b, filter_name)
 end
 
 -- 制作所需要的材料
-local dreadsword_ingredients = { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4) }
+AddRecipe2("dreadsword", { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4),Ingredient("voidcloth", 1) }, TECH.LOST, { "MAGIC", "WEAPONS" })
+SortAfter("dreadsword", "nightsword", "MAGIC")
+SortAfter("dreadsword", "nightsword", "WEAPONS")
 
-if aoc_config.include_voidcloth and aoc_config.dreadsword_enable then
-    table.insert(dreadsword_ingredients, Ingredient("voidcloth", 1))
-end
+AddRecipe2("dread_pickaxe", { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4), Ingredient("voidcloth", 2)}, TECH.SHADOWFORGING_TWO, { nounlock=true, station_tag = "shadow_forge" }, { "CRAFTING_STATION" })
+SortAfter("dread_pickaxe", "voidcloth_scythe", "CRAFTING_STATION")
 
-if aoc_config.dreadsword_enable then
-    AddRecipe2("dreadsword", dreadsword_ingredients, TECH.LOST, { nounlock = false }, { "MAGIC", "WEAPONS" })
-    SortBefore("dreadsword", "nightsword", "MAGIC")
-    SortAfter("dreadsword", "nightstick", "WEAPONS")
-end
+AddRecipe2("dread_axe", {Ingredient("dreadstone", 5), Ingredient("horrorfuel", 5), Ingredient("voidcloth", 2)}, TECH.SHADOWFORGING_TWO, { nounlock=true, station_tag = "shadow_forge" }, { "CRAFTING_STATION" })
 
-local dread_pickaxe_ingredients = { Ingredient("dreadstone", 4), Ingredient("horrorfuel", 4) }
-
-if aoc_config.include_voidcloth and aoc_config.dread_pickaxe_enable then
-    table.insert(dread_pickaxe_ingredients, Ingredient("voidcloth", 2))
-end
-
-if aoc_config.dread_pickaxe_enable then
-    AddRecipe2("dread_pickaxe", dread_pickaxe_ingredients, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" }, { "TOOLS" })
-end
-
-AddRecipe2("dread_axe", {Ingredient("dreadstone", 5), Ingredient("horrorfuel", 5), Ingredient("voidcloth", 2)}, TECH.SHADOWFORGING_TWO, { station_tag = "shadow_forge" }, { "WEAPONS", "TOOLS" })
+AddRecipe2("lunar_spark_blade", {Ingredient("security_pulse_cage_full", 1), Ingredient("moonglass_charged", 3), Ingredient("purebrilliance", 4), Ingredient("moonrocknugget", 3)}, TECH.LUNARFORGING_TWO, { nounlock=true, station_tag = "lunar_forge" }, { "CRAFTING_STATION" })
+SortBefore("lunar_spark_blade", "beargerfur_sack", "CRAFTING_STATION")

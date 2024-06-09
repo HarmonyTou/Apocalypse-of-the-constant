@@ -1,10 +1,10 @@
 return {
     ACTIONS = {
         CASTAOE = {
-            DREADSWORD_SKILL_PARRY = "block",
+            DREADSWORD_SKILL_PARRY = "Block",
             DREADSWORD_SKILL_WAVE = "Shadow Cut",
-            DREAD_LANTERN_START = "absorb miasma",
-            DREAD_LANTERN_STOP = "stop absorbing miasma",
+            DREAD_LANTERN_START = "Absorb Miasma",
+            DREAD_LANTERN_STOP = "Stop Absorbing",
         },
     },
     DREADSWORD_TALK = {
@@ -24,18 +24,34 @@ return {
             "end it all",
             "Let raw killing rule you",
             "...",
-            "madness...",
+            "Madness...",
         },
     },
     NAMES = {
-        DREADSWORD = "Dread Sword",
-        DREAD_LANTERN = "Dread Lantern",
-        DREAD_PICKAXE = "Dread Pickaxe",
+        DREADSWORD = "Dreadstone Sword",
+        DREAD_PICKAXE = "Dreadstone Pickaxe",
+        DREAD_CLOAK = "Darknight Splint Mail",--板甲
+        NIGHTMARE_HAT = "Darknight Helm",--战盔
+
+        DREADSPEAR = "Dreadstone Spear",
+
+        DREAD_AXE = "Shroud Axe",--Withered axe?
+        DREAD_LANTERN = "Shroud Lantern",--Withered Lantern?
+
+        LUNAR_SPARK_BLADE="Spark Blade",
     },
     RECIPE_DESC = {
         DREADSWORD = "Bring the deepest despair to your enemies",
-        DREAD_LANTERN = "A very hopeless looking lantern.",
         DREAD_PICKAXE = "It's very destructive, but you need to find a good angle.",
+        DREAD_CLOAK = "TODO",--板甲
+        NIGHTMAREHAT = "TODO",--战盔
+
+        DREADSPEAR = "TODO",
+
+        DREAD_AXE = "TODO",
+        DREAD_LANTERN = "A very hopeless looking lantern.",
+
+        LUNAR_SPARK_BLADE="TODO",
     },
     SKIN_NAMES = {
         night_edge = "Night's Edge",

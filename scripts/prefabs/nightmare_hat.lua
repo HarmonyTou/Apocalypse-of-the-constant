@@ -169,7 +169,6 @@ local function MakeHat(name)
 
         inst:AddTag("hat")
         inst:AddTag("shadow_item")
-        inst:AddTag("gestaltprotection")
         inst:AddTag("goggles")
         inst:AddTag("show_broken_ui")
 
@@ -210,14 +209,16 @@ local function MakeHat(name)
 		inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALLMED)
 
 		inst:AddComponent("damagetyperesist")
-		inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMOR_LUNARPLANT_LUNAR_RESIST)
+		inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
 
         inst:AddComponent("setbonus")
-        inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.VOIDCLOTH)
+        inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
         inst.components.setbonus:SetOnEnabledFn(InSetBonusEnabled)
         inst.components.setbonus:SetOnDisabledFn(OnSetBonusDisabled)
 
-		MakeForgeRepairable(inst, FORGEMATERIALS.VOIDCLOTH, OnBroken, OnRepaired)
+        inst:AddComponent("shadowlevel")
+        inst.components.shadowlevel:SetDefaultLevel(TUNING.NIGHTMARE_HAT.SHADOW_LEVEL)
+
 		MakeHauntableLaunch(inst)
 
         inst.swap_data = swap_data

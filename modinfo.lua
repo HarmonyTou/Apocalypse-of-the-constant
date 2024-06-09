@@ -43,27 +43,6 @@ configuration_options = {
         default = false,
     },
     {
-        name = "include_voidcloth",
-        label = en_zh("Choose to include Voidcloth", "自定义配方"),
-        hover = en_zh("Toggle on for Voidcloth use", "是否加入碎布"),
-        options = enable_option,
-        default = true,
-    },
-    {
-        name = "dreadsword_enable",
-        label = en_zh("Dread Sword", "绝望剑"),
-        hover = en_zh("Optional dreadsword", "物品开关"),
-        options = enable_option,
-        default = true,
-    },
-    {
-        name = "dread_pickaxe_enable",
-        label = en_zh("Dread Pickaxe", "绝望稿"),
-        hover = en_zh("Optional dreadpickaxe", "物品开关"),
-        options = enable_option,
-        default = true,
-    },
-    {
         name = "talking_sword",
         label = en_zh("Talking Sword", "会说话的剑"),
         hover = en_zh("Optional Talking sword", "开关"),
