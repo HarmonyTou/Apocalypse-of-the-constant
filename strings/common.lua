@@ -31,7 +31,7 @@ return {
         DREADSWORD = "Dreadstone Sword",
         DREAD_PICKAXE = "Dreadstone Pickaxe",
         DREAD_CLOAK = "Darknight Splint Mail",--板甲
-        NIGHTMARE_HAT = "Darknight Helm",--战盔
+        NIGHTMAREHAT = "Darknight Helm",--战盔
 
         DREADSPEAR = "Dreadstone Spear",
 

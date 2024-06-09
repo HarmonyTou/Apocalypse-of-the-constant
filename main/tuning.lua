@@ -32,12 +32,14 @@ local tuning = {
         SHADOW_LEVEL = 3,
     },
 
-    NIGHTMARE_HAT = {
+    KNIGHTMARESET = {
         SHADOW_LEVEL = 3,
+        PLANAR_DEF = 10,
+        ARMOR = 840,--same as ARMORDREADSTONE
+        ABSORPTION = 0.85
+        SETBONUS_SHADOW_RESIST = math.sqrt(0.75) / 0.9, --same as ARMOR_VOIDCLOTH_SETBONUS_SHADOW_RESIST and ARMOR_LUNARPLANT_SETBONUS_LUNAR_RESIST
     },
-    DREAD_CLOAK = {
-        SHADOW_LEVEL = 3,
-    },
+
     DREAD_LANTERN = {
         SHADOW_LEVEL = 1,
     },

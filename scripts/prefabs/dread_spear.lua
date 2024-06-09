@@ -50,10 +50,10 @@ local function GetSetBonusEquip(inst, owner)
     local hat = inventory ~= nil and inventory:GetEquippedItem(EQUIPSLOTS.HEAD) or nil
     local armor = inventory ~= nil and inventory:GetEquippedItem(EQUIPSLOTS.BODY) or nil
     return hat ~= nil and hat.prefab == "dreadstonehat" and hat
-           or 
-           armor ~= nil and armor.prefab == "armordreadstone" and armor
-           or
-           nil
+           or armor ~= nil and armor.prefab == "armordreadstone" and armor
+           or hat ~= nil and armor.prefab == "nightmarehat" and hat
+           or armor ~= nil and armor.prefab == "dread_cloak" and armor
+           or nil
 end
 
 local function OnEquip(inst, owner)

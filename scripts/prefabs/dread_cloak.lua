@@ -4,8 +4,55 @@ local assets =
     Asset("ANIM", "anim/swap_dread_cloak2.zip"),
 }
 
+local function DoRegen(inst, owner)
+    if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
+        local setbonus = inst.components.setbonus ~= nil and
+        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1 -- Cassielu: need constant for new EQUIPMENTSETNAMES?
+        local rate = 1 /
+        Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
+            owner.components.sanity:GetPercent())
+        if inst.isonattack then
+            rate = rate * 4
+        end
+        inst.components.armor:Repair(inst.components.armor.maxcondition * rate * setbonus)
+    end
+
+    if inst.isonattack then
+        inst.task = inst:DoPeriodicTask(TUNING.ARMOR_DREADSTONE_REGEN_PERIOD, function()
+            inst.isonattack = false
+            if inst.task then
+                inst.task:Cancel()
+                inst.task = nil
+            end
+        end)
+    end
+
+    if not inst.components.armor:IsDamaged() then
+        inst.regentask:Cancel()
+        inst.regentask = nil
+    end
+end
+
+local function StartRegen(inst, owner)
+    if inst.regentask == nil then
+        inst.regentask = inst:DoPeriodicTask(TUNING.ARMOR_DREADSTONE_REGEN_PERIOD, DoRegen, nil, owner)
+    end
+end
+
+local function StopRegen(inst)
+    if inst.regentask ~= nil then
+        inst.regentask:Cancel()
+        inst.regentask = nil
+    end
+
+    if inst.task ~= nil then
+        inst.task:Cancel()
+        inst.task = nil
+    end
+end
+
 local function InSetBonusEnabled(inst)
-    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMOR_DREADSTONEHAT_SHADOW_RESIST, "setbonus")
+    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.KNIGHTMARESET.SETBONUS_SHADOW_RESIST, "setbonus")
 end
 
 local function OnSetBonusDisabled(inst)
@@ -90,6 +137,12 @@ local function onequip(inst, owner)
 
     -- Haunted light fx
     -- owner.AnimState:SetHaunted(true)
+
+    if owner.components.sanity ~= nil and inst.components.armor:IsDamaged() then
+		StartRegen(inst, owner)
+	else
+		StopRegen(inst)
+	end
 end
 
 local function onunequip(inst, owner)
@@ -101,6 +154,17 @@ local function onunequip(inst, owner)
     -- end
     -- inst.protect_fx = nil
     -- owner.AnimState:SetHaunted(false)
+
+    StopRegen(inst)
+end
+
+local function OnTakeDamage(inst, amount)
+	if inst.regentask == nil and inst.components.equippable:IsEquipped() then
+		local owner = inst.components.inventoryitem.owner
+		if owner ~= nil and owner.components.sanity ~= nil then
+			StartRegen(inst, owner)
+		end
+	end
 end
 
 local function fn()
@@ -137,7 +201,11 @@ local function fn()
     inst.components.inventoryitem.imagename = "armor_nightmare"
 
     inst:AddComponent("armor")
-    inst.components.armor:InitCondition(1000, 0.9)
+    inst.components.armor:InitCondition(TUNING.ARMORDREADSTONE, TUNING.KNIGHTMARESET.ABSORPTION)
+    inst.components.armor.ontakedamage = OnTakeDamage
+
+    inst:AddComponent("planardefense")
+    inst.components.planardefense:SetBaseDefense(TUNING.TUNING.KNIGHTMARESET.PLANAR_DEF)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
@@ -148,12 +216,12 @@ local function fn()
 	inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
 
     inst:AddComponent("setbonus")
-    inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
+    inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE) -- Cassielu: need constant for new EQUIPMENTSETNAMES?
     inst.components.setbonus:SetOnEnabledFn(InSetBonusEnabled)
     inst.components.setbonus:SetOnDisabledFn(OnSetBonusDisabled)
 
     inst:AddComponent("shadowlevel")
-    inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_CLOAK.SHADOW_LEVEL)
+    inst.components.shadowlevel:SetDefaultLevel(TUNING.KNIGHTMARESET.SHADOW_LEVEL)
 
     --inst:AddComponent("aoc_dimenson_container_linker")
     --这个组件01还没上传

@@ -17,6 +17,54 @@ local function base_onequip(inst, owner, symbol_override, swap_hat_override)
     end
 end
 
+local function DoRegen(inst, owner)
+    if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
+        local setbonus = inst.components.setbonus ~= nil and
+        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1 -- Cassielu: need constant for new EQUIPMENTSETNAMES?
+        local rate = 1 /
+        Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
+            owner.components.sanity:GetPercent())
+        if inst.isonattack then
+            rate = rate * 4
+        end
+        inst.components.armor:Repair(inst.components.armor.maxcondition * rate * setbonus)
+    end
+
+    if inst.isonattack then
+        inst.task = inst:DoPeriodicTask(TUNING.ARMOR_DREADSTONE_REGEN_PERIOD, function()
+            inst.isonattack = false
+            if inst.task then
+                inst.task:Cancel()
+                inst.task = nil
+            end
+        end)
+    end
+
+    if not inst.components.armor:IsDamaged() then
+        inst.regentask:Cancel()
+        inst.regentask = nil
+    end
+end
+
+local function StartRegen(inst, owner)
+    if inst.regentask == nil then
+        inst.regentask = inst:DoPeriodicTask(TUNING.ARMOR_DREADSTONE_REGEN_PERIOD, DoRegen, nil, owner)
+    end
+end
+
+local function StopRegen(inst)
+    if inst.regentask ~= nil then
+        inst.regentask:Cancel()
+        inst.regentask = nil
+    end
+
+    if inst.task ~= nil then
+        inst.task:Cancel()
+        inst.task = nil
+    end
+end
+
+
 local OnEquipToModel = function(inst, owner, from_ground)
     if inst.components.fueled ~= nil then
         inst.components.fueled:StopConsuming()
@@ -62,6 +110,12 @@ local function OnEquip(inst, owner)
     if owner.components.grue ~= nil then
         owner.components.grue:AddImmunity("nightmarehat")
     end
+
+    if owner.components.sanity ~= nil and inst.components.armor:IsDamaged() then
+		StartRegen(inst, owner)
+	else
+		StopRegen(inst)
+	end
 end
 
 local function OnUnequip(inst, owner)
@@ -109,10 +163,21 @@ local function OnUnequip(inst, owner)
     if owner.components.grue ~= nil then
         owner.components.grue:RemoveImmunity("nightmarehat")
     end
+
+    StopRegen(inst)
+end
+
+local function OnTakeDamage(inst, amount)
+	if inst.regentask == nil and inst.components.equippable:IsEquipped() then
+		local owner = inst.components.inventoryitem.owner
+		if owner ~= nil and owner.components.sanity ~= nil then
+			StartRegen(inst, owner)
+		end
+	end
 end
 
 local function InSetBonusEnabled(inst)
-    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMOR_DREADSTONEHAT_SHADOW_RESIST, "setbonus")
+    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.KNIGHTMARESET.SETBONUS_SHADOW_RESIST, "setbonus")
 end
 
 local function OnSetBonusDisabled(inst)
@@ -200,10 +265,11 @@ local function MakeHat(name)
         inst.components.equippable:SetOnEquipToModel(OnEquipToModel)
 
 		inst:AddComponent("armor")
-		inst.components.armor:InitCondition(TUNING.ARMOR_LUNARPLANT_HAT, TUNING.ARMOR_LUNARPLANT_HAT_ABSORPTION)
+		inst.components.armor:InitCondition(TUNING.ARMORDREADSTONE, TUNING.KNIGHTMARESET.ABSORPTION)
+        inst.components.armor.ontakedamage = OnTakeDamage
 
 		inst:AddComponent("planardefense")
-		inst.components.planardefense:SetBaseDefense(TUNING.ARMOR_LUNARPLANT_HAT_PLANAR_DEF)
+		inst.components.planardefense:SetBaseDefense(TUNING.KNIGHTMARESET.PLANAR_DEF)
 
 		inst:AddComponent("waterproofer")
 		inst.components.waterproofer:SetEffectiveness(TUNING.WATERPROOFNESS_SMALLMED)
@@ -212,12 +278,12 @@ local function MakeHat(name)
 		inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
 
         inst:AddComponent("setbonus")
-        inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE)
+        inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE) -- Cassielu: need constant for new EQUIPMENTSETNAMES?
         inst.components.setbonus:SetOnEnabledFn(InSetBonusEnabled)
         inst.components.setbonus:SetOnDisabledFn(OnSetBonusDisabled)
 
         inst:AddComponent("shadowlevel")
-        inst.components.shadowlevel:SetDefaultLevel(TUNING.NIGHTMARE_HAT.SHADOW_LEVEL)
+        inst.components.shadowlevel:SetDefaultLevel(TUNING.KNIGHTMARESET.SHADOW_LEVEL)
 
 		MakeHauntableLaunch(inst)
 

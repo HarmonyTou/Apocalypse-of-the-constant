@@ -23,7 +23,7 @@ local RE_COOLDOWN_PERCENT = 0
 local COOLDOWN_WAVE = 4.5
 
 
-local SKILL_EQUIP_PREFAB_1 = "lunarplanthat"
+local SKILL_EQUIP_PREFAB_1 = "nightmarehat"
 local SKILL_EQUIP_PREFAB_2 = "voidclothhat"
 
 local function ReticuleTargetFn_Parry()

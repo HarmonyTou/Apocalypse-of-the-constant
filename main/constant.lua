@@ -1,0 +1,4 @@
+--[[local EQUIPMENTSETNAMES =
+{
+    KNIGHTMARE = "knightmare",
+},]]
