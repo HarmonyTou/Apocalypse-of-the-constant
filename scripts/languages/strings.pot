@@ -108,7 +108,7 @@ msgstr
 
 #. STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD"
-msgid "A black, shabby sword with a loud sound."
+msgid "Black old screaming sword."
 msgstr 
 
 #. STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD

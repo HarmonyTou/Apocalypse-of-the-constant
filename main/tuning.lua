@@ -15,7 +15,7 @@ local tuning = {
         EFFICIENCY = 1.5,
         USES = 250,
         SHADOW_LEVEL = 2,
-        PLANAR_DAMAGE = TUNING.PICKAXE_LUNARPLANT_PLANAR_DAMAGE,
+        PLANAR_DAMAGE = 10, --same as PICKAXE_LUNARPLANT_PLANAR_DAMAGE
     },
 
     DREAD_AXE = {
@@ -27,8 +27,7 @@ local tuning = {
         ALT_HIT_RANGE = 3,
         ALT_STIMULI = "strong",
         ALT_SPEED = 20,
-        ALT_DAMAGE = 68,
-        ALT_PLANAR_DAMAGE = 34,
+        ALT_WORK = 10,
         SHADOW_LEVEL = 3,
     },
 

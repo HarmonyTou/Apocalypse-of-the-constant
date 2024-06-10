@@ -111,7 +111,7 @@ return {
         -- ANNOUNCE_DREADSWORD_CANT_PARRY = "",
         -- ANNOUNCE_DREADSWORD_CANT_WAVE = "",
         DESCRIBE = {
-            DREADSWORD = "好玩!好玩!",
+            DREADSWORD = "好玩！好玩！",
             -- DREAD_PICKAXE = "",
             -- DREAD_LANTERN = "",
         },

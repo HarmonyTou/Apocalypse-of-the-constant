@@ -262,7 +262,7 @@ local function OnProjectileUpdate(inst, dt)
         local dx, dz = x2 - x, z2 - z
         local len = math.sqrt(dx * dx + dz * dz)
         if len <= 0 or x1 * dx / len + z1 * dz / len > .3 then
-            v.components.workable:WorkedBy(inst,20)
+            v.components.workable:WorkedBy(inst,TUNING.DREAD_AXE.ALT_WORK)
 			inst.components.complexprojectile:Hit() --破坏一个后直接结束
 			inst.components.finiteuses:Use(5)
         end
@@ -302,12 +302,6 @@ local function MakeProjectile(inst)
         inst:AddComponent("complexprojectile")
     end
 
-    -- Still required:
-    -- TUNING.DREAD_AXE.ALT_SPEED
-    -- TUNING.DREAD_AXE.ALT_DIST
-    -- TUNING.DREAD_AXE.ALT_HIT_RANGE
-    -- TUNING.DREAD_AXE.ALT_STIMULI
-    -- TUNING.DREAD_AXE.ALT_DAMAGE
     inst.components.complexprojectile.onupdatefn = OnProjectileUpdate
     inst.components.complexprojectile:SetOnLaunch(OnLaunch)
     inst.components.complexprojectile:SetOnHit(OnHit)
@@ -435,6 +429,7 @@ local function fn()
 
     inst:AddComponent("tool")
     inst.components.tool:SetAction(ACTIONS.CHOP, TUNING.DREAD_AXE.EFFICIENCY)
+    inst.components.tool:EnableToughWork(true)
 
     inst:AddComponent("planardamage")
     inst.components.planardamage:SetBaseDamage(TUNING.DREAD_AXE.PLANAR_DAMAGE)

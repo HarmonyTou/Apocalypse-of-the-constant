@@ -149,6 +149,7 @@ local function fn()
 
     inst:AddComponent("inspectable")
     inst:AddComponent("inventoryitem")
+    inst.components.inventoryitem.imagename = "dreadspear"
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(TUNING.DREADSPEAR.DAMAGE)

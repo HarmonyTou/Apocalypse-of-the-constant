@@ -205,7 +205,7 @@ local function fn()
     inst.components.armor.ontakedamage = OnTakeDamage
 
     inst:AddComponent("planardefense")
-    inst.components.planardefense:SetBaseDefense(TUNING.TUNING.KNIGHTMARESET.PLANAR_DEF)
+    inst.components.planardefense:SetBaseDefense(TUNING.KNIGHTMARESET.PLANAR_DEF)
 
     inst:AddComponent("equippable")
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY

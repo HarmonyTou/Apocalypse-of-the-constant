@@ -112,13 +112,13 @@ msgstr "可惜不能用來砍樹。"
 
 #. STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD"
-msgid "A black, shabby sword with a loud sound."
+msgid "Black old screaming sword."
 msgstr "黑的破舊的聲音很大的劍。"
 
 #. STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD"
 msgid "Fun! Fun!"
-msgstr "好玩!好玩!"
+msgstr "好玩！好玩！"
 
 #. STRINGS.CHARACTERS.WURT.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WURT.DESCRIBE.DREADSWORD"

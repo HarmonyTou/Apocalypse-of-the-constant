@@ -85,6 +85,9 @@ local function fn()
     inst.components.equippable:SetOnEquip(OnEquip)
     inst.components.equippable:SetOnUnequip(OnUnequip)
 
+    local damagetypebonus = inst:AddComponent("damagetypebonus")
+    damagetypebonus:AddBonus("lunar_aligned", inst, TUNING.WEAPONS_VOIDCLOTH_VS_LUNAR_BONUS)
+
     inst:AddComponent("shadowlevel")
 	inst.components.shadowlevel:SetDefaultLevel(TUNING.DREAD_PICKAXE.SHADOW_LEVEL)
 

@@ -155,12 +155,12 @@ local function ChannelingTaskFn(inst, owner)
         end
     end
 
-    local shadow_creatures = TheSim:FindEntities(x, y, z, 10, { "_combat", "_health", "shadow" })
+    local shadow_creatures = TheSim:FindEntities(x, y, z, 10, { "_combat", "_health", "shadowcreature", "nightmarecreature" })
     for k, v in pairs(shadow_creatures) do
         if not IsEntityDead(v, true) and not owner.components.combat:IsAlly(v)
             and (inst.hitted_creatures[v] == nil or GetTime() - inst.hitted_creatures[v] >= 1.0) then
             -- owner.components.combat:DoAttack(v)
-            v.components.combat:GetAttacked(inst, 20)
+            v.components.combat:GetAttacked(inst, 1) --这会不会太OP了？
             inst.hitted_creatures[v] = GetTime()
         end
     end
