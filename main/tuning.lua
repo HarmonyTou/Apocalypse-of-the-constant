@@ -36,7 +36,7 @@ local tuning = {
         SHADOW_LEVEL = 3,
         PLANAR_DEF = 10,
         ARMOR = 840,--same as ARMORDREADSTONE
-        ABSORPTION = 0.85
+        ABSORPTION = 0.85,
         SETBONUS_SHADOW_RESIST = math.sqrt(0.75) / 0.9, --same as ARMOR_VOIDCLOTH_SETBONUS_SHADOW_RESIST and ARMOR_LUNARPLANT_SETBONUS_LUNAR_RESIST
     },
 
@@ -48,4 +48,6 @@ local tuning = {
 for k, v in pairs(tuning) do
     TUNING[k] = v
 end
+
+
 
