@@ -7,10 +7,11 @@ local assets =
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
         local setbonus = inst.components.setbonus ~= nil and
-        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1 -- Cassielu: need constant for new EQUIPMENTSETNAMES?
+            inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or
+            1 -- Cassielu: need constant for new EQUIPMENTSETNAMES?
         local rate = 1 /
-        Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
-            owner.components.sanity:GetPercent())
+            Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
+                owner.components.sanity:GetPercent())
         if inst.isonattack then
             rate = rate * 4
         end
@@ -52,7 +53,8 @@ local function StopRegen(inst)
 end
 
 local function InSetBonusEnabled(inst)
-    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.KNIGHTMARESET.SETBONUS_SHADOW_RESIST, "setbonus")
+    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.KNIGHTMARESET.SETBONUS_SHADOW_RESIST,
+        "setbonus")
 end
 
 local function OnSetBonusDisabled(inst)
@@ -139,10 +141,10 @@ local function onequip(inst, owner)
     -- owner.AnimState:SetHaunted(true)
 
     if owner.components.sanity ~= nil and inst.components.armor:IsDamaged() then
-		StartRegen(inst, owner)
-	else
-		StopRegen(inst)
-	end
+        StartRegen(inst, owner)
+    else
+        StopRegen(inst)
+    end
 end
 
 local function onunequip(inst, owner)
@@ -159,12 +161,12 @@ local function onunequip(inst, owner)
 end
 
 local function OnTakeDamage(inst, amount)
-	if inst.regentask == nil and inst.components.equippable:IsEquipped() then
-		local owner = inst.components.inventoryitem.owner
-		if owner ~= nil and owner.components.sanity ~= nil then
-			StartRegen(inst, owner)
-		end
-	end
+    if inst.regentask == nil and inst.components.equippable:IsEquipped() then
+        local owner = inst.components.inventoryitem.owner
+        if owner ~= nil and owner.components.sanity ~= nil then
+            StartRegen(inst, owner)
+        end
+    end
 end
 
 local function fn()
@@ -192,7 +194,7 @@ local function fn()
     end
 
     --shadowlevel (from shadowlevel component) added to pristine state for optimization
-	inst:AddTag("shadowlevel")
+    inst:AddTag("shadowlevel")
     inst:AddTag("shadow_item")
 
     inst:AddComponent("inspectable")
@@ -213,7 +215,7 @@ local function fn()
     inst.components.equippable:SetOnUnequip(onunequip)
 
     inst:AddComponent("damagetyperesist")
-	inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
+    inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
 
     inst:AddComponent("setbonus")
     inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE) -- Cassielu: need constant for new EQUIPMENTSETNAMES?
@@ -223,8 +225,7 @@ local function fn()
     inst:AddComponent("shadowlevel")
     inst.components.shadowlevel:SetDefaultLevel(TUNING.KNIGHTMARESET.SHADOW_LEVEL)
 
-    --inst:AddComponent("aoc_dimenson_container_linker")
-    --这个组件01还没上传
+    inst:AddComponent("aoc_dimenson_container_linker")
 
     MakeHauntableLaunch(inst)
 

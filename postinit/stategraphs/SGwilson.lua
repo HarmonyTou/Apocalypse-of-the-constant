@@ -293,42 +293,77 @@ local states = {
         },
     },
 
-    -- State {
-    --     name = "dread_cloak_start_using_container",
-    --     tags = { "doing", "busy", "nodangle" },
+    State {
+        name = "dread_cloak_open_container",
+        tags = { "doing", "overridelocomote" },
 
-    --     onenter = function(inst)
-    --         inst.components.locomotor:Stop()
-    --         inst.SoundEmitter:PlaySound("dontstarve/wilson/make_trap", "make")
-    --         inst.AnimState:PlayAnimation("build_pre")
-    --         inst.AnimState:PushAnimation("build_loop", true)
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
 
-    --         inst:PerformBufferedAction()
-    --     end,
+            local bufferedaction = inst:GetBufferedAction()
+            inst.sg.statemem.item = bufferedaction and bufferedaction.invobject
 
-    --     timeline =
-    --     {
-    --         TimeEvent(4 * FRAMES, function(inst)
-    --             inst.sg:RemoveStateTag("busy")
-    --         end),
-    --     },
+            inst.AnimState:PlayAnimation("build_pre")
+            inst.AnimState:PushAnimation("build_loop", true)
+            inst.SoundEmitter:PlaySound("dontstarve/wilson/make_trap", "make")
 
-    --     onexit = function(inst)
-    --         inst.SoundEmitter:KillSound("make")
-    --         inst.components.channelcaster:StopChanneling()
-    --     end,
-    -- },
+            inst:PerformBufferedAction()
+        end,
 
-    -- State {
-    --     name = "dread_cloak_stop_using_container",
+        onupdate = function(inst)
+            if inst.sg.statemem.item and inst.sg.statemem.item:IsValid()
+                and inst.sg.statemem.item.components.aoc_dimenson_container_linker
+                and inst.sg.statemem.item.components.aoc_dimenson_container_linker:IsOpened() then
+                -- Everything OK, do nothing.
+            else
+                -- Item missing or is closed while in opening state.
+                inst.AnimState:PlayAnimation("build_pst")
+                inst.sg:GoToState("idle", true)
+            end
+        end,
 
-    --     onenter = function(inst)
-    --         inst.components.locomotor:Stop()
-    --         inst.AnimState:PlayAnimation("build_pst")
-    --         inst:PerformBufferedAction()
-    --         inst.sg:GoToState("idle", true)
-    --     end,
-    -- },
+        onexit = function(inst)
+            inst.SoundEmitter:KillSound("make")
+            if inst.sg.statemem.item and inst.sg.statemem.item:IsValid()
+                and inst.sg.statemem.item.components.aoc_dimenson_container_linker
+                and inst.sg.statemem.item.components.aoc_dimenson_container_linker:IsOpened() then
+                inst.sg.statemem.item.components.aoc_dimenson_container_linker:Close(inst)
+            end
+        end,
+
+        events =
+        {
+            EventHandler("performaction", function(inst, data)
+                if data ~= nil and data.action ~= nil and data.action.action == ACTIONS.DROP then
+                    -- Add more cute animation ?
+                end
+            end),
+
+            EventHandler("locomote", function(inst)
+                inst.AnimState:PlayAnimation("build_pst")
+                inst.sg:GoToState("idle", true)
+                return true
+            end),
+            -- EventHandler("animqueueover", function(inst)
+            --     if inst.AnimState:AnimDone() then
+            --         inst.sg:GoToState("idle")
+            --     end
+            -- end),
+        },
+    },
+
+    State {
+        name = "dread_cloak_close_container",
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+
+            inst:PerformBufferedAction()
+
+            inst.AnimState:PlayAnimation("build_pst")
+            inst.sg:GoToState("idle", true)
+        end,
+    },
 }
 
 for _, state in ipairs(states) do

@@ -50,3 +50,45 @@ ACTIONS.CASTAOE.strfn = function(act)
     end
     return _ACTIONS_CASTAOE_strfn(act)
 end
+
+
+AddAction("AOC_OPEN_DIMENSON_CONTAINER", "AOC_OPEN_DIMENSON_CONTAINER", function(act)
+    if act.doer and act.doer:IsValid()
+        and act.invobject and act.invobject:IsValid()
+        and act.invobject.components.aoc_dimenson_container_linker
+        and not act.invobject.components.aoc_dimenson_container_linker:IsOpened() then
+        act.invobject.components.aoc_dimenson_container_linker:Open(act.doer)
+        return true
+    end
+end)
+
+AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.AOC_OPEN_DIMENSON_CONTAINER, "dread_cloak_open_container"))
+AddStategraphActionHandler("wilson_client",
+    ActionHandler(ACTIONS.AOC_OPEN_DIMENSON_CONTAINER, "dread_cloak_open_container"))
+
+AddAction("AOC_CLOSE_DIMENSON_CONTAINER", "AOC_CLOSE_DIMENSON_CONTAINER", function(act)
+    if act.doer and act.doer:IsValid()
+        and act.invobject and act.invobject:IsValid()
+        and act.invobject.components.aoc_dimenson_container_linker then
+        if act.invobject.components.aoc_dimenson_container_linker:IsOpened() then
+            act.invobject.components.aoc_dimenson_container_linker:Close(act.doer)
+        end
+
+        return true
+    end
+end)
+
+AddStategraphActionHandler("wilson", ActionHandler(ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER, "dread_cloak_close_container"))
+AddStategraphActionHandler("wilson_client",
+    ActionHandler(ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER, "dread_cloak_close_container"))
+
+
+AddComponentAction("INVENTORY", "aoc_dimenson_container_linker", function(inst, doer, actions, right)
+    if doer and doer:HasTag("player") then
+        if inst:HasTag("aoc_dimenson_container_opened") then
+            table.insert(actions, ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER)
+        else
+            table.insert(actions, ACTIONS.AOC_OPEN_DIMENSON_CONTAINER)
+        end
+    end
+end)
