@@ -13,6 +13,7 @@ PrefabFiles = {
     "aoc_skins",
     "nightmare_hat",
     "dread_spear",
+    "woods_shadeling",
 }
 
 Assets = {
