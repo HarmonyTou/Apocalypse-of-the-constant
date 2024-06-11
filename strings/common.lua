@@ -37,8 +37,9 @@ return {
 
         DREAD_AXE = "Shroud Axe",--Withered axe?
         DREAD_LANTERN = "Shroud Lantern",--Withered Lantern?
+        WOODS_SHADELING = "Laboring Horror",
 
-        LUNAR_SPARK_BLADE="Spark Blade",
+        LUNAR_SPARK_BLADE = "Spark Blade",
     },
     RECIPE_DESC = {
         DREADSWORD = "Bring the deepest despair to your enemies",
