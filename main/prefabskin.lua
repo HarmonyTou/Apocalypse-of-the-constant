@@ -1,4 +1,4 @@
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 local SkinHandler = require("utils/skinhandler")
 
 dreadsword_init_fn = function(inst, build_name)
@@ -28,5 +28,5 @@ dreadsword_clear_fn = function(inst)
 end
 
 SkinHandler.AddModSkins({
-    dreadsword = {"night_edge"}
+    dreadsword = { "night_edge" }
 })

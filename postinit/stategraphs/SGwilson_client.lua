@@ -2,7 +2,7 @@ local SoundUtil = require("utils/soundutil")
 local ReplaceSound = SoundUtil.ReplaceSound
 local AddStategraphState = AddStategraphState
 local AddStategraphPostInit = AddStategraphPostInit
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 
 local states = {
     State {

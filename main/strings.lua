@@ -1,7 +1,7 @@
 local ENV = env
 local MODROOT = MODROOT
 local StringUtil = require("utils/stringutil")
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 
 local locale = aoc_config.locale
 
@@ -22,20 +22,20 @@ local Languages = {
     -- ru = "russian",  -- russian
     zh = "chinese_s",  -- chinese
     chs = "chinese_s", -- chinese mod
-    sc = "chinese_s", -- simple chinese
-    tc = "chinese_t", -- simple chinese
-    cht = "chinese_t",  -- simple chinese
+    sc = "chinese_s",  -- simple chinese
+    tc = "chinese_t",  -- simple chinese
+    cht = "chinese_t", -- simple chinese
 }
 local function MergeTranslationFromPO(base_path, override_lang)
     local _defaultlang = LanguageTranslator.defaultlang
     local lang = override_lang or _defaultlang
     if not Languages[lang] then return end
-    local filepath = base_path.."/"..Languages[lang]..".po"
+    local filepath = base_path .. "/" .. Languages[lang] .. ".po"
     if not resolvefilepath_soft(filepath) then
-        print("Could not find a language file matching "..filepath.." in any of the search paths.")
+        print("Could not find a language file matching " .. filepath .. " in any of the search paths.")
         return
     end
-    local temp_lang = lang.."_temp"
+    local temp_lang = lang .. "_temp"
     LanguageTranslator:LoadPOFile(filepath, temp_lang)
     StringUtil.merge_table(LanguageTranslator.languages[lang], LanguageTranslator.languages[temp_lang])
     TranslateStringTable(STRINGS)
@@ -44,7 +44,7 @@ local function MergeTranslationFromPO(base_path, override_lang)
 end
 
 local characters = {
-    "generic",  -- wilson
+    "generic", -- wilson
     "willow",
     "wolfgang",
     "wendy",
@@ -74,4 +74,4 @@ end
 
 MergeStringsToGLOBAL(StringUtil.ImportStringsFile("common", ENV))
 MergeStringsToGLOBAL(strings)
-MergeTranslationFromPO(MODROOT.."scripts/languages", Languages[locale])
+MergeTranslationFromPO(MODROOT .. "scripts/languages", Languages[locale])

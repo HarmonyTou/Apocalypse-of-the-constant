@@ -1,14 +1,15 @@
 local AddPrefabPostInit = AddPrefabPostInit
 local UpvalueUtil = require("utils/upvalueutil")
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
         local setbonus = inst.components.setbonus ~= nil and
-        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1
+            inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or
+            1
         local rate = 1 /
-        Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
-            owner.components.sanity:GetPercent())
+            Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
+                owner.components.sanity:GetPercent())
         if inst.isonattack then
             rate = rate * 4
         end

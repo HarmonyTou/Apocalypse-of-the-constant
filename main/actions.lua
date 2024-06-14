@@ -1,5 +1,5 @@
 local UpvalueUtil = require("utils/upvalueutil")
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 
 local function TriggerAbility(sanity_precent)
     if sanity_precent == 1 then

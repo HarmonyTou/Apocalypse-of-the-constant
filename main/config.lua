@@ -1,6 +1,6 @@
 local GetModConfigData = GetModConfigData
 local ENV = env
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 
 aoc_config = {
 	locale = GetModConfigData("locale"),

@@ -1,5 +1,5 @@
 local AddSimPostInit = AddSimPostInit
-GLOBAL.setfenv(1, GLOBAL)
+-- GLOBAL.setfenv(1, GLOBAL)
 
 local function postinitfn()
     local daywalker_loots = LootTables["daywalker"]
