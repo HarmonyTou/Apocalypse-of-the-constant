@@ -84,7 +84,7 @@ AddStategraphActionHandler("wilson_client",
 
 
 AddComponentAction("INVENTORY", "aoc_dimenson_container_linker", function(inst, doer, actions, right)
-    if doer and doer:HasTag("player") then
+    if doer and doer:HasTag("player") and inst.replica.equippable and inst.replica.equippable:IsEquipped() then
         if inst:HasTag("aoc_dimenson_container_opened") then
             table.insert(actions, ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER)
         else

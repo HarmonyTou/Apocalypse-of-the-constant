@@ -45,4 +45,4 @@ function AOCDimensonContainerLinker:Close(doer, do_not_loop_trigger)
     self.inst:RemoveTag("aoc_dimenson_container_opened")
 end
 
-return
+return AOCDimensonContainerLinker

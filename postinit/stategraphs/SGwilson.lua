@@ -295,7 +295,7 @@ local states = {
 
     State {
         name = "dread_cloak_open_container",
-        tags = { "doing", "overridelocomote" },
+        tags = { "doing", },
 
         onenter = function(inst)
             inst.components.locomotor:Stop()
@@ -339,11 +339,13 @@ local states = {
                 end
             end),
 
-            EventHandler("locomote", function(inst)
-                inst.AnimState:PlayAnimation("build_pst")
-                inst.sg:GoToState("idle", true)
-                return true
-            end),
+            -- EventHandler("locomote", function(inst)
+            --     if inst.components.locomotor:WantsToMoveForward() then
+            --         inst.AnimState:PlayAnimation("build_pst")
+            --         inst.sg:GoToState("idle", true)
+            --         return true
+            --     end
+            -- end),
             -- EventHandler("animqueueover", function(inst)
             --     if inst.AnimState:AnimDone() then
             --         inst.sg:GoToState("idle")

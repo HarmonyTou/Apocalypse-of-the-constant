@@ -4,6 +4,12 @@ local AddStategraphState = AddStategraphState
 local AddStategraphPostInit = AddStategraphPostInit
 -- GLOBAL.setfenv(1, GLOBAL)
 
+local function ClearCachedServerState(inst)
+    if inst.player_classified ~= nil then
+        inst.player_classified.currentstate:set_local(0)
+    end
+end
+
 local states = {
     State {
         name = "lunar_spark_blade_leap_lag",
@@ -198,16 +204,77 @@ local states = {
     --     end,
     -- },
 
-    -- State {
-    --     name = "dread_cloak_stop_using_container",
 
-    --     onenter = function(inst)
-    --         inst.components.locomotor:Stop()
-    --         inst.AnimState:PlayAnimation("build_pst")
-    --         inst:PerformPreviewBufferedAction()
-    --         inst.sg:GoToState("idle", true)
-    --     end,
-    -- },
+    State {
+        name = "dread_cloak_open_container",
+        tags = { "doing", },
+        server_states = { "dread_cloak_open_container", },
+
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+
+
+
+            inst:PerformPreviewBufferedAction()
+
+            inst.entity:SetIsPredictingMovement(false)
+
+            ClearCachedServerState(inst)
+
+            inst.sg.statemem.anim_played = false
+
+            inst.sg:SetTimeout(2)
+        end,
+
+        onupdate = function(inst)
+            if inst.sg:ServerStateMatches() then
+                if not inst.sg.statemem.anim_played and inst.entity:FlattenMovementPrediction() then
+                    if inst.AnimState:IsCurrentAnimation("build_pre") then
+                        inst.AnimState:PushAnimation("build_loop", true)
+                    elseif inst.AnimState:IsCurrentAnimation("build_loop") then
+
+                    else
+                        inst.AnimState:PlayAnimation("build_pre")
+                        inst.AnimState:PushAnimation("build_loop", true)
+                    end
+                    inst.sg.statemem.anim_played = true
+                end
+            elseif inst.bufferedaction == nil then
+                inst.AnimState:PlayAnimation("build_pst")
+                inst.sg:GoToState("idle", true)
+            end
+        end,
+
+        ontimeout = function(inst)
+            if inst.bufferedaction ~= nil and inst.bufferedaction.ispreviewing then
+                inst:ClearBufferedAction()
+                inst.sg:GoToState("idle")
+            end
+        end,
+
+        events =
+        {
+
+        },
+
+        onexit = function(inst)
+            inst.entity:SetIsPredictingMovement(true)
+        end,
+    },
+
+    State {
+        name = "dread_cloak_close_container",
+
+        onenter = function(inst)
+            inst.components.locomotor:Stop()
+
+            inst:PerformPreviewBufferedAction()
+
+            inst.AnimState:PlayAnimation("build_pst")
+            inst.sg:GoToState("idle", true)
+        end,
+    },
 }
 
 for _, state in ipairs(states) do

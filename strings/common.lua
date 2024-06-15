@@ -6,6 +6,9 @@ return {
             DREAD_LANTERN_START = "Absorb Miasma",
             DREAD_LANTERN_STOP = "Stop Absorbing",
         },
+
+        AOC_OPEN_DIMENSON_CONTAINER = "Open",
+        AOC_CLOSE_DIMENSON_CONTAINER = "Close",
     },
     DREADSWORD_TALK = {
         ATTTALK = {
@@ -30,13 +33,13 @@ return {
     NAMES = {
         DREADSWORD = "Dreadstone Sword",
         DREAD_PICKAXE = "Dreadstone Pickaxe",
-        DREAD_CLOAK = "Darknight Splint Mail",--板甲
-        NIGHTMAREHAT = "Darknight Helm",--战盔
+        DREAD_CLOAK = "Darknight Splint Mail", --板甲
+        NIGHTMAREHAT = "Darknight Helm",       --战盔
 
         DREADSPEAR = "Dreadstone Spear",
 
-        DREAD_AXE = "Shroud Axe",--Withered axe?
-        DREAD_LANTERN = "Shroud Lantern",--Withered Lantern?
+        DREAD_AXE = "Shroud Axe",         --Withered axe?
+        DREAD_LANTERN = "Shroud Lantern", --Withered Lantern?
         WOODS_SHADELING = "Laboring Horror",
 
         LUNAR_SPARK_BLADE = "Spark Blade",
@@ -44,15 +47,15 @@ return {
     RECIPE_DESC = {
         DREADSWORD = "Bring the deepest despair to your enemies",
         DREAD_PICKAXE = "It's very destructive, but you need to find a good angle.",
-        DREAD_CLOAK = "TODO",--板甲
-        NIGHTMAREHAT = "TODO",--战盔
+        DREAD_CLOAK = "TODO",  --板甲
+        NIGHTMAREHAT = "TODO", --战盔
 
         DREADSPEAR = "TODO",
 
         DREAD_AXE = "TODO",
         DREAD_LANTERN = "A very hopeless looking lantern.",
 
-        LUNAR_SPARK_BLADE="TODO",
+        LUNAR_SPARK_BLADE = "TODO",
     },
     SKIN_NAMES = {
         night_edge = "Night's Edge",
