@@ -70,7 +70,7 @@ end
 local function OnEquip(inst, owner)
     owner.AnimState:OverrideSymbol("swap_object", "dread_axe", "dread_axe")
     SetFxOwner(inst, owner)
-
+    owner.components.combat:SetAttackPeriod(0) -- 将攻速从2.5提高到3.33的关键，跟其他改攻速的角色冲突？我想这一定不能 
     owner.AnimState:Show("ARM_carry")
     owner.AnimState:Hide("ARM_normal")
 end
@@ -78,6 +78,7 @@ end
 local function OnUnequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
+    owner.components.combat:SetAttackPeriod(TUNING.WILSON_ATTACK_PERIOD)
     SetFxOwner(inst, nil)
 end
 
@@ -91,7 +92,7 @@ local function OnStopFloating(inst)
 end
 
 local function SpellFn(inst, caster, pos)
-    inst.components.rechargeable:Discharge(5)
+    inst.components.rechargeable:Discharge(3)
     inst:MakeProjectile()
 
     caster.components.inventory:DropItem(inst)
@@ -336,13 +337,13 @@ local function OnCharged(inst)
 end
 
 local function OnAttack(inst, owner, target)
-    --local suo = owner.replica.inventory and owner.replica.inventory:GetEquippedItem(EQUIPSLOTS.BODY) --通过取消后摇使砍伐攻击看起来不卡顿的代码，先注掉了
-    --if owner and owner.sg then
-	    --if suo == nil or (suo and suo.prefab ~= "klaus_amulet") then --与无锁不冲突
-	 	   --owner.sg:RemoveStateTag("attack")
-	        --owner.sg:RemoveStateTag("abouttoattack")
-	    --end
-	--end
+    local suo = owner.replica.inventory and owner.replica.inventory:GetEquippedItem(EQUIPSLOTS.BODY) --通过取消后摇使砍伐攻击看起来不卡顿的代码，先注掉了
+    if owner and owner.sg then
+	    if suo == nil or (suo and suo.prefab ~= "klaus_amulet") then --与UM无锁不冲突
+	 	    owner.sg:RemoveStateTag("attack")
+	        owner.sg:RemoveStateTag("abouttoattack")
+	    end
+	end
 	if target then
         Hitsparks(owner,target,{1,0,0})
 	end
@@ -421,7 +422,7 @@ local function fn()
     inst:AddComponent("inventoryitem")
 
     inst:AddComponent("weapon")
-    inst.components.weapon:SetDamage(TUNING.DREAD_AXE.DAMAGE * .5)
+    inst.components.weapon:SetDamage(TUNING.DREAD_AXE.DAMAGE)
     inst.components.weapon:SetOnAttack(OnAttack)
 
     inst:AddComponent("aoespell")
