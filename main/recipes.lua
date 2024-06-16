@@ -32,7 +32,7 @@ local function SortAfter(a, b, filter_name)
 end
 
 -- 制作所需要的材料
-AddRecipe2("dreadspear", { Ingredient("twigs", 2), Ingredient("rope", 1), Ingredient("dreadstone", 1) }, TECH.LOST,
+AddRecipe2("dreadspear", { Ingredient("livinglog", 1), Ingredient("horrorfuel", 2),  Ingredient("dreadstone", 2) }, TECH.LOST,
     { nounlock = false }, { "MAGIC", "WEAPONS" })
 SortAfter("dreadspear", "nightsword", "MAGIC")
 SortAfter("dreadspear", "nightsword", "WEAPONS")
