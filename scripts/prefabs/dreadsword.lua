@@ -18,7 +18,7 @@ local prefabs =
 ------------------------------------------------------------------------------------------------------------------------
 -- Weapon skill definations
 
-local COOLDOWN_PARRY = 10
+local COOLDOWN_PARRY = 6
 local RE_COOLDOWN_PERCENT = 0
 local COOLDOWN_WAVE = 4.5
 
