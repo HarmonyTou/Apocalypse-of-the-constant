@@ -297,6 +297,37 @@ local function cloak_animfn()
 
     inst.persists = false
 
+    inst.idle_anim = "idle1"
+    inst.old_owner_moving = false
+
+    inst:AddComponent("updatelooper")
+
+    inst.LookForOwnerMoving = function(inst, owner)
+        if owner:HasTag("locomotor") then
+            inst._update_fn = function()
+                local owner_moving = owner:HasTag("moving")
+                if owner_moving and not inst.old_owner_moving then
+                    -- TODO: Play moving anim here
+                    -- inst.AnimState:PlayAnimation("idle1", true)
+                elseif not owner_moving and inst.old_owner_moving then
+                    -- inst.AnimState:PushAnimation(inst.idle_anim, true)
+                    -- TODO: Play normal ani here
+                end
+
+                inst.old_owner_moving = owner_moving
+            end
+
+            inst.components.updatelooper:AddOnUpdateFn(inst._update_fn)
+        end
+    end
+
+    inst.StopLook = function(inst, owner)
+        if inst._update_fn then
+            inst.components.updatelooper:RemoveOnUpdateFn(inst._update_fn)
+            inst._update_fn = nil
+        end
+    end
+
     return inst
 end
 
