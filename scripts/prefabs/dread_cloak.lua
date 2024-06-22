@@ -213,6 +213,7 @@ local function fn()
     inst.components.equippable.equipslot = EQUIPSLOTS.ARMOR or EQUIPSLOTS.BODY
     inst.components.equippable:SetOnEquip(onequip)
     inst.components.equippable:SetOnUnequip(onunequip)
+    inst.components.equippable.walkspeedmult = 1.2
 
     inst:AddComponent("damagetyperesist")
     inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
