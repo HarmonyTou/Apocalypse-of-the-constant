@@ -14,6 +14,8 @@ PrefabFiles = {
     "nightmare_hat",
     "dread_spear",
     "woods_shadeling",
+    "knightmare",
+    "knightmare_gears",
 }
 
 Assets = {

@@ -43,6 +43,9 @@ return {
         WOODS_SHADELING = "Laboring Horror",
 
         LUNAR_SPARK_BLADE = "Spark Blade",
+
+        KNIGHTMARE_ALLEGIANCE = "真正的名字？",
+        KNIGHTMARE = "骑士",
     },
     RECIPE_DESC = {
         DREADSWORD = "Bring the deepest despair to your enemies",
