@@ -108,6 +108,10 @@ local function CheckSwapAnims(inst, owner_unequip)
 
         -- Static symbol, only contains up body anim
         -- owner.AnimState:OverrideSymbol("swap_body", "swap_dread_cloak2", "swap_body")
+
+        inst.swap_anims.cloak_up:TrackOwner(owner)
+        inst.swap_anims.cloak_side:TrackOwner(owner)
+        inst.swap_anims.cloak_down:TrackOwner(owner)
     else
         for k, v in pairs(inst.swap_anims) do
             v:Hide()
@@ -127,6 +131,10 @@ local function CheckSwapAnims(inst, owner_unequip)
         if owner_unequip then
             owner_unequip.AnimState:ClearOverrideSymbol("swap_body")
         end
+
+        inst.swap_anims.cloak_up:StopTrackingOwner()
+        inst.swap_anims.cloak_side:StopTrackingOwner()
+        inst.swap_anims.cloak_down:StopTrackingOwner()
     end
 end
 
@@ -255,9 +263,24 @@ local function fn()
         v.entity:AddFollower()
     end
 
-    inst.swap_anims.cloak_up.AnimState:PlayAnimation("idle1", true)
-    inst.swap_anims.cloak_side.AnimState:PlayAnimation("idle4", true)
-    inst.swap_anims.cloak_down.AnimState:PlayAnimation("idle1", true)
+    inst.swap_anims.cloak_up.idle_anim = "idle1"
+    inst.swap_anims.cloak_up.move_pre_anim = "move_pre1"
+    inst.swap_anims.cloak_up.move_loop_anim = "move_loop_1"
+    inst.swap_anims.cloak_up.move_pst_anim = "move_pst_1"
+
+    inst.swap_anims.cloak_side.idle_anim = "idle4"
+    inst.swap_anims.cloak_side.move_pre_anim = "move_pre2"
+    inst.swap_anims.cloak_side.move_loop_anim = "move_loop_2"
+    inst.swap_anims.cloak_side.move_pst_anim = "move_pst_2"
+
+    inst.swap_anims.cloak_down.idle_anim = "idle1"
+    inst.swap_anims.cloak_down.move_pre_anim = "move_pre1"
+    inst.swap_anims.cloak_down.move_loop_anim = "move_loop_1"
+    inst.swap_anims.cloak_down.move_pst_anim = "move_pst_1"
+
+    inst.swap_anims.cloak_up.AnimState:PlayAnimation(inst.swap_anims.cloak_up.idle_anim, true)
+    inst.swap_anims.cloak_side.AnimState:PlayAnimation(inst.swap_anims.cloak_side.idle_anim, true)
+    inst.swap_anims.cloak_down.AnimState:PlayAnimation(inst.swap_anims.cloak_down.idle_anim, true)
 
     inst.swap_anims.armor_down_1.AnimState:PlayAnimation("idle1", true)
     inst.swap_anims.armor_down_2.AnimState:PlayAnimation("idle2", true)
@@ -298,21 +321,35 @@ local function cloak_animfn()
 
     inst.persists = false
 
+    -- TODO: When bishop finish the anim, add ad here
     inst.idle_anim = "idle1"
+    inst.move_pre_anim = ""
+    inst.move_loop_anim = ""
+    inst.move_pst_anim = ""
     inst.old_owner_moving = false
 
     inst:AddComponent("updatelooper")
 
-    inst.LookForOwnerMoving = function(inst, owner)
+    inst.TrackOwner = function(inst, owner)
+        inst.AnimState:PlayAnimation(inst.idle_anim, true)
+
         if owner:HasTag("locomotor") then
             inst._update_fn = function()
-                local owner_moving = owner:HasTag("moving")
+                if not owner:IsValid() then
+                    return
+                end
+
+                -- local owner_moving = owner:HasTag("moving")
+                local owner_moving = owner.sg and owner.sg:HasStateTag("moving")
+
                 if owner_moving and not inst.old_owner_moving then
                     -- TODO: Play moving anim here
-                    -- inst.AnimState:PlayAnimation("idle1", true)
+                    inst.AnimState:PlayAnimation(inst.move_pre_anim)
+                    inst.AnimState:PushAnimation(inst.move_loop_anim, true)
                 elseif not owner_moving and inst.old_owner_moving then
-                    -- inst.AnimState:PushAnimation(inst.idle_anim, true)
-                    -- TODO: Play normal ani here
+                    -- TODO: Play normal anim here
+                    inst.AnimState:PlayAnimation(inst.move_pst_anim)
+                    inst.AnimState:PushAnimation(inst.idle_anim, true)
                 end
 
                 inst.old_owner_moving = owner_moving
@@ -322,7 +359,7 @@ local function cloak_animfn()
         end
     end
 
-    inst.StopLook = function(inst, owner)
+    inst.StopTrackingOwner = function(inst)
         if inst._update_fn then
             inst.components.updatelooper:RemoveOnUpdateFn(inst._update_fn)
             inst._update_fn = nil
