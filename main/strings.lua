@@ -1,7 +1,7 @@
 local ENV = env
 local MODROOT = MODROOT
 local StringUtil = require("utils/stringutil")
--- GLOBAL.setfenv(1, GLOBAL)
+GLOBAL.setfenv(1, GLOBAL)
 
 local locale = aoc_config.locale
 
@@ -25,12 +25,13 @@ local Languages = {
     sc = "chinese_s",  -- simple chinese
     tc = "chinese_t",  -- simple chinese
     cht = "chinese_t", -- simple chinese
+    cant = "cantonese", -- cantonese
 }
 local function MergeTranslationFromPO(base_path, override_lang)
     local _defaultlang = LanguageTranslator.defaultlang
     local lang = override_lang or _defaultlang
     if not Languages[lang] then return end
-    local filepath = base_path .. "/" .. Languages[lang] .. ".po"
+    local filepath = base_path .. "/aoc_" .. Languages[lang] .. ".po"
     if not resolvefilepath_soft(filepath) then
         print("Could not find a language file matching " .. filepath .. " in any of the search paths.")
         return

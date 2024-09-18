@@ -1,14 +1,13 @@
 return {
     ACTIONS = {
+        AOC_CLOSE_DIMENSON_CONTAINER = "Close",
+        AOC_OPEN_DIMENSON_CONTAINER = "Open",
         CASTAOE = {
             DREADSWORD_SKILL_PARRY = "Block",
             DREADSWORD_SKILL_WAVE = "Shadow Cut",
             DREAD_LANTERN_START = "Absorb Miasma",
             DREAD_LANTERN_STOP = "Stop Absorbing",
         },
-
-        AOC_OPEN_DIMENSON_CONTAINER = "Open",
-        AOC_CLOSE_DIMENSON_CONTAINER = "Close",
     },
     DREADSWORD_TALK = {
         ATTTALK = {
@@ -31,39 +30,32 @@ return {
         },
     },
     NAMES = {
-        DREADSWORD = "Dreadstone Sword",
-        DREAD_PICKAXE = "Dreadstone Pickaxe",
-        DREAD_CLOAK = "Darknight Splint Mail", --板甲
-        NIGHTMAREHAT = "Darknight Helm",       --战盔
-
         DREADSPEAR = "Dreadstone Spear",
-
-        DREAD_AXE = "Shroud Axe",         --Withered axe?
-        DREAD_LANTERN = "Shroud Lantern", --Withered Lantern?
-        WOODS_SHADELING = "Laboring Horror",
-
+        DREADSWORD = "Dreadstone Sword",
+        DREAD_AXE = "Shroud Axe",
+        DREAD_CLOAK = "Darknight Splint Mail",
+        DREAD_LANTERN = "Shroud Lantern",
+        DREAD_PICKAXE = "Dreadstone Pickaxe",
+        KNIGHTMARE = "Knight",
+        KNIGHTMARE_ALLEGIANCE = "Real name?",
         LUNAR_SPARK_BLADE = "Spark Blade",
-
-        KNIGHTMARE_ALLEGIANCE = "真正的名字？",
-        KNIGHTMARE = "骑士",
+        NIGHTMAREHAT = "Darknight Helm",
+        WOODS_SHADELING = "Laboring Horror",
     },
     RECIPE_DESC = {
-        DREADSWORD = "Bring the deepest despair to your enemies",
-        DREAD_PICKAXE = "It's very destructive, but you need to find a good angle.",
-        DREAD_CLOAK = "TODO",  --板甲
-        NIGHTMAREHAT = "TODO", --战盔
-
         DREADSPEAR = "TODO",
-
+        DREADSWORD = "Bring the deepest despair to your enemies",
         DREAD_AXE = "TODO",
+        DREAD_CLOAK = "TODO",
         DREAD_LANTERN = "A very hopeless looking lantern.",
-
+        DREAD_PICKAXE = "It's very destructive, but you need to find a good angle.",
         LUNAR_SPARK_BLADE = "TODO",
-    },
-    SKIN_NAMES = {
-        night_edge = "Night's Edge",
+        NIGHTMAREHAT = "TODO",
     },
     SKIN_DESCRIPTIONS = {
+        night_edge = "Night's Edge",
+    },
+    SKIN_NAMES = {
         night_edge = "Night's Edge",
     },
 }

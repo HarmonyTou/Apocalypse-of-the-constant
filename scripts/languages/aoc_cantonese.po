@@ -1,24 +1,34 @@
 msgid ""
 msgstr ""
-"Language: zh-CN\n"
+"Language: zh-Yue\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT Version: 2.0"
 
+#. STRINGS.ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER
+msgctxt "STRINGS.ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER"
+msgid "Close"
+msgstr "閂"
+
+#. STRINGS.ACTIONS.AOC_OPEN_DIMENSON_CONTAINER
+msgctxt "STRINGS.ACTIONS.AOC_OPEN_DIMENSON_CONTAINER"
+msgid "Open"
+msgstr "打開"
+
 #. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_PARRY"
 msgid "Block"
-msgstr "格挡"
+msgstr "區塊"
 
 #. STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_WAVE
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREADSWORD_SKILL_WAVE"
 msgid "Shadow Cut"
-msgstr "暗影斩切"
+msgstr "陰影切割"
 
 #. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_START"
 msgid "Absorb Miasma"
-msgstr "吸收瘴气"
+msgstr "吸收瘴氣"
 
 #. STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP
 msgctxt "STRINGS.ACTIONS.CASTAOE.DREAD_LANTERN_STOP"
@@ -28,205 +38,280 @@ msgstr "停止吸收"
 #. STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY
 msgctxt "STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_PARRY"
 msgid "My strength is not strong enough..."
-msgstr "我的力量还不够强大......."
+msgstr "我實力唔夠勁 ..."
 
 #. STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_WAVE
 msgctxt "STRINGS.CHARACTERS.GENERIC.ANNOUNCE_DREADSWORD_CANT_WAVE"
 msgid "Make waves, why can’t you make waves?"
-msgstr "放波啊，怎么放不出波啊！"
+msgstr "搞波，點解你唔可以搞波？"
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREADSWORD"
 msgid "Just holding it makes me shiver."
-msgstr "光是拿着它就令我颤抖。"
+msgstr "淨係拎住佢就令我震驚。"
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_LANTERN
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_LANTERN"
 msgid "Something was burning inside."
-msgstr "有什么东西在里面熊熊燃烧。"
+msgstr "入面有啲嘢燒緊。"
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_PICKAXE
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.DREAD_PICKAXE"
 msgid "It can easily fall out of your hand if you don't hold it tightly."
-msgstr "如果你不抓紧，它很容易从手中脱落。"
+msgstr "如果你唔抱緊佢，佢好容易會跌出你隻手。"
 
 #. STRINGS.CHARACTERS.WALTER.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WALTER.DESCRIBE.DREADSWORD"
 msgid "The Sword of the Evil Knight!"
-msgstr "邪恶骑士之剑!"
+msgstr "邪惡騎士之劍！"
 
 #. STRINGS.CHARACTERS.WANDA.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WANDA.DESCRIBE.DREADSWORD"
 msgid "This sword works better than the last one."
-msgstr "这把剑比上一个更好用。"
+msgstr "呢把劍嘅效果好過上一把。"
 
 #. STRINGS.CHARACTERS.WARLY.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WARLY.DESCRIBE.DREADSWORD"
 msgid "When will I have real kitchen utensils?"
-msgstr "什么时候能有把真正的厨具?"
+msgstr "我幾時會有真正嘅廚具？"
 
 #. STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WATHGRITHR.DESCRIBE.DREADSWORD"
 msgid "Hull's inferno of despair! Only those brave enough to face death can hold it."
-msgstr "赫尔的绝望炼狱！只有敢于面对死亡的勇士才能握住它。"
+msgstr "赫爾嘅絕望地獄！只有夠勇敢面對死亡嘅人先可以抱住佢。"
 
 #. STRINGS.CHARACTERS.WAXWELL.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WAXWELL.DESCRIBE.DREADSWORD"
 msgid "It draws despair from its victims and uses it to repair the darkness that protects you."
-msgstr "它从受害者抽取绝望,以用于修复保护你的黑暗。"
+msgstr "佢會從受害者身上吸取絕望，並用佢嚟修復保護你嘅黑暗。"
 
 #. STRINGS.CHARACTERS.WEBBER.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WEBBER.DESCRIBE.DREADSWORD"
 msgid "We are afraid of its sound."
-msgstr "我们害怕它的声音。"
+msgstr "我哋驚佢嘅聲音。"
 
 #. STRINGS.CHARACTERS.WENDY.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WENDY.DESCRIBE.DREADSWORD"
 msgid "This sword...radiates more pain."
-msgstr "这柄剑......散发着更多的痛苦。"
+msgstr "呢把劍 ... 輻射出更多嘅痛苦。"
 
 #. STRINGS.CHARACTERS.WICKERBOTTOM.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WICKERBOTTOM.DESCRIBE.DREADSWORD"
 msgid "It's not as heavy as it looks."
-msgstr "它没有看上去的那么重。"
+msgstr "佢唔係好似睇落咁重。"
 
 #. STRINGS.CHARACTERS.WILLOW.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WILLOW.DESCRIBE.DREADSWORD"
 msgid "Yes, it would be better if it had some firelight."
-msgstr "不错,要是带点火光就更好了。"
+msgstr "係呀，如果佢有啲火光會好啲。"
 
 #. STRINGS.CHARACTERS.WINONA.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WINONA.DESCRIBE.DREADSWORD"
 msgid "It looks tattered and I don't know if it is strong or not."
-msgstr "看起来破破烂烂的,不知道结不结实。"
+msgstr "睇落好爛，唔知堅唔堅。"
 
 #. STRINGS.CHARACTERS.WOLFGANG.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WOLFGANG.DESCRIBE.DREADSWORD"
 msgid "Not only is it true, it’s also sharp!"
-msgstr "不仅是真的,还是锋利的!"
+msgstr "唔單止係真，仲好犀利！"
 
 #. STRINGS.CHARACTERS.WOODIE.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WOODIE.DESCRIBE.DREADSWORD"
 msgid "It's a pity that it can't be used to cut down trees."
-msgstr "可惜不能用来砍树。"
+msgstr "可惜唔可以用嚟斬樹。"
 
 #. STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WORMWOOD.DESCRIBE.DREADSWORD"
 msgid "Black old screaming sword."
-msgstr "黑的破旧的声音很大的剑。"
+msgstr "黑色老尖叫劍。"
 
 #. STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WORTOX.DESCRIBE.DREADSWORD"
 msgid "Fun! Fun!"
-msgstr "好玩！好玩！"
+msgstr "樂趣！樂趣！"
 
 #. STRINGS.CHARACTERS.WURT.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WURT.DESCRIBE.DREADSWORD"
 msgid "A spooky sword."
-msgstr "阴森恐怖的剑。"
+msgstr "一把鬼怪嘅劍。"
 
 #. STRINGS.CHARACTERS.WX78.DESCRIBE.DREADSWORD
 msgctxt "STRINGS.CHARACTERS.WX78.DESCRIBE.DREADSWORD"
 msgid "Organic destroyer."
-msgstr "有机物破坏者。"
+msgstr "有機驅逐艦。"
 
 #. STRINGS.DREADSWORD_TALK.ATTTALK.1
 msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.1"
 msgid "I will tear your soul apart"
-msgstr "我会撕裂你们的灵魂"
+msgstr "我會撕裂你嘅靈魂"
 
 #. STRINGS.DREADSWORD_TALK.ATTTALK.2
 msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.2"
 msgid "It's a waste of beautiful suffering"
-msgstr "这是对美好苦难的浪费"
+msgstr "係浪費美好嘅苦難"
 
 #. STRINGS.DREADSWORD_TALK.ATTTALK.3
 msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.3"
 msgid "Oh, this is what I'm going to show you"
-msgstr "噢，这是我将给你看的"
+msgstr "哦，呢個就係我要畀你睇嘅嘢"
 
 #. STRINGS.DREADSWORD_TALK.ATTTALK.4
 msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.4"
 msgid "Give up extravagant hopes"
-msgstr "放弃奢望"
+msgstr "放棄奢侈嘅希望"
 
 #. STRINGS.DREADSWORD_TALK.ATTTALK.5
 msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.5"
 msgid "Fragile"
-msgstr "脆弱"
+msgstr "易碎"
 
 #. STRINGS.DREADSWORD_TALK.ATTTALK.6
 msgctxt "STRINGS.DREADSWORD_TALK.ATTTALK.6"
 msgid "you should suffer"
-msgstr "你应当痛苦"
+msgstr "你應該受苦"
 
 #. STRINGS.DREADSWORD_TALK.TALK.1
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.1"
 msgid "Fear, more despair!"
-msgstr "恐惧，更多的绝望！"
+msgstr "恐懼，更加絕望！"
 
 #. STRINGS.DREADSWORD_TALK.TALK.2
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.2"
 msgid "Look them in the eye!"
-msgstr "直视他们！"
+msgstr "望住佢哋對眼！"
 
 #. STRINGS.DREADSWORD_TALK.TALK.3
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.3"
 msgid "Do not resist the darkness of destiny!"
-msgstr "不要抗拒命定的黑暗！"
+msgstr "唔好抗拒命運嘅黑暗！"
 
 #. STRINGS.DREADSWORD_TALK.TALK.4
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.4"
 msgid "You crave more death"
-msgstr "你渴望更多的死亡"
+msgstr "你渴望更多嘅死亡"
 
 #. STRINGS.DREADSWORD_TALK.TALK.5
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.5"
 msgid "end it all"
-msgstr "结束这一切"
+msgstr "結束所有嘢"
 
 #. STRINGS.DREADSWORD_TALK.TALK.6
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.6"
 msgid "Let raw killing rule you"
-msgstr "让原始的杀戮支配你"
+msgstr "讓生殺統治你"
 
 #. STRINGS.DREADSWORD_TALK.TALK.7
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.7"
 msgid "..."
-msgstr "......"
+msgstr "⋯"
 
 #. STRINGS.DREADSWORD_TALK.TALK.8
 msgctxt "STRINGS.DREADSWORD_TALK.TALK.8"
 msgid "Madness..."
-msgstr "愚蠢..."
+msgstr "瘋狂 ..."
+
+#. STRINGS.NAMES.DREADSPEAR
+msgctxt "STRINGS.NAMES.DREADSPEAR"
+msgid "Dreadstone Spear"
+msgstr "恐怖石矛"
 
 #. STRINGS.NAMES.DREADSWORD
 msgctxt "STRINGS.NAMES.DREADSWORD"
 msgid "Dreadstone Sword"
-msgstr "绝望石剑"
+msgstr "恐怖石劍"
+
+#. STRINGS.NAMES.DREAD_AXE
+msgctxt "STRINGS.NAMES.DREAD_AXE"
+msgid "Shroud Axe"
+msgstr "裹尸布斧頭"
+
+#. STRINGS.NAMES.DREAD_CLOAK
+msgctxt "STRINGS.NAMES.DREAD_CLOAK"
+msgid "Darknight Splint Mail"
+msgstr "暗夜夾板郵件"
 
 #. STRINGS.NAMES.DREAD_LANTERN
 msgctxt "STRINGS.NAMES.DREAD_LANTERN"
 msgid "Shroud Lantern"
-msgstr "祛雾提灯"
+msgstr "裹尸布燈籠"
 
 #. STRINGS.NAMES.DREAD_PICKAXE
 msgctxt "STRINGS.NAMES.DREAD_PICKAXE"
 msgid "Dreadstone Pickaxe"
-msgstr "绝望石镐"
+msgstr "恐怖石斧頭"
+
+#. STRINGS.NAMES.KNIGHTMARE
+msgctxt "STRINGS.NAMES.KNIGHTMARE"
+msgid "Knight"
+msgstr "騎士"
+
+#. STRINGS.NAMES.KNIGHTMARE_ALLEGIANCE
+msgctxt "STRINGS.NAMES.KNIGHTMARE_ALLEGIANCE"
+msgid "Real name?"
+msgstr "真名？"
+
+#. STRINGS.NAMES.LUNAR_SPARK_BLADE
+msgctxt "STRINGS.NAMES.LUNAR_SPARK_BLADE"
+msgid "Spark Blade"
+msgstr "火花刀片"
+
+#. STRINGS.NAMES.NIGHTMAREHAT
+msgctxt "STRINGS.NAMES.NIGHTMAREHAT"
+msgid "Darknight Helm"
+msgstr "黑暗之夜頭盔"
+
+#. STRINGS.NAMES.WOODS_SHADELING
+msgctxt "STRINGS.NAMES.WOODS_SHADELING"
+msgid "Laboring Horror"
+msgstr "勞動恐怖"
+
+#. STRINGS.RECIPE_DESC.DREADSPEAR
+msgctxt "STRINGS.RECIPE_DESC.DREADSPEAR"
+msgid "TODO"
+msgstr "東多"
 
 #. STRINGS.RECIPE_DESC.DREADSWORD
 msgctxt "STRINGS.RECIPE_DESC.DREADSWORD"
 msgid "Bring the deepest despair to your enemies"
-msgstr "为你的敌人带来最深沉的绝望"
+msgstr "為你嘅敵人帶嚟最深嘅絕望"
+
+#. STRINGS.RECIPE_DESC.DREAD_AXE
+msgctxt "STRINGS.RECIPE_DESC.DREAD_AXE"
+msgid "TODO"
+msgstr "東多"
+
+#. STRINGS.RECIPE_DESC.DREAD_CLOAK
+msgctxt "STRINGS.RECIPE_DESC.DREAD_CLOAK"
+msgid "TODO"
+msgstr "東多"
 
 #. STRINGS.RECIPE_DESC.DREAD_LANTERN
 msgctxt "STRINGS.RECIPE_DESC.DREAD_LANTERN"
 msgid "A very hopeless looking lantern."
-msgstr "看起来非常绝望的提灯。"
+msgstr "一個睇落好無望嘅燈籠。"
 
 #. STRINGS.RECIPE_DESC.DREAD_PICKAXE
 msgctxt "STRINGS.RECIPE_DESC.DREAD_PICKAXE"
 msgid "It's very destructive, but you need to find a good angle."
-msgstr "破坏力很大，但需要找好角度。"
+msgstr "佢好破壞，但係你要搵個好嘅角度。"
+
+#. STRINGS.RECIPE_DESC.LUNAR_SPARK_BLADE
+msgctxt "STRINGS.RECIPE_DESC.LUNAR_SPARK_BLADE"
+msgid "TODO"
+msgstr "東多"
+
+#. STRINGS.RECIPE_DESC.NIGHTMAREHAT
+msgctxt "STRINGS.RECIPE_DESC.NIGHTMAREHAT"
+msgid "TODO"
+msgstr "東多"
+
+#. STRINGS.SKIN_DESCRIPTIONS.night_edge
+msgctxt "STRINGS.SKIN_DESCRIPTIONS.night_edge"
+msgid "Night's Edge"
+msgstr "夜晚嘅邊緣"
+
+#. STRINGS.SKIN_NAMES.night_edge
+msgctxt "STRINGS.SKIN_NAMES.night_edge"
+msgid "Night's Edge"
+msgstr "夜晚嘅邊緣"
 

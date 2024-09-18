@@ -34,11 +34,11 @@ configuration_options = {
         name = "locale",
         label = en_zh("Translation", "翻译"),
         hover = en_zh("Select your translation.", "选择翻译"),
-        options =
-        {
+        options = {
             { description = "Auto", data = false },
             { description = "English", data = "en" },
             { description = "简体中文", data = "sc" },
+            { description = "广东话", data = "cant" },
         },
         default = false,
     },
