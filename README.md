@@ -1,5 +1,7 @@
 ![Apocalypse of the content](https://github.com/sydneyclaude/Apocalypse-of-the-constant/blob/main/images/modicon.png "logo")
 
+***
+
 ## Contributors
 
 - Programmers:

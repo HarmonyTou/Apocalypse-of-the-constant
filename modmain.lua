@@ -2,7 +2,7 @@
 
 -- 灵衣：一键GLOBAL
 -- 在env环境中找不到键时，去GLOBAL环境中找
-GLOBAL.setmetatable(env, { __index = function(t, k) return GLOBAL.rawget(GLOBAL, k) end })
+-- GLOBAL.setmetatable(env, { __index = function(t, k) return GLOBAL.rawget(GLOBAL, k) end })
 
 local modules = {
 	"config",

@@ -1,6 +1,6 @@
 local AddPrefabPostInit = AddPrefabPostInit
 local UpvalueUtil = require("utils/upvalueutil")
--- GLOBAL.setfenv(1, GLOBAL)
+GLOBAL.setfenv(1, GLOBAL)
 
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then

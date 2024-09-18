@@ -1,7 +1,7 @@
--- GLOBAL.setfenv(1, GLOBAL)
+GLOBAL.setfenv(1, GLOBAL)
 local SkinHandler = require("utils/skinhandler")
 
-GLOBAL.dreadsword_init_fn = function(inst, build_name)
+dreadsword_init_fn = function(inst, build_name)
     if not TheWorld.ismastersim then
         return
     end
@@ -16,7 +16,7 @@ GLOBAL.dreadsword_init_fn = function(inst, build_name)
     end
 end
 
-GLOBAL.dreadsword_clear_fn = function(inst)
+dreadsword_clear_fn = function(inst)
     basic_clear_fn(inst, "dreadsword")
 
     if inst.blade1 ~= nil then

@@ -5,7 +5,13 @@ local StateGraphUtil = require("utils/stategraphutil")
 local AddTimeEventPostInit = StateGraphUtil.AddTimeEventPostInit
 local AddStategraphState = AddStategraphState
 local AddStategraphPostInit = AddStategraphPostInit
--- GLOBAL.setfenv(1, GLOBAL)
+local AddStategraphActionHandler = AddStategraphActionHandler
+GLOBAL.setfenv(1, GLOBAL)
+
+local actionhandlers = {
+    ActionHandler(ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER, "dread_cloak_close_container"),
+    ActionHandler(ACTIONS.AOC_OPEN_DIMENSON_CONTAINER, "dread_cloak_open_container"),
+}
 
 local states = {
     State {
@@ -511,6 +517,10 @@ local function fn(sg)
 
     --     return FunctionOrValue(_stop_channelcast_actionhandler, inst, action, ...)
     -- end
+end
+
+for _, actionhandler in ipairs(actionhandlers) do
+    AddStategraphActionHandler("wilson", actionhandler)
 end
 
 AddStategraphPostInit("wilson", fn)

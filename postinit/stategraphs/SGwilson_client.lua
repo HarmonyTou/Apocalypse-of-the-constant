@@ -2,13 +2,19 @@ local SoundUtil = require("utils/soundutil")
 local ReplaceSound = SoundUtil.ReplaceSound
 local AddStategraphState = AddStategraphState
 local AddStategraphPostInit = AddStategraphPostInit
--- GLOBAL.setfenv(1, GLOBAL)
+local AddStategraphActionHandler = AddStategraphActionHandler
+GLOBAL.setfenv(1, GLOBAL)
 
 local function ClearCachedServerState(inst)
     if inst.player_classified ~= nil then
         inst.player_classified.currentstate:set_local(0)
     end
 end
+
+local actionhandlers = {
+    ActionHandler(ACTIONS.AOC_OPEN_DIMENSON_CONTAINER, "dread_cloak_open_container"),
+    ActionHandler(ACTIONS.AOC_CLOSE_DIMENSON_CONTAINER, "dread_cloak_close_container"),
+}
 
 local states = {
     State {
@@ -377,6 +383,10 @@ local function fn(sg)
 
     --     return FunctionOrValue(_stop_channelcast_actionhandler, inst, action, ...)
     -- end
+end
+
+for _, actionhandler in ipairs(actionhandlers) do
+    AddStategraphActionHandler("wilson_client", actionhandler)
 end
 
 AddStategraphPostInit("wilson_client", fn)
