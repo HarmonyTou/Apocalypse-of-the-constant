@@ -16,7 +16,8 @@
 - Translators & Writers:
 	- **Sydney**
 	- **Bishop**
-- Logo: **Bishop**
+- Logo: 
+	- **Bishop**
 - Designer: 
 	- **DearFrisk**
 	- **Mr.鲁鲁**
@@ -26,7 +27,10 @@
 ## Links
 [Steam Workshop Mod Page Link](https://steamcommunity.com/sharedfiles/filedetails/?id=2995403395)
 
+## 永恒启示录-饥交所上市规划
+项目估值: 800亿呼噜币
+业务占比: 没有
+上市后规划: 2025年收购科雷
+
 ## License
 Apocalypse of the content is licensed under Apache License v2.0.
-
-
