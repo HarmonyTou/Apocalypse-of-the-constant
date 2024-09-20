@@ -54,35 +54,9 @@ local function ImportStringsFile(module_name, env)
     end
 end
 
-local Languages = {
-    zh = "chinese_s", -- Simplified Chinese
-    zht = "chinese_t", -- Traditional Chinese
-    chs = "chinese_s",
-    cht = "chinese_t",
-    sc = "chinese_s",
-    cant = "cantonese",
-}
-local function MergeTranslationFromPO(base_path, override_lang)
-    local _defaultlang = LanguageTranslator.defaultlang
-    local lang = override_lang or _defaultlang
-    print("Loading language file " .. tostring(Languages[lang]))
-    if not Languages[lang] then return end
-    local filepath = base_path .. "/aoc_" .. Languages[lang] .. ".po"
-    if not resolvefilepath_soft(filepath) then
-        print("Could not find a language file matching " .. filepath .. " in any of the search paths.")
-        return
-    end
-    local temp_lang = lang .. "_temp"
-    LanguageTranslator:LoadPOFile(filepath, temp_lang)
-    merge_table(LanguageTranslator.languages[lang], LanguageTranslator.languages[temp_lang])
-    TranslateStringTable(STRINGS)
-    LanguageTranslator.languages[temp_lang] = nil
-    LanguageTranslator.defaultlang = _defaultlang
-end
-
 return {
     ImportStringsFile = ImportStringsFile,
-    MergeTranslationFromPO = MergeTranslationFromPO,
+
     merge_table = merge_table,
     is_array = is_array,
 }
