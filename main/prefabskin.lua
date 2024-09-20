@@ -1,5 +1,5 @@
-GLOBAL.setfenv(1, GLOBAL)
 local SkinHandler = require("utils/skinhandler")
+GLOBAL.setfenv(1, GLOBAL)
 
 dreadsword_init_fn = function(inst, build_name)
     if not TheWorld.ismastersim then
