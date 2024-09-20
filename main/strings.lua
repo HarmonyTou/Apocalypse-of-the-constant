@@ -32,6 +32,10 @@ for _, v in pairs(characters) do
     strings.CHARACTERS[string.upper(v)] = StringUtil.ImportStringsFile(v, ENV)
 end
 
-StringUtil.MergeStringsToGLOBAL(StringUtil.ImportStringsFile("common", ENV))
-StringUtil.MergeStringsToGLOBAL(strings)
+local function MergeStringsToGLOBAL(strings, custom_field, no_override)
+    StringUtil.merge_table(custom_field or STRINGS, strings, no_override)
+end
+
+MergeStringsToGLOBAL(StringUtil.ImportStringsFile("common", ENV))
+MergeStringsToGLOBAL(strings)
 StringUtil.MergeTranslationFromPO(MODROOT .. "scripts/languages", aoc_config.locale)

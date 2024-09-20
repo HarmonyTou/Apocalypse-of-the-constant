@@ -80,14 +80,9 @@ local function MergeTranslationFromPO(base_path, override_lang)
     LanguageTranslator.defaultlang = _defaultlang
 end
 
-local function MergeStringsToGLOBAL(strings, custom_field, no_override)
-    merge_table(custom_field or STRINGS, strings, no_override)
-end
-
 return {
     ImportStringsFile = ImportStringsFile,
     MergeTranslationFromPO = MergeTranslationFromPO,
-    MergeStringsToGLOBAL = MergeStringsToGLOBAL,
     merge_table = merge_table,
     is_array = is_array,
 }
