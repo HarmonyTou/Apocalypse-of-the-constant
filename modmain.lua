@@ -15,7 +15,7 @@ local modules = {
 	"actions",
 	"commands",
 	"prefabskin",
-	--"constant", --cassielu: how these things work?
+	"constant",
 }
 
 for i = 1, #modules do
