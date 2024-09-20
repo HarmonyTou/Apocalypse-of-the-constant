@@ -36,8 +36,8 @@ configuration_options = {
         hover = en_zh("Select your translation.", "选择翻译"),
         options = {
             { description = "自动选择/Auto Select", data = false },
-            { description = en_zh("English", "英语"), data = "en" },
-            { description = en_zh("Chinese", "简体中文"), data = "sc" },
+            { description = en_zh("Chinese Simplified", "简体中文"), data = "sc" },
+            { description = en_zh("Chinese Traditional", "繁体中文"), data = "tc" },
             { description = en_zh("Cantonese", "广东话"), data = "cant" },
         },
         default = false,
