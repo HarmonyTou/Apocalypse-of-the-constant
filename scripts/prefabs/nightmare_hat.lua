@@ -20,7 +20,7 @@ end
 local function DoRegen(inst, owner)
     if owner.components.sanity ~= nil and owner.components.sanity:IsInsanityMode() then
         local setbonus = inst.components.setbonus ~= nil and
-        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.DREADSTONE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1 -- Cassielu: need constant for new EQUIPMENTSETNAMES?
+        inst.components.setbonus:IsEnabled(EQUIPMENTSETNAMES.KNIGHTMARE) and TUNING.ARMOR_DREADSTONE_REGEN_SETBONUS or 1 -- Cassielu: need constant for new EQUIPMENTSETNAMES?
         local rate = 1 /
         Lerp(1 / TUNING.ARMOR_DREADSTONE_REGEN_MAXRATE, 1 / TUNING.ARMOR_DREADSTONE_REGEN_MINRATE,
             owner.components.sanity:GetPercent())
@@ -278,7 +278,7 @@ local function MakeHat(name)
 		inst.components.damagetyperesist:AddResist("shadow_aligned", inst, TUNING.ARMORDREADSTONE_SHADOW_RESIST)
 
         inst:AddComponent("setbonus")
-        inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.DREADSTONE) -- Cassielu: need constant for new EQUIPMENTSETNAMES?
+        inst.components.setbonus:SetSetName(EQUIPMENTSETNAMES.KNIGHTMARE) -- Cassielu: need constant for new EQUIPMENTSETNAMES?
         inst.components.setbonus:SetOnEnabledFn(InSetBonusEnabled)
         inst.components.setbonus:SetOnDisabledFn(OnSetBonusDisabled)
 

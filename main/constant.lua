@@ -1,4 +1,3 @@
---[[local EQUIPMENTSETNAMES =
-{
-    KNIGHTMARE = "knightmare",
-},]]
+GLOBAL.setfenv(1, GLOBAL)
+
+EQUIPMENTSETNAMES.KNIGHTMARE = "knightmare"
