@@ -15,6 +15,7 @@ PrefabFiles = {
     "dread_spear",
     "woods_shadeling",
     "knightmare",
+    "shroudlog",
     "knightmare_gears",
 }
 
