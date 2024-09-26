@@ -73,8 +73,6 @@ local function fn()
     inst:AddComponent("inspectable")
 
     inst:AddComponent("inventoryitem")
-    inst.components.inventoryitem.imagename = "shroudlog"
-    inst.components.inventoryitem.atlasname = "images/shroudlog.xml"
     RegisterInventoryItemAtlas(images/shroudlog.tex, shroudlog)
 
     inst:AddComponent("stackable")
