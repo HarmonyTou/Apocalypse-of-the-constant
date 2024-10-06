@@ -2,6 +2,7 @@ local modimport = modimport
 
 local postinit = {
     prefabs = {
+        "cave",
         "daywalker",
         "dreadstonehat",
         "armordreadstone",

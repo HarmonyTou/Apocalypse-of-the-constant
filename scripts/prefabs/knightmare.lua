@@ -14,9 +14,9 @@ local prefabs = {
 
 
 SetSharedLootTable("knightmare",
-{
-    {"horrorfuel", 1.00},
-})
+    {
+        { "horrorfuel", 1.00 },
+    })
 
 ----------------------------------------------------------
 local function OnSpawnShadow(inst, ent)
@@ -41,9 +41,9 @@ end
 
 local function GetShadowSpawnPoint(inst)
     local pos = inst:GetPosition()
-    local dist = 2+6*math.random()
-    local angle = math.random()*PI2
-    local offset = Vector3(dist*math.cos(angle),0-dist*math.sin(angle))
+    local dist = 2 + 6 * math.random()
+    local angle = math.random() * PI2
+    local offset = Vector3(dist * math.cos(angle), 0 - dist * math.sin(angle))
 
     if offset ~= nil then
         return pos + offset
@@ -52,15 +52,15 @@ end
 ---------------------------------------------------------------
 
 local TARGET_DIST = 30
-local TARGET_DSQ = (TARGET_DIST)^2
+local TARGET_DSQ = (TARGET_DIST) ^ 2
 local RETARGET_MUST_TAGS = { "_combat" }
 local RETARGET_CANT_TAGS = { "INLIMBO", "playerghost", "FX" }
-local RETARGET_ONEOF_TAGS = { "shadow_aligned","player_shadow_aligned" }
+local RETARGET_ONEOF_TAGS = { "shadow_aligned", "player_shadow_aligned" }
 local function Retarget(inst)
     local spawnpoint_position = inst.components.knownlocations:GetLocation("spawnpoint")
 
     if spawnpoint_position ~= nil and
-            inst:GetDistanceSqToPoint(spawnpoint_position:Get()) >= TARGET_DSQ then
+        inst:GetDistanceSqToPoint(spawnpoint_position:Get()) >= TARGET_DSQ then
         return nil
     else
         return FindEntity(
@@ -76,13 +76,13 @@ local function Retarget(inst)
     end
 end
 
-local function keeptargetfn(inst,target)
+local function keeptargetfn(inst, target)
     return inst.components.combat:CanTarget(target)
 end
 
 
 local function DisplayNameFn(inst)
-	return ThePlayer ~= nil and ThePlayer:HasTag("player_shadow_aligned") and STRINGS.NAMES.KNIGHTMARE_ALLEGIANCE or nil
+    return ThePlayer ~= nil and ThePlayer:HasTag("player_shadow_aligned") and STRINGS.NAMES.KNIGHTMARE_ALLEGIANCE or nil
 end
 
 
@@ -102,8 +102,8 @@ local function OnAttacked(inst, data)
 end
 
 local function onkilledtarget(inst, data)
-	local target = data ~= nil and data.victim
-    if target~=nil and target:IsValid() and target:HasTag("gestaltnoloot") then
+    local target = data ~= nil and data.victim
+    if target ~= nil and target:IsValid() and target:HasTag("gestaltnoloot") then
         inst.components.health:DoDelta(100)
         local lootdropper = target.components.lootdropper or nil
         if lootdropper ~= nil then
@@ -152,16 +152,16 @@ end
 
 -------------------------------------------
 local function fn()
-	local inst = CreateEntity()
+    local inst = CreateEntity()
 
-	inst.entity:AddTransform()
+    inst.entity:AddTransform()
     inst.entity:AddAnimState()
     inst.entity:AddSoundEmitter()
     inst.entity:AddDynamicShadow()
     inst.entity:AddNetwork()
 
     inst.Transform:SetFourFaced()
-    
+
     MakeCharacterPhysics(inst, 100, .5)
 
     inst.DynamicShadow:SetSize(1.3, .6)
@@ -187,7 +187,7 @@ local function fn()
     inst.AnimState:OverrideSymbol("shadow_hands", "shadow_hands", "shadow_hands")
     inst.AnimState:OverrideSymbol("snap_fx", "player_actions_fishing_ocean_new", "snap_fx")
 
-    
+
 
     --[[inst:AddComponent("talker")
     inst.components.talker.fontsize = 40
@@ -206,13 +206,15 @@ local function fn()
     inst:AddTag("noteleport")
     inst:AddTag("abyss")
 
-	inst.entity:SetPristine()
+    inst.entity:SetPristine()
 
-	if not TheWorld.ismastersim then
-		return inst
-	end	
+    if not TheWorld.ismastersim then
+        return inst
+    end
 
-	
+    inst.CheckRift = CheckRift
+
+
     inst:AddComponent("health")
     inst.components.health:SetMaxHealth(7000)
 
@@ -228,7 +230,7 @@ local function fn()
     inst.components.locomotor.walkspeed = 6
     inst.components.locomotor.runspeed = 6
     inst.components.locomotor.fasteronroad = true
-    inst.components.locomotor.pathcaps = { ignorecreep = true}
+    inst.components.locomotor.pathcaps = { ignorecreep = true }
 
     -----------------------------------------------------
     inst:AddComponent("planarentity")
@@ -282,7 +284,7 @@ local function fn()
     inst:ListenForEvent("attacked", OnAttacked)
     inst:ListenForEvent("killed", onkilledtarget)
     inst:ListenForEvent("ms_riftaddedtopool", CheckRift, TheWorld)
-	inst:ListenForEvent("ms_riftremovedfrompool", CheckRift, TheWorld)
+    inst:ListenForEvent("ms_riftremovedfrompool", CheckRift, TheWorld)
 
     inst.shouldparry = false
     inst.OnEntityWake = OnEntityWake

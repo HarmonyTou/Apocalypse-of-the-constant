@@ -342,19 +342,16 @@ local function fn(sg)
     sg.actionhandlers[ACTIONS.ATTACK].deststate = function(inst, action, ...)
         if not (inst.sg:HasStateTag("attack") and action.target == inst.sg.statemem.attacktarget or IsEntityDead(inst)) then
             local weapon = inst.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
-            local inventoryitem = weapon ~= nil and weapon.replica.inventoryitem
-            if (inventoryitem ~= nil and inventoryitem:IsWeapon()) then
-                local target = action.target
-                if weapon then
-                    if weapon.prefab == "lunar_spark_blade" then
-                        if target and weapon._leap_range:value() > 0 and not target:IsNear(inst, weapon._leap_range:value()) then
-                            return "lunar_spark_blade_leap_lag"
-                        else
-                            return "lunar_spark_blade_scythe_attack"
-                        end
-                    elseif weapon:HasTag("chop_attack") then
-                        return "chop_attack"
+            local target = action.target
+            if weapon then
+                if weapon.prefab == "lunar_spark_blade" then
+                    if target and weapon._leap_range:value() > 0 and not target:IsNear(inst, weapon._leap_range:value()) then
+                        return "lunar_spark_blade_leap_lag"
+                    else
+                        return "lunar_spark_blade_scythe_attack"
                     end
+                elseif weapon:HasTag("chop_attack") then
+                    return "chop_attack"
                 end
             end
         end
