@@ -108,7 +108,7 @@ function DCKnightmareSpawner:TimerDone_Clue()
     print("Clue spaw success, position:", clue:GetPosition(), "entity:", clue)
 end
 
--- When clue disappeared, it runs this code.
+-- When clue disappeared, it should run this code.
 function DCKnightmareSpawner:HandleDisapperedClue(clue)
     self:StopTimer_Clue()
     self.clue_spawned = false
@@ -244,7 +244,7 @@ function DCKnightmareSpawner:SpawnClue()
     end
 
     -- TODO: Finish this clue
-    local clue = SpawnAt("stash_map", pos)
+    local clue = SpawnAt("knightmare_clue_map", pos)
 
     return clue, player
 end

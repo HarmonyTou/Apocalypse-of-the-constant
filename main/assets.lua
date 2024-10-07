@@ -17,6 +17,9 @@ PrefabFiles = {
     "knightmare",
     "shroudlog",
     "knightmare_gears",
+
+    "knightmare_clue_map",
+    "knightmare_clue_ground_fx",
 }
 
 Assets = {
