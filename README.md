@@ -10,6 +10,8 @@
 	- **dx11**
 	- **Guns of the Patriots**
 	- **Bering**
+    - **萌新小黄**
+    - **翊坤宫娘娘**
 - Animators & Artists:
 	- **Bishop**
   	- **Alacl**
